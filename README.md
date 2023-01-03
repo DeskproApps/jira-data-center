@@ -1,7 +1,7 @@
-My App
+Jira Data Center
 ===
 
-TODO: Include a summary of app functionality and a screenshot
+Deskpro's Jira integration that supports Jira Data Center
 
 Basic Usage
 ---
