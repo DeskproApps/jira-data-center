@@ -62,18 +62,4 @@ export const removeBacklinkCommentDoc = (ticketId: string, url: string) => ({
     ]
 });
 
-export const paragraphDoc = (text: string) => ({
-    version: 1,
-    type: "doc",
-    content: [
-        {
-            type: "paragraph",
-            content: [
-                {
-                    type: "text",
-                    text,
-                }
-            ]
-        }
-    ]
-});
+export const paragraphDoc = (text: string): string => text;

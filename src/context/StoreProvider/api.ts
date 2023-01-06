@@ -118,7 +118,7 @@ export const getIssueComments = async (client: IDeskproClient, key: string): Pro
  */
 export const addIssueComment = async (client: IDeskproClient, key: string, comment: string) =>
     request(client, "POST", `${API_BASE_URL}/issue/${key}/comment`, {
-      body: paragraphDoc(comment),
+        body: paragraphDoc(comment),
     })
 ;
 
