@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import isString from "lodash/isString";
 import { useDeskproAppClient, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import {
   getIssueAttachments,
@@ -111,6 +112,10 @@ export const useAdfToPlainText = () => {
   return (document: ADFEntity): string => {
     if (!document) {
       return "";
+    }
+
+    if (isString(document)) {
+      return document;
     }
 
     return reduce(document, (acc, node) => {
