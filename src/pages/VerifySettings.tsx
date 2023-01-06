@@ -23,7 +23,7 @@ export const preInstalledRequest = async (
 
     const dpFetch = await adminGenericProxyFetch(client);
 
-    const res = await dpFetch(`https://${domain}.atlassian.net/rest/api/3/myself`, {
+    const res = await dpFetch(`https://${domain}.atlassian.net/rest/api/2/myself`, {
         method: "GET",
         headers: {
             "Accept": "application/json",
