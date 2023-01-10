@@ -9,8 +9,9 @@ import {
 import { useDeskproAppClient, LoadingSpinner } from "@deskpro/app-sdk";
 import {
     IssueFormData,
+    AttachmentFile,
+    JiraIssueDetails,
     InvalidRequestResponseError,
-    AttachmentFile
 } from "../context/StoreProvider/types";
 import {
     useAdfToPlainText,
@@ -22,6 +23,7 @@ import {
 import { useStore } from "../context/StoreProvider/hooks";
 import { FormikHelpers } from "formik";
 import { IssueMeta } from "../types";
+import { SubmitIssueFormData } from "../components/IssueForm/types";
 
 interface EditProps {
     issueKey: string;
@@ -31,8 +33,8 @@ export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
     const { client } = useDeskproAppClient();
     const [ state, dispatch ] = useStore();
     const [loading, setLoading] = useState<boolean>(false);
-    const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
-    const [issue, setIssue] = useState<any>(null);
+    const [apiErrors, setApiErrors] = useState<Record<string, string>|undefined>({});
+    const [issue, setIssue] = useState<null|JiraIssueDetails>(null);
 
     const adfToPlainText = useAdfToPlainText();
 
@@ -67,7 +69,11 @@ export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
         return (<LoadingSpinner />);
     }
 
-    const onSubmit = (data: IssueFormData, _helpers: FormikHelpers<any>, meta: Record<string, IssueMeta>) => {
+    const onSubmit = (
+        data: SubmitIssueFormData,
+        _helpers: FormikHelpers<IssueFormData>,
+        meta: Record<string, IssueMeta>,
+    ) => {
         if (!client || !state.context?.data.ticket || !issueKey) {
             return;
         }
@@ -119,7 +125,7 @@ export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
         labels: get(issue, ["fields", "labels"], []) || [],
         priority: get(issue, ["fields", "priority", "id"], ""),
         customFields: Object.keys(editMeta).reduce((fields, key) => {
-            const value = formatCustomFieldValueForSet(editMeta[key], issue.fields[key] ?? null);
+            const value = formatCustomFieldValueForSet(editMeta[key], get(issue, ["fields", key], null));
 
             if (value === undefined) {
                 return fields;
@@ -127,7 +133,7 @@ export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
 
             return {
                 ...fields,
-                [key]: formatCustomFieldValueForSet(editMeta[key], issue.fields[key] ?? null),
+                [key]: formatCustomFieldValueForSet(editMeta[key], get(issue, ["fields", key], null)),
             };
         }, {}),
         parentKey: get(issue, ["fields", "parent", "key"], ""),

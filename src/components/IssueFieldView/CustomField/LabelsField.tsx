@@ -8,14 +8,19 @@ export const LabelsField: FC<MappedViewProps> = ({ value }: MappedViewProps) => 
 
     const labels = (value ?? []);
 
-    if (!labels.length) {
+    if (!Array.isArray(labels) || !labels.length) {
         return (<NoValue />);
     }
 
     return (
         <Stack gap={3}>
-            {labels.map((option: string, idx: number) => (
-                <Pill label={option} textColor={theme.colors.grey100} backgroundColor={theme.colors.grey10} key={idx} />
+            {labels.map((option, idx) => (
+                <Pill
+                    key={idx}
+                    label={option}
+                    textColor={theme.colors.grey100}
+                    backgroundColor={theme.colors.grey10}
+                />
             ))}
         </Stack>
     );

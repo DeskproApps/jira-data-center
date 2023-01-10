@@ -10,7 +10,7 @@ export const reducer: StoreReducer = (state: State, action: Action): State => {
     .with([__, { type: "changePage" }],  ([prevState, action]) => ({
       ...prevState,
       page: action.page,
-      pageParams: action.params,
+      ...(!action?.params ? {} : { pageParams: action.params }),
     }))
     .with([__, { type: "loadContext" }],  ([prevState, action]) => ({
       ...prevState,

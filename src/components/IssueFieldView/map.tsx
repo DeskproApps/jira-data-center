@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import type { IssueMeta } from "../../types";
-import { FieldType } from "../../types";
+import { IssueMeta, FieldType, IssueValue } from "../../types";
 import { match } from "ts-pattern";
 import { RequestLanguageField } from "./CustomField/RequestLanguageField";
 import { PlainTextField } from "./CustomField/PlainTextField";
@@ -16,7 +15,7 @@ import { SelectSingleField } from "./CustomField/SelectSingleField";
 import { UrlField } from "./CustomField/UrlField";
 import { UserPickerField } from "./CustomField/UserPickerField";
 
-export default (meta: IssueMeta, value: unknown): ReactNode => match<FieldType, ReactNode|null>(meta.type)
+export default (meta: IssueMeta, value: IssueValue[IssueMeta["type"]]): ReactNode => match<FieldType, ReactNode|null>(meta.type)
     .with(FieldType.REQUEST_LANG, () => <RequestLanguageField meta={meta} value={value} />)
     .with(FieldType.TEXT_PLAIN, () => <PlainTextField meta={meta} value={value} />)
     .with(FieldType.TEXT_PARAGRAPH, () => <ParagraphField meta={meta} value={value} />)

@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import type { MappedViewProps } from "../types";
+import isString from "lodash/isString";
 import { NoValue } from "../NoValue";
 import { useDeskproAppTheme } from "@deskpro/app-sdk";
 import { ExternalLink } from "../../ExternalLink/ExternalLink";
@@ -7,7 +8,7 @@ import { ExternalLink } from "../../ExternalLink/ExternalLink";
 export const UrlField: FC<MappedViewProps> = ({ value }: MappedViewProps) => {
     const { theme } = useDeskproAppTheme();
 
-    if (!value) {
+    if (!isString(value)) {
         return (<NoValue />);
     }
 

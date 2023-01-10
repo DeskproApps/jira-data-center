@@ -19,12 +19,12 @@ export const SelectSingleField: FC<MappedFieldProps> = ({ id, meta, field, error
         >
             <DropdownSelect
                 helpers={helpers}
-                options={options.map((option, idx: number) => ({
+                options={options.map((option, idx) => ({
                     key: `${idx}`,
                     label: option.value,
                     value: option.id,
                     type: "value" as const
-                } as DropdownValueType<any>))}
+                } as DropdownValueType<unknown>))}
                 id={id}
                 placeholder="Select value"
                 value={field.value}

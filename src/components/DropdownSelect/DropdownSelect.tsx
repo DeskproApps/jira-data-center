@@ -10,10 +10,13 @@ import { faCaretDown, faHandPointer, faExternalLinkAlt } from "@fortawesome/free
 import { FieldHelperProps } from "formik";
 
 export interface DropdownSelectProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   helpers: FieldHelperProps<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: DropdownValueType<any>[];
   id?: string;
   placeholder?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
   disabled?: boolean;
 }

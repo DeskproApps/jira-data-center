@@ -8,6 +8,7 @@ import {useLoadLinkedIssues, useSetAppTitle} from "../hooks";
 import {useStore} from "../context/StoreProvider/hooks";
 import {FormikHelpers} from "formik";
 import {IssueMeta} from "../types";
+import { SubmitIssueFormData } from "../components/IssueForm/types";
 
 export const Create: FC = () => {
     const { client } = useDeskproAppClient();
@@ -24,7 +25,11 @@ export const Create: FC = () => {
         client?.deregisterElement("homeContextMenu");
     }, [client, state]);
 
-    const onSubmit = (data: IssueFormData, _helpers: FormikHelpers<any>, meta: Record<string, IssueMeta>) => {
+    const onSubmit = (
+        data: SubmitIssueFormData,
+        _helpers: FormikHelpers<IssueFormData>,
+        meta: Record<string, IssueMeta>,
+    ) => {
         if (!client || !state.context?.data.ticket) {
             return;
         }

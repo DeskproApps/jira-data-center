@@ -1,6 +1,6 @@
-import { IssueMeta } from "../../types";
+import { IssueMeta, IssueValue } from "../../types";
 
 export interface MappedViewProps {
     meta: IssueMeta;
-    value: any;
+    value: IssueValue[IssueMeta["type"]];
 }

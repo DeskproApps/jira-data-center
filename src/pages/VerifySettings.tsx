@@ -11,13 +11,13 @@ import {
     adminGenericProxyFetch,
 } from "@deskpro/app-sdk";
 import { Settings } from "../types";
-import { User } from "../context/StoreProvider/types";
+import { JiraUser } from "../context/StoreProvider/types";
 import { toBase64 } from "../utils";
 
 export const preInstalledRequest = async (
     client: IDeskproClient,
     settings: Required<Pick<Settings, "domain"|"username"|"api_key">>,
-): Promise<User|null> => {
+): Promise<JiraUser|null> => {
     const { domain, username, api_key } = settings;
     const auth = `${username}:${api_key}`;
 
@@ -47,7 +47,7 @@ const VerifySettings: FC = () => {
     const { client } = useDeskproAppClient();
     const { theme } = useDeskproAppTheme();
 
-    const [currentUser, setCurrentUser] = useState<User|null>(null);
+    const [currentUser, setCurrentUser] = useState<JiraUser|null>(null);
     const [settings, setSettings] = useState<Settings>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");

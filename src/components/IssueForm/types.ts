@@ -1,21 +1,4 @@
-export interface JiraProject {
-    id: string;
-    key: string;
-    name: string;
-}
-
-export interface JiraIssueType {
-    id: string;
-    name: string;
-    fields?: Record<string, any>;
-}
-
-export interface JiraUser {
-    accountId: string;
-    displayName: string;
-    active: boolean;
-    accountType: "atlassian"|"app";
-}
+import { IssueFormData } from "../../context/StoreProvider/types";
 
 export interface JiraField {
     key: string;
@@ -33,3 +16,6 @@ export const mandatoryFields = [
     "reporter",
     "summary",
 ];
+
+export type SubmitIssueFormData = Omit<IssueFormData, "labels"|"priority"|"assigneeUserId"|"reporterUserId">
+    & Partial<Pick<IssueFormData, "labels"|"priority"|"assigneeUserId"|"reporterUserId">>;

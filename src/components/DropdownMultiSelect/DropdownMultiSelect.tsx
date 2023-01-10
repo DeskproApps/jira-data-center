@@ -12,16 +12,19 @@ import { FieldHelperProps } from "formik";
 import { Label } from "../Label/Label";
 import { sortedUniq } from "lodash";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface DropdownMultiSelectValueType extends DropdownValueType<any> {
   valueLabel?: string;
   color?: string;
 }
 
 export interface DropdownMultiSelectProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   helpers: FieldHelperProps<any>;
   options: DropdownMultiSelectValueType[];
   id?: string;
   placeholder?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   values?: any[];
 }
 

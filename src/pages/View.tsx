@@ -35,7 +35,7 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
   const findByKey = useFindLinkedIssueByKey();
   const adfToPlainText = useAdfToPlainText();
 
-  useSetAppTitle(issueKey);
+  useSetAppTitle(issueKey || "");
 
   useEffect(() => {
     client?.registerElement("home", { type: "home_button" });

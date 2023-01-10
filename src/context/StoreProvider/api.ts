@@ -5,12 +5,17 @@ import { IDeskproClient, proxyFetch } from "@deskpro/app-sdk";
 import {
   IssueItem,
   JiraComment,
+  Permissions,
   SearchParams,
-  IssueFormData,
+  JiraUserInfo,
   AttachmentFile,
   IssueAttachment,
+  JiraIssueSearch,
   IssueSearchItem,
   ApiRequestMethod,
+  JiraIssueDetails,
+  JiraIssueFieldMeta,
+  JiraIssueCustomFieldMeta,
   InvalidRequestResponseError,
 } from "./types";
 import {
@@ -20,6 +25,7 @@ import {
 } from "./adf";
 import { useAdfToPlainText } from "../../hooks";
 import { FieldType, IssueMeta } from "../../types";
+import { SubmitIssueFormData } from "../../components/IssueForm/types";
 
 // JIRA REST API Base URL
 const API_BASE_URL = "https://__domain__.atlassian.net/rest/api/2";
@@ -59,6 +65,7 @@ export const addRemoteLink = async (client: IDeskproClient, key: string, ticketI
  * Remove remote link
  */
 export const removeRemoteLink = async (client: IDeskproClient, key: string, ticketId: string) =>
+    // eslint-disable-next-line no-console
     request(client, "DELETE", `${API_BASE_URL}/issue/${key}/remotelink?globalId=${remoteLinkGlobalId(ticketId)}`).catch(console.warn)
 ;
 
@@ -74,7 +81,9 @@ export const addLinkCommentToIssue = async (client: IDeskproClient, key: string,
 /**
  * Get the status of all required Jira permissions
  */
-export const getMyPermissions = async (client: IDeskproClient) => {
+export const getMyPermissions = async (client: IDeskproClient): Promise<{
+  permissions: Permissions,
+}> => {
   const required = [
     "BROWSE_PROJECTS",
     "CREATE_ISSUES",
@@ -97,7 +106,17 @@ export const getIssueComments = async (client: IDeskproClient, key: string): Pro
     return [];
   }
 
-  const comments = data.comments.map((comment: any) => ({
+  const comments = data.comments.map((comment: {
+    author: JiraUserInfo,
+    body: string,
+    created: string,
+    updated: string,
+    id: string,
+    jsdPublic: boolean,
+    renderedBody: string,
+    self: string,
+    updateAuthor: JiraUserInfo,
+  }) => ({
     id: comment.id,
     created: new Date(comment.created),
     updated: new Date(comment.updated),
@@ -108,7 +127,7 @@ export const getIssueComments = async (client: IDeskproClient, key: string): Pro
       displayName: comment.author.displayName,
       avatarUrl: comment.author.avatarUrls["24x24"],
     },
-  } as JiraComment));
+  }));
 
   return orderBy<JiraComment>(comments, (comment) => comment.created, ['desc']);
 };
@@ -156,20 +175,21 @@ export const searchIssues = async (
     {}
   );
 
-  const epicKeys = (fullIssues ?? []).reduce((list: unknown[], issue: any) => {
+  const epicKeys = (fullIssues ?? []).reduce((list: unknown[], issue: JiraIssueDetails) => {
     const meta = findEpicLinkMeta(issue) as { key: string } | null;
     if (!meta) {
       return list;
     }
 
-    if (!issue.fields[meta.key]) {
+    if (!get(issue, ["fields", meta.key])) {
       return list;
     }
 
-    return {...list, [issue.key]: issue.fields[meta.key]};
+    return {...list, [issue.key]: get(issue, ["fields", meta.key])};
   }, {});
 
-  let epics: { [key: string]: any } = {};
+  let epics: { [key: string]: Omit<JiraIssueDetails, "editmeta"> } = {};
+
 
   if (Object.values(epicKeys).length) {
     const epicJql = encodeURIComponent(`issueKey IN (${Object.values(epicKeys).join(",")})`);
@@ -181,7 +201,7 @@ export const searchIssues = async (
     );
   }
 
-  return (searchIssues ?? []).map((searchIssue: any) => ({
+  return (searchIssues ?? []).map((searchIssue: JiraIssueSearch) => ({
     id: searchIssue.id,
     key: searchIssue.key,
     keyHtml: searchIssue.keyHtml,
@@ -214,32 +234,33 @@ export const listLinkedIssues = async (client: IDeskproClient, keys: string[]): 
     {}
   );
 
-  const epicKeys = (fullIssues ?? []).reduce((list: unknown[], issue: any) => {
+  const epicKeys = (fullIssues ?? []).reduce((list: unknown[], issue: JiraIssueDetails) => {
     const meta = findEpicLinkMeta(issue) as { key: string } | null;
     if (!meta) {
       return list;
     }
 
-    if (!issue.fields[meta.key]) {
+    if (!get(issue, ["fields", meta.key])) {
       return list;
     }
 
-    return {...list, [issue.key]: issue.fields[meta.key]};
+    return {...list, [issue.key]: get(issue, ["fields", meta.key])};
   }, {});
 
-  const sprints = (fullIssues ?? []).reduce((list: unknown[], issue: any) => {
+  const sprints = (fullIssues ?? []).reduce((list: unknown[], issue: JiraIssueDetails) => {
     const meta = findSprintLinkMeta(issue) as { key: string } | null;
     if (!meta) {
       return list;
     }
 
-    if (!issue.fields[meta.key]) {
+    if (!get(issue, ["fields", meta.key])) {
       return list;
     }
 
-    return {...list, [issue.key]: issue.fields[meta.key]};
+    return {...list, [issue.key]: get(issue, ["fields", meta.key])};
   }, {});
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let epics: { [key: string]: any } = {};
 
   if (Object.values(epicKeys).length) {
@@ -252,7 +273,7 @@ export const listLinkedIssues = async (client: IDeskproClient, keys: string[]): 
     );
   }
 
-  return (fullIssues ?? []).map((issue: any) => ({
+  return (fullIssues ?? []).map((issue: JiraIssueDetails) => ({
     id: issue.id,
     key: issue.key,
     summary: get(issue, ["fields", "summary"], "-"),
@@ -267,6 +288,7 @@ export const listLinkedIssues = async (client: IDeskproClient, keys: string[]): 
     assigneeAvatarUrl: get(issues, [issue.key, "fields", "assignee", "avatarUrls", "24x24"], ""),
     epicKey: epics[epicKeys[issue.key]] ? epics[epicKeys[issue.key]].key : undefined,
     epicName: epics[epicKeys[issue.key]] ? epics[epicKeys[issue.key]].fields.summary : undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sprints: (sprints[issue.key] ?? []).map((sprint: any) => ({
       sprintBoardId: sprint.boardId,
       sprintName: sprint.name,
@@ -282,7 +304,7 @@ export const listLinkedIssues = async (client: IDeskproClient, keys: string[]): 
         buildCustomFieldMeta(issue.editmeta.fields),
     ),
     parentKey: get(issues, [issue.key, "fields", "parent", "key"], null),
-  } as IssueItem));
+  }));
 };
 
 /**
@@ -295,7 +317,7 @@ export const getIssueAttachments = async (client: IDeskproClient, key: string): 
     return [];
   }
 
-  return res.fields.attachment.map((attachment: any) => ({
+  return res.fields.attachment.map((attachment: { id: number, filename: string, size: number, content: string }) => ({
     id: attachment.id,
     filename: attachment.filename,
     sizeBytes: attachment.size,
@@ -307,7 +329,7 @@ export const getIssueAttachments = async (client: IDeskproClient, key: string): 
   } as IssueAttachment));
 }
 
-export const createIssue = async (client: IDeskproClient, data: IssueFormData, meta: Record<string, IssueMeta>) => {
+export const createIssue = async (client: IDeskproClient, data: SubmitIssueFormData, meta: Record<string, IssueMeta>) => {
   const customFields = Object.keys(data.customFields).reduce((fields, key) => {
     const value = formatCustomFieldValue(meta[key], data.customFields[key]);
 
@@ -321,7 +343,7 @@ export const createIssue = async (client: IDeskproClient, data: IssueFormData, m
     };
   }, {});
 
-  const body: any = {
+  const body = {
     fields: {
       summary: data.summary,
       issuetype: {
@@ -367,7 +389,7 @@ export const createIssue = async (client: IDeskproClient, data: IssueFormData, m
    return res;
 };
 
-export const updateIssue = async (client: IDeskproClient, issueKey: string, data: IssueFormData, meta: Record<string, IssueMeta>) => {
+export const updateIssue = async (client: IDeskproClient, issueKey: string, data: SubmitIssueFormData, meta: Record<string, IssueMeta>) => {
   const customFields = Object.keys(data.customFields).reduce((fields, key) => {
     const value = formatCustomFieldValue(meta[key], data.customFields[key]);
 
@@ -381,7 +403,7 @@ export const updateIssue = async (client: IDeskproClient, issueKey: string, data
     };
   }, {});
 
-  const body: any = {
+  const body = {
     fields: {
       summary: data.summary,
       issuetype: {
@@ -466,6 +488,7 @@ export const getIssueDependencies = async (client: IDeskproClient) => {
   return cache.get(cache_key);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const request = async (client: IDeskproClient, method: ApiRequestMethod, url: string, content?: any) => {
   const dpFetch = await proxyFetch(client);
 
@@ -509,8 +532,8 @@ const request = async (client: IDeskproClient, method: ApiRequestMethod, url: st
   }
 };
 
-export const buildCustomFieldMeta = (fields: any) => {
-  const customFields: Record<string, any> = extractCustomFieldMeta(fields);
+export const buildCustomFieldMeta = (fields: JiraIssueDetails["editmeta"]["fields"]) => {
+  const customFields: Record<string, JiraIssueCustomFieldMeta> = extractCustomFieldMeta(fields);
 
   return Object.keys(customFields).reduce((fields, key) => ({
     ...fields,
@@ -518,33 +541,37 @@ export const buildCustomFieldMeta = (fields: any) => {
   }), {});
 };
 
-const findEpicLinkMeta = (issue: any) => Object
+const findEpicLinkMeta = (issue: JiraIssueDetails) => Object
   .values(issue.editmeta.fields)
-  .filter((field: any) => field.schema.custom === "com.pyxis.greenhopper.jira:gh-epic-link")[0] ?? null
+  .filter((field: JiraIssueFieldMeta|JiraIssueCustomFieldMeta) => {
+    return get(field, ["schema", "custom"]) === "com.pyxis.greenhopper.jira:gh-epic-link"
+  })[0] ?? null
 ;
 
-const findSprintLinkMeta = (issue: any) => Object
+const findSprintLinkMeta = (issue: JiraIssueDetails) => Object
   .values(issue.editmeta.fields)
-  .filter((field: any) => field.schema.custom === "com.pyxis.greenhopper.jira:gh-sprint")[0] ?? null
+  .filter((field: JiraIssueFieldMeta|JiraIssueCustomFieldMeta) => {
+    return get(field, ["schema", "custom"]) === "com.pyxis.greenhopper.jira:gh-sprint"
+  })[0] ?? null
 ;
 
-const extractCustomFieldMeta = (fields: any) => Object.keys(fields).reduce((customFields, key) => {
+const extractCustomFieldMeta = (fields: JiraIssueDetails["editmeta"]["fields"]) => Object.keys(fields).reduce((customFields, key) => {
   if (!isCustomFieldKey(key)) {
     return customFields;
   }
 
-  return { ...customFields, [key]: fields[key] };
+  return { ...customFields, [key]: get(fields, [key]) };
 }, {});
 
-export const extractCustomFieldValues = (fields: any) => Object.keys(fields).reduce((customFields, key) => {
+export const extractCustomFieldValues = (fields: JiraIssueDetails["fields"]) => Object.keys(fields).reduce((customFields, key) => {
   if (!isCustomFieldKey(key)) {
     return customFields;
   }
 
-  return { ...customFields, [key]: fields[key] };
+  return { ...customFields, [key]: get(fields, [key]) };
 }, {});
 
-const transformFieldMeta = (field: any) => ({
+const transformFieldMeta = (field: JiraIssueCustomFieldMeta) => ({
   type: field.schema.custom,
   key: field.key,
   name: field.name,
@@ -552,6 +579,7 @@ const transformFieldMeta = (field: any) => ({
   ...omit(field, ["key", "name", "operations", "schema", "required"]),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const combineCustomFieldValueAndMeta = (values: any, meta: any) => Object.keys(meta).reduce((fields, key) => ({
   ...fields,
   [key]: {
@@ -567,6 +595,7 @@ const remoteLinkGlobalId = (ticketId: string) => `deskpro_ticket_${ticketId}`;
 /**
  * Format fields when sending values to API
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const formatCustomFieldValue = (meta: IssueMeta, value: any) => match<FieldType, any>(meta.type)
     .with(FieldType.TEXT_PLAIN, () => value ?? undefined)
     .with(FieldType.TEXT_PARAGRAPH, () => value ? paragraphDoc(value) : undefined)
@@ -586,6 +615,7 @@ const formatCustomFieldValue = (meta: IssueMeta, value: any) => match<FieldType,
 /**
  * Format data when getting values from the API
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const formatCustomFieldValueForSet = (meta: IssueMeta, value: any) => match<FieldType, any>(meta.type)
     .with(FieldType.TEXT_PLAIN, () => value ?? "")
     .with(FieldType.TEXT_PARAGRAPH, () => useAdfToPlainText()(value))

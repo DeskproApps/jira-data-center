@@ -4,7 +4,7 @@ import { MappedFieldProps } from "../types";
 import { DropdownSelect } from "../../DropdownSelect/DropdownSelect";
 import { FieldType } from "../../../types";
 import { useStore } from "../../../context/StoreProvider/hooks";
-import { JiraUser } from "../../IssueForm/types";
+import { JiraUserInfo } from "../../../context/StoreProvider/types";
 
 export const UserPickerField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {
     const [ state ] = useStore();
@@ -17,8 +17,8 @@ export const UserPickerField: FC<MappedFieldProps> = ({ id, meta, field, error, 
         return (<></>);
     }
 
-    const users: JiraUser[] = (state.dataDependencies.users ?? [])
-        .filter((user: JiraUser) => user.active && user.accountType === "atlassian")
+    const users: JiraUserInfo[] = (state.dataDependencies.users ?? [])
+        .filter((user) => user.active && user.accountType === "atlassian")
     ;
 
     return (
@@ -29,12 +29,12 @@ export const UserPickerField: FC<MappedFieldProps> = ({ id, meta, field, error, 
         >
             <DropdownSelect
                 helpers={helpers}
-                options={users.map((user: JiraUser, idx: number) => ({
+                options={users.map((user, idx: number) => ({
                     key: `${idx}`,
                     label: user.displayName,
                     value: user.accountId,
                     type: "value" as const
-                } as DropdownValueType<any>))}
+                } as DropdownValueType<JiraUserInfo["accountId"]>))}
                 id={id}
                 placeholder="Select value"
                 value={field.value}

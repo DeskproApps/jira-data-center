@@ -109,7 +109,7 @@ export const useFindLinkedIssueAttachmentsByKey = () => {
 }
 
 export const useAdfToPlainText = () => {
-  return (document: ADFEntity): string => {
+  return (document?: ADFEntity|string|null): string => {
     if (!document) {
       return "";
     }

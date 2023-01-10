@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import get from "lodash/get";
 import { FieldType, IssueMeta } from "../../types";
 import { match } from "ts-pattern";
 import type { MappedFieldProps } from "./types";
@@ -36,7 +37,7 @@ const map = (type: FieldType): MaybeField => match<FieldType, MaybeField>(type)
 
 interface CustomFieldProps {
     meta: IssueMeta;
-    apiErrors: Record<string, string>;
+    apiErrors?: Record<string, string>;
     extraLabels?: string[];
 }
 
@@ -49,14 +50,14 @@ export const CustomField: FC<CustomFieldProps> = ({ meta, apiErrors, extraLabels
 
     return (
         <div className="create-form-field">
-            <FormikField<any> name={`customFields.${meta.key}`}>
+            <FormikField name={`customFields.${meta.key}`}>
                 {([field, , helpers], { id, error }) => (
                     <Field
                         id={id}
                         meta={meta}
                         field={field}
                         extraLabels={extraLabels}
-                        error={!! (error || apiErrors[meta.name] || apiErrors[meta.key])}
+                        error={!! (error || get(apiErrors, [meta.name]) || get(apiErrors, [meta.key]))}
                         helpers={helpers}
                     />
                 )}

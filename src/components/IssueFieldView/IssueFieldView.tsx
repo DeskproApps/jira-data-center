@@ -1,11 +1,11 @@
 import type {FC, ReactElement} from "react";
-import { IssueMeta } from "../../types";
+import { IssueMeta, IssueValue } from "../../types";
 import { Property } from "@deskpro/app-sdk";
 import map from "./map";
 
 interface IssueFieldViewProps {
     meta: IssueMeta;
-    value: any;
+    value: IssueValue[IssueMeta["type"]];
 }
 
 export const IssueFieldView: FC<IssueFieldViewProps> = ({ value, meta }: IssueFieldViewProps) => {
@@ -13,6 +13,7 @@ export const IssueFieldView: FC<IssueFieldViewProps> = ({ value, meta }: IssueFi
 
     if (field === null) {
         // Inform us of the missing map then gracefully do not attempt to render the field
+        // eslint-disable-next-line no-console
         console.warn(`Could not render field view, mapping missing for JIRA field type ${meta.type}`);
         return (<></>);
     }

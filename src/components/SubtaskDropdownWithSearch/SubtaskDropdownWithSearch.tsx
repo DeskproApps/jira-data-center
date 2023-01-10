@@ -22,13 +22,14 @@ import {
   faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { searchIssues } from "../../context/StoreProvider/api";
+import { IssueSearchItem, IssueFormData } from "../../context/StoreProvider/types";
 import { normalize } from "../../utils";
 
 export interface DropdownWithSearchProps {
-  helpers: FieldHelperProps<any>;
+  helpers: FieldHelperProps<IssueFormData["parentKey"]>;
   id?: string;
   placeholder?: string;
-  value?: any;
+  value: IssueSearchItem["key"];
   disabled?: boolean;
   projectId: string;
 }
@@ -56,8 +57,8 @@ export const SubtaskDropdownWithSearch: FC<DropdownWithSearchProps> = ({ helpers
   const [loading, setLoading] = useState<boolean>(false);
   const [isDirtySearch, setIsDirtySearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [parents, setParents] = useState<Record<string, any>>([]);
-  const [parentOptions, setParentOptions] = useState<DropdownValueType<any>[] | DropdownHeaderType[]>([]);
+  const [parents, setParents] = useState<Record<string, IssueSearchItem>>({});
+  const [parentOptions, setParentOptions] = useState<DropdownValueType<IssueSearchItem["key"]>[] | DropdownHeaderType[]>([]);
 
   const getIssueTitle = (): string => {
     const issue = get(parents, [value], null);
@@ -71,7 +72,7 @@ export const SubtaskDropdownWithSearch: FC<DropdownWithSearchProps> = ({ helpers
 
   const debouncedSearch = useDebouncedCallback<(v: string) => void>((q) => {
     if (!q || !client) {
-      setParents([]);
+      setParents({});
       return;
     }
 

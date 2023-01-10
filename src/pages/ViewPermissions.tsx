@@ -8,6 +8,7 @@ import {
 } from "@deskpro/app-sdk";
 import {useState} from "react";
 import {getMyPermissions} from "../context/StoreProvider/api";
+import { Permissions } from "../context/StoreProvider/types";
 import {orderBy} from "lodash";
 import {faCheckCircle, faTimesCircle} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -15,7 +16,7 @@ import {useSetAppTitle} from "../hooks";
 
 export const ViewPermissions = () => {
     const { theme } = useDeskproAppTheme();
-    const [ permissionStatuses, setPermissionStatuses ] = useState<any>(null);
+    const [ permissionStatuses, setPermissionStatuses ] = useState<null|{ permissions: Permissions }>(null);
 
     useSetAppTitle("JIRA Permissions");
 
@@ -36,11 +37,7 @@ export const ViewPermissions = () => {
         return (<span>[Permissions Not Found]</span>);
     }
 
-    let permissions = Object.keys(permissionStatuses.permissions).map((key) => ({
-        ...permissionStatuses.permissions[key],
-    }));
-
-    permissions = orderBy(permissions, "id", "asc");
+    const permissions = orderBy(Object.values(permissionStatuses.permissions), "id", "asc");
 
     return (
         <>

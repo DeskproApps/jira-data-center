@@ -3,10 +3,10 @@ import type { MappedViewProps } from "../types";
 import { NoValue } from "../NoValue";
 import { useAdfToPlainText } from "../../../hooks";
 
-export const ParagraphField: FC<MappedViewProps> = ({ value }: MappedViewProps) => {
+export const ParagraphField: FC<MappedViewProps> = ({ value }) => {
     const sdfToPlainText = useAdfToPlainText();
     return (value
-        ? <>{sdfToPlainText(value)}</>
+        ? <>{sdfToPlainText(value as string)}</>
         : <NoValue />
     );
 };

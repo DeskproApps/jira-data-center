@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { orderBy, uniq } from "lodash";
+import { orderBy, uniq, get } from "lodash";
 import { IntlProvider } from "react-intl";
 import { Formik, FormikHelpers } from "formik";
 import {
@@ -18,9 +18,15 @@ import { useStore } from "../../context/StoreProvider/hooks";
 import { schema } from "./validation";
 import { ErrorBlock } from "../Error/ErrorBlock";
 import { useLoadDataDependencies } from "../../hooks";
-import { JiraIssueType, JiraProject, JiraUser } from "./types";
 import { DropdownSelect } from "../DropdownSelect/DropdownSelect";
-import {AttachmentFile, IssueFormData} from "../../context/StoreProvider/types";
+import {
+    JiraProject,
+    JiraUserInfo,
+    JiraIssueType,
+    IssueFormData,
+    AttachmentFile,
+    JiraPriorityValue,
+} from "../../context/StoreProvider/types";
 import { buildCustomFieldMeta } from "../../context/StoreProvider/api";
 import { FieldType, IssueMeta } from "../../types";
 import { CustomField } from "../IssueFieldForm/map";
@@ -28,12 +34,17 @@ import { DropdownMultiSelect } from "../DropdownMultiSelect/DropdownMultiSelect"
 import {AttachmentsField} from "../AttachmentsField/AttachmentsField";
 import { SubtaskDropdownWithSearch } from "../SubtaskDropdownWithSearch/SubtaskDropdownWithSearch";
 import { isNeedField, isRequiredField } from "../../utils";
+import { SubmitIssueFormData } from "./types";
 
 export interface IssueFormProps {
-    onSubmit: (values: any, formikHelpers: FormikHelpers<any>, meta: Record<string, IssueMeta>) => void | Promise<any>;
+    onSubmit: (
+        values: SubmitIssueFormData,
+        formikHelpers: FormikHelpers<IssueFormData>,
+        meta: Record<string, IssueMeta>,
+    ) => void | Promise<void>;
     type: "create"|"update";
-    apiErrors: Record<string, string>;
-    values?: any;
+    apiErrors?: Record<string, string>;
+    values?: IssueFormData;
     loading?: boolean;
     editMeta?: Record<string, IssueMeta>;
     issueKey?: string;
@@ -86,29 +97,29 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
 
     const users = orderBy(
         state.dataDependencies.users ?? [],
-        (u: JiraUser) => u.displayName,
+        (u) => u.displayName,
         ['asc']
     );
 
-    const projectOptions = projects.map((project: JiraProject, idx: number) => ({
+    const projectOptions = projects.map((project, idx) => ({
         key: `${idx}`,
         label: `${project.name} (${project.key})`,
         value: project.id,
         type: "value" as const,
-    })) as DropdownValueType<any>[];
+    })) as DropdownValueType<JiraProject["id"]>[];
 
     const userOptions = users
-        .filter((u: JiraUser) => u.active)
-        .filter((u: JiraUser) => u.accountType === "atlassian")
-        .map((user: JiraUser, idx: number) => ({
+        .filter((u) => u.active)
+        .filter((u) => u.accountType === "atlassian")
+        .map((user, idx: number) => ({
             key: `${idx}`,
             label: `${user.displayName}`,
             value: user.accountId,
             type: "value" as const,
-        })) as DropdownValueType<any>[];
+        })) as DropdownValueType<JiraUserInfo["accountId"]>[];
 
     const buildIssueTypeOptions = (projectId: string) => {
-        const { projects } =  state.dataDependencies.createMeta;
+        const { projects } =  get(state, ["dataDependencies", "createMeta"]);
         const project = (projects ?? []).filter((p: JiraProject) => p.id === projectId)[0] ?? null;
 
         if (!project) {
@@ -120,12 +131,12 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
             label: `${issueType.name}`,
             value: issueType.id,
             type: "value" as const,
-        } as DropdownValueType<any>));
+        } as DropdownValueType<JiraIssueType["id"]>));
     };
 
     const buildLabelOptions = () => {
         const labels = [
-            ...state.dataDependencies.labels ?? [],
+            ...(get(state, ["dataDependencies","labels"], []) || []),
             ...extraLabels,
         ];
 
@@ -134,11 +145,11 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
             label: label,
             value: label,
             type: "value" as const,
-        } as DropdownValueType<any>));
+        } as DropdownValueType<string>));
     };
 
     const buildPriorityOptions = (projectId: string, issueTypeId: string) => {
-        const { projects } = state.dataDependencies.createMeta;
+        const { projects } = get(state, ["dataDependencies", "createMeta"]);
 
         const project = (projects ?? []).filter((p: JiraProject) => p.id === projectId)[0] ?? null;
 
@@ -146,18 +157,19 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
             return [];
         }
 
-        const issueType = project.issuetypes.filter((issueType: any) => issueType.id === issueTypeId)[0] as JiraIssueType;
+        const issueType = project.issuetypes.filter((issueType: JiraIssueType) => issueType.id === issueTypeId)[0];
 
-        return (issueType.fields?.priority?.allowedValues ?? []).map((priority: any, idx: number) => ({
+        return (issueType.fields?.priority?.allowedValues ?? []).map((priority: JiraPriorityValue, idx: number) => ({
             key: `${idx}`,
             label: priority.name,
             value: priority.id,
             type: "value" as const,
-        } as DropdownValueType<any>));
+        } as DropdownValueType<JiraPriorityValue["id"]>));
     };
 
     const getCustomFields = (projectId?: string, issueTypeId?: string): Record<string, IssueMeta> => {
-        const { projects } = state.dataDependencies.createMeta;
+        const { projects } = get(state, ["dataDependencies", "createMeta"]);
+
         const project = (projects ?? []).filter((p: JiraProject) => p.id === projectId)[0] ?? null;
 
         if (!project) {
@@ -175,7 +187,7 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
         return buildCustomFieldMeta(issueType.fields);
     };
 
-    const submit = (values: any, helpers: FormikHelpers<any>) => {
+    const submit = (values: IssueFormData, helpers: FormikHelpers<IssueFormData>) => {
         const { labels, priority, assigneeUserId, reporterUserId, ...data } = values;
         const isNeed = ((state, projectId, issueTypeId) => {
             return (fieldName: string) => {

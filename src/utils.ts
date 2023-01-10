@@ -1,8 +1,7 @@
 import { parseISO } from "date-fns";
 import { get, has } from "lodash";
 import { IDeskproClient } from "@deskpro/app-sdk";
-import { State } from "./context/StoreProvider/types";
-import { JiraIssueType, JiraProject } from "./components/IssueForm/types";
+import { State, JiraProject, JiraIssueType } from "./context/StoreProvider/types";
 
 export const getDateFromValue = (value: unknown): Date => {
     if (typeof value === "string") {
@@ -67,6 +66,7 @@ export const isRequiredField = ({ state, fieldName, projectId, issueTypeId }: {
     return get(issueType, ["fields", fieldName, "required"]);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const normalize = (source: undefined|any[], fieldName = "id") => {
     if (!Array.isArray(source)) {
         return {};

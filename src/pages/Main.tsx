@@ -9,7 +9,7 @@ import { useStore } from "../context/StoreProvider/hooks";
 import { Home } from "./Home";
 import { Link } from "./Link";
 import { View } from "./View";
-import { Page } from "../context/StoreProvider/types";
+import { Page, ElementEventPayload } from "../context/StoreProvider/types";
 import { ErrorBlock } from "../components/Error/ErrorBlock";
 import { useDebouncedCallback } from "use-debounce";
 import { Create } from "./Create";
@@ -135,8 +135,9 @@ export const Main: FC = () => {
     500
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const unlinkTicket = ({ issueKey }: any) => {
-    if (!state?.context?.data.ticket) {
+    if (!state?.context?.data.ticket || !issueKey) {
       return;
     }
 
@@ -165,7 +166,7 @@ export const Main: FC = () => {
       client && setTimeout(() => client.resize(), 200);
     },
     onElementEvent: (id, type, payload) => {
-      match<[string, any]>([id, payload])
+      match<[string, ElementEventPayload]>([id, payload as ElementEventPayload])
         .with(["addIssue", __], () => dispatch({ type: "changePage", page: "link" }))
         .with(["home", __], () => dispatch({ type: "changePage", page: "home" }))
         .with(["edit", __], () => dispatch({ type: "changePage", page: "edit", params: { issueKey: payload } }))
@@ -185,15 +186,15 @@ export const Main: FC = () => {
   }, [dispatch]);
 
   const page = match<Page|undefined>(state.page)
-      .with("verify_settings", () => <VerifySettings {...state.pageParams} />)
-      .with("home", () => <Home {...state.pageParams} />)
-      .with("link", () => <Link {...state.pageParams} />)
+      .with("verify_settings", () => <VerifySettings />)
+      .with("home", () => <Home />)
+      .with("link", () => <Link />)
       .with("view", () => <View {...state.pageParams} />)
-      .with("create", () => <Create {...state.pageParams} />)
+      .with("create", () => <Create />)
       .with("edit", () => <Edit {...state.pageParams} />)
       .with("comment", () => <Comment {...state.pageParams} />)
-      .with("view_permissions", () => <ViewPermissions {...state.pageParams} />)
-      .otherwise(() => <Home {...state.pageParams} />)
+      .with("view_permissions", () => <ViewPermissions />)
+      .otherwise(() => <Home />)
   ;
 
   return (
