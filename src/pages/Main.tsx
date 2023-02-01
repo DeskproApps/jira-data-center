@@ -1,74 +1,206 @@
-import { useState } from "react";
+import { FC, useEffect, useCallback } from "react";
+import { __, match } from "ts-pattern";
 import {
-    Context, H1, HorizontalDivider,
-    LoadingSpinner,
-    Property, proxyFetch,
-    Stack,
-    useDeskproAppEvents,
-    useInitialisedDeskproAppClient
+  Context,
+  TargetAction, useDeskproAppClient,
+  useDeskproAppEvents, useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
+import { useStore } from "../context/StoreProvider/hooks";
+import { Home } from "./Home";
+import { Link } from "./Link";
+import { View } from "./View";
+import { Page, ElementEventPayload } from "../context/StoreProvider/types";
+import { ErrorBlock } from "../components/Error/ErrorBlock";
+import { useDebouncedCallback } from "use-debounce";
+import { Create } from "./Create";
+import { addIssueComment, removeRemoteLink } from "../context/StoreProvider/api";
+import { Edit } from "./Edit";
+import { Comment } from "./Comment";
+import {
+  registerReplyBoxEmailsAdditionsTargetAction,
+  registerReplyBoxNotesAdditionsTargetAction, ticketReplyEmailsSelectionStateKey,
+  ticketReplyNotesSelectionStateKey
+} from "../utils";
+import { ReplyBoxNoteSelection } from "../types";
+import { useLoadLinkedIssues, useWhenNoLinkedItems } from "../hooks";
+import { ViewPermissions } from "./ViewPermissions";
+import { VerifySettings } from "./VerifySettings";
 
-/*
-    Note: the following page component contains example code, please remove the contents of this component before you
-    develop your app. For more information, please refer to our apps
-    guides @see https://support.deskpro.com/en-US/guides/developers/anatomy-of-an-app
-*/
+export const Main: FC = () => {
+  const { client } = useDeskproAppClient();
+  const loadLinkedIssues = useLoadLinkedIssues();
+  const [state, dispatch] = useStore();
 
-export const Main = () => {
-    const [ ticketContext, setTicketContext ] = useState<Context|null>(null);
-    const [ examplePosts, setExamplePosts ] = useState<{ id: string; title: string; }[]>([]);
+  if (state._error) {
+    // eslint-disable-next-line no-console
+    console.error(state._error);
+  }
 
-    // Add a "refresh" button @see https://support.deskpro.com/en-US/guides/developers/app-elements
-    useInitialisedDeskproAppClient((client) => {
-        client.registerElement("myRefreshButton", { type: "refresh_button" });
-    });
+  useWhenNoLinkedItems(
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      useCallback(() => dispatch({ type: "changePage", page: "link" }), [])
+  );
 
-    // Listen for the "change" event and store the context data
-    // as local state @see https://support.deskpro.com/en-US/guides/developers/app-events
-    useDeskproAppEvents({
-        onChange: setTicketContext,
-    });
+  useEffect(() => {
+    client?.registerElement("refresh", { type: "refresh_button" });
+  }, [client]);
 
-    // Use the apps proxy to fetch data from a third party
-    // API @see https://support.deskpro.com/en-US/guides/developers/app-proxy
-    useInitialisedDeskproAppClient((client) => (async () => {
-        const fetch = await proxyFetch(client);
+  const debounceTargetAction = useDebouncedCallback<(a: TargetAction<ReplyBoxNoteSelection[]>) => void>(
+    (action: TargetAction) => {
+      match<string>(action.name)
+          .with("linkTicket", () => dispatch({ type: "changePage", page: "link" }))
+          .with("jiraReplyBoxNoteAdditions", () => (action.payload ?? []).forEach((selection: { id: string; selected: boolean; }) => {
+            const ticketId = action.subject;
 
-        const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+            if (state.context?.data.ticket.id) {
+              client?.setState(
+                  ticketReplyNotesSelectionStateKey(ticketId, selection.id),
+                  { id: selection.id, selected: selection.selected }
+              ).then((result) => {
+                if (result.isSuccess) {
+                  registerReplyBoxNotesAdditionsTargetAction(client, state);
+                }
+              });
+            }
+          }))
+          .with("jiraReplyBoxEmailAdditions", () => (action.payload ?? []).forEach((selection: { id: string; selected: boolean; }) => {
+            const ticketId = action.subject;
 
-        const posts = await response.json();
+            if (state.context?.data.ticket.id) {
+              client?.setState(
+                  ticketReplyEmailsSelectionStateKey(ticketId, selection.id),
+                  { id: selection.id, selected: selection.selected }
+              ).then((result) => {
+                if (result.isSuccess) {
+                  registerReplyBoxEmailsAdditionsTargetAction(client, state);
+                }
+              });
+            }
+          }))
+          .with("jiraOnReplyBoxNote", () => {
+            const ticketId = action.subject;
+            const note = action.payload.note;
 
-        setExamplePosts(posts.slice(0, 3));
-    })());
+            if (!ticketId || !note || !client) {
+              return;
+            }
 
-    // If we don't have a ticket context yet, show a loading spinner
-    if (ticketContext === null) {
-        return <LoadingSpinner />;
+            if (ticketId !== state.context?.data.ticket.id) {
+              return;
+            }
+
+            client.setBlocking(true);
+            client.getState<{ id: string; selected: boolean }>(`tickets/${ticketId}/notes/*`)
+                .then((r) => {
+                  const issueIds = r
+                      .filter(({ data }) => data?.selected)
+                      .map((({ data }) => data?.id as string))
+                  ;
+
+                  return Promise.all(issueIds.map((issueId) => addIssueComment(client, issueId, note)));
+                })
+                .then(() => loadLinkedIssues())
+                .finally(() => client.setBlocking(false))
+            ;
+          })
+          .with("jiraOnReplyBoxEmail", () => {
+            const ticketId = action.subject;
+            const email = action.payload.email;
+
+            if (!ticketId || !email || !client) {
+              return;
+            }
+
+            if (ticketId !== state.context?.data.ticket.id) {
+              return;
+            }
+
+            client.setBlocking(true);
+            client.getState<{ id: string; selected: boolean }>(`tickets/${ticketId}/emails/*`)
+                .then((r) => {
+                  const issueIds = r
+                      .filter(({ data }) => data?.selected)
+                      .map((({ data }) => data?.id as string))
+                  ;
+
+                  return Promise.all(issueIds.map((issueId) => addIssueComment(client, issueId, email)));
+                })
+                .then(() => loadLinkedIssues())
+                .finally(() => client.setBlocking(false))
+            ;
+          })
+          .run()
+      ;
+    },
+    500
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const unlinkTicket = ({ issueKey }: any) => {
+    if (!state?.context?.data.ticket || !issueKey) {
+      return;
     }
 
-    // Show some information about a given
-    // ticket @see https://support.deskpro.com/en-US/guides/developers/targets and third party API
-    return (
-        <>
-            <H1>Ticket Data</H1>
-            <Stack gap={12} vertical>
-                <Property title="Ticket ID">
-                    {ticketContext.data.ticket.id}
-                </Property>
-                <Property title="Ticket Subject">
-                    {ticketContext.data.ticket.subject}
-                </Property>
-            </Stack>
-            <HorizontalDivider width={2} />
-            <H1>Example Posts</H1>
-            {examplePosts.map((post) => (
-                <div key={post.id}>
-                    <Property title="Post Title">
-                        {post.title}
-                    </Property>
-                    <HorizontalDivider width={2} />
-                </div>
-            ))}
-        </>
-    );
+    const contextData = state?.context?.data;
+
+    dispatch({ type: "unlinkIssue", key: issueKey });
+
+    client?.getEntityAssociation("linkedJiraDataCentreIssue", contextData.ticket.id).delete(issueKey)
+        .then(() => removeRemoteLink(client, issueKey, contextData.ticket.id))
+        .then(() => dispatch({ type: "changePage", page: "home" }))
+    ;
+  };
+
+  useInitialisedDeskproAppClient((client) => {
+    registerReplyBoxNotesAdditionsTargetAction(client, state);
+    registerReplyBoxEmailsAdditionsTargetAction(client, state);
+    client.registerTargetAction("jiraOnReplyBoxNote", "on_reply_box_note");
+    client.registerTargetAction("jiraOnReplyBoxEmail", "on_reply_box_email");
+  }, [state.linkedIssuesResults?.list, state?.context?.data]);
+
+  useDeskproAppEvents({
+    onChange: (context: Context) => {
+      context && dispatch({ type: "loadContext", context: context });
+    },
+    onShow: () => {
+      client && setTimeout(() => client.resize(), 200);
+    },
+    onElementEvent: (id, type, payload) => {
+      match<[string, ElementEventPayload]>([id, payload as ElementEventPayload])
+        .with(["addIssue", __], () => dispatch({ type: "changePage", page: "link" }))
+        .with(["home", __], () => dispatch({ type: "changePage", page: "home" }))
+        .with(["edit", __], () => dispatch({ type: "changePage", page: "edit", params: { issueKey: payload } }))
+        .with([__, { action: "unlink", issueKey: __ }], () => unlinkTicket(payload))
+        .with([__, { action: "viewPermissions" }], () => dispatch({ type: "changePage", page: "view_permissions" }))
+        .otherwise(() => {})
+      ;
+    },
+    onTargetAction: (a) => debounceTargetAction(a as TargetAction),
+  }, [client, state.context?.data]);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const page = queryParams.get("page") as Page|null;
+
+    page && dispatch({ type: "changePage", page })
+  }, [dispatch]);
+
+  const page = match<Page|undefined>(state.page)
+      .with("verify_settings", () => <VerifySettings />)
+      .with("home", () => <Home />)
+      .with("link", () => <Link />)
+      .with("view", () => <View {...state.pageParams} />)
+      .with("create", () => <Create />)
+      .with("edit", () => <Edit {...state.pageParams} />)
+      .with("comment", () => <Comment {...state.pageParams} />)
+      .with("view_permissions", () => <ViewPermissions />)
+      .otherwise(() => <Home />)
+  ;
+
+  return (
+    <>
+      {state._error && (<ErrorBlock text="An error occurred" />)}
+      {page}
+    </>
+  );
 };
