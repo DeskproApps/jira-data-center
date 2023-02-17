@@ -1,19 +1,22 @@
 import { FC, useEffect, useMemo } from "react";
 import {
-  useAdfToPlainText, useFindLinkedIssueAttachmentsByKey,
+  useSetAppTitle,
+  useExternalLink,
+  useAdfToPlainText,
   useFindLinkedIssueByKey,
   useLoadLinkedIssueAttachment,
-  useSetAppTitle
+  useFindLinkedIssueAttachmentsByKey,
 } from "../hooks";
 import {
   H1,
   Pill,
-  Property, Spinner,
   Stack,
-  HorizontalDivider,
+  Spinner,
+  Property,
   AttachmentTag,
+  HorizontalDivider,
+  useDeskproAppTheme,
   useDeskproAppClient,
-  useDeskproAppTheme
 } from "@deskpro/app-sdk";
 import { ExternalLink } from "../components/ExternalLink/ExternalLink";
 import { useStore } from "../context/StoreProvider/hooks";
@@ -34,6 +37,7 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
   const findAttachmentsByKey = useFindLinkedIssueAttachmentsByKey();
   const findByKey = useFindLinkedIssueByKey();
   const adfToPlainText = useAdfToPlainText();
+  const { getBaseUrl } = useExternalLink();
 
   useSetAppTitle(issueKey || "");
 
@@ -70,24 +74,22 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
     return (<></>);
   }
 
-  const domain = state.context?.settings.domain as string;
-
   return (
     <>
       <Stack align="start" gap={10}>
         <Stack gap={10} vertical>
           <div style={{ display: "flex", alignItems: "start", marginBottom: "-6px" }}>
             <H1 style={{ marginRight: "1px" }}>{issue.summary}</H1>
-            <ExternalLink href={`https://${domain}.atlassian.net/browse/${issue.key}`} style={{ position: "relative", top: "-4px" }} />
+            <ExternalLink href={`${getBaseUrl()}/browse/${issue.key}`} style={{ position: "relative", top: "-4px" }} />
           </div>
           <Property title="Issue Key">
             {issue.key}
-            <ExternalLink href={`https://${domain}.atlassian.net/browse/${issue.key}`} />
+            <ExternalLink href={`${getBaseUrl()}/browse/${issue.key}`} />
           </Property>
           {issue.parentKey && (
             <Property title="Parent">
               {issue.parentKey}
-              <ExternalLink href={`https://${domain}.atlassian.net/browse/${issue.parentKey}`} />
+              <ExternalLink href={`${getBaseUrl()}/browse/${issue.parentKey}`} />
             </Property>
           )}
           {issue.description && (
@@ -97,12 +99,12 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
           )}
           <Property title="Project">
             {issue.projectName}
-            <ExternalLink href={`https://${domain}.atlassian.net/browse/${issue.projectKey}`} />
+            <ExternalLink href={`${getBaseUrl()}/browse/${issue.projectKey}`} />
           </Property>
           {issue.epicKey && (
             <Property title="Epic">
               {issue.epicName}
-              <ExternalLink href={`https://${domain}.atlassian.net/browse/${issue.epicKey}`} />
+              <ExternalLink href={`${getBaseUrl()}/browse/${issue.epicKey}`} />
             </Property>
           )}
           {(issue.sprints ?? []).length > 0 && (
@@ -110,7 +112,7 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
               {(issue.sprints ?? []).map((sprint, idx) => (
                 <div key={idx}>
                   {sprint.sprintName} ({sprint.sprintState})
-                  <ExternalLink href={`https://${domain}.atlassian.net/jira/software/c/projects/${issue?.projectKey}/boards/${sprint.sprintBoardId}`} />
+                  <ExternalLink href={`${getBaseUrl()}/jira/software/c/projects/${issue?.projectKey}/boards/${sprint.sprintBoardId}`} />
                 </div>
               ))}
             </Property>
@@ -126,7 +128,7 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
                   )}
                   <span className="user-name">{issue.assigneeName}</span>
                   {issue.assigneeId && (
-                      <ExternalLink href={`https://${domain}.atlassian.net/jira/people/${issue.assigneeId}`} />
+                      <ExternalLink href={`${getBaseUrl()}/jira/people/${issue.assigneeId}`} />
                   )}
                 </div>
             ) : (
@@ -140,7 +142,7 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
               )}
               <span className="user-name">{issue.reporterName}</span>
               {issue.reporterId && (
-                  <ExternalLink href={`https://${domain}.atlassian.net/jira/people/${issue.reporterId}`} />
+                  <ExternalLink href={`${getBaseUrl()}/jira/people/${issue.reporterId}`} />
               )}
             </div>
           </Property>
@@ -187,7 +189,7 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
           ))}
           <Stack vertical gap={10} style={{ width: "100%" }}>
             <HorizontalDivider style={{ width: "100%" }} />
-            <CommentsList issueKey={issueKey} domain={state.context?.settings.domain} />
+            <CommentsList issueKey={issueKey} />
           </Stack>
         </Stack>
       </Stack>

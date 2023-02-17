@@ -147,7 +147,6 @@ export const Link: FC = () => {
         <SearchResultItem
           key={idx}
           item={item}
-          jiraDomain={state.context?.settings.domain as string}
           onSelect={() => toggleSelection(item.key)}
           checkbox={(
             <Checkbox

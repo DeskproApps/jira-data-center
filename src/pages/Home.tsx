@@ -75,7 +75,6 @@ export const Home: FC = () => {
             <LinkedIssueResultItem
               key={idx}
               item={item}
-              jiraDomain={state.context?.settings.domain as string}
               onView={() => dispatch({ type: "changePage", page: "view", params: { issueKey: item.key } })}
             />
           ))
