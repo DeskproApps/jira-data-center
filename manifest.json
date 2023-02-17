@@ -2,7 +2,7 @@
   "name": "@deskpro-apps/jira-data-centre",
   "title": "Jira Data Centre",
   "description": "View Jira issues linked with Deskpro tickets to streamline communication with users",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
@@ -89,7 +89,7 @@
   },
   "proxy": {
     "whitelist": [{
-      "url": "https://(.*).atlassian.net/rest/api/.*",
+      "url": "__instance_url__/rest/api/.*",
       "methods": ["GET", "POST", "PUT", "DELETE"],
       "timeout": 30
     }]
