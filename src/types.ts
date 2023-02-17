@@ -1,3 +1,4 @@
+import { Context } from "@deskpro/app-sdk";
 import { JiraUserInfo } from "./context/StoreProvider/types";
 
 export type Maybe<T> = T | undefined | null;
@@ -148,7 +149,7 @@ export interface ReplyBoxOnReply {
 }
 
 export type Settings = {
-    domain?: string,
+    instance_url?: string,
     username?: string,
     api_key?: string,
     verify_settings?: string,
@@ -156,3 +157,12 @@ export type Settings = {
     default_comment_on_ticket_note?: string,
     ticket_subject_as_issue_summary?: string,
 };
+
+export type TicketData = {
+    env: object,
+    app: object,
+    ticket: object,
+    currentAgent: object,
+};
+
+export type TicketContext = Context<TicketData, Maybe<Settings>>;

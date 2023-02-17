@@ -11,18 +11,24 @@ import { Link } from "./Link";
 import { View } from "./View";
 import { Page, ElementEventPayload } from "../context/StoreProvider/types";
 import { ErrorBlock } from "../components/Error/ErrorBlock";
+import { SettingsError } from "../components/Error/SettingsError";
 import { useDebouncedCallback } from "use-debounce";
 import { Create } from "./Create";
 import { addIssueComment, removeRemoteLink } from "../context/StoreProvider/api";
 import { Edit } from "./Edit";
 import { Comment } from "./Comment";
 import {
+  ticketReplyNotesSelectionStateKey,
+  ticketReplyEmailsSelectionStateKey,
+  registerReplyBoxNotesAdditionsTargetAction,
   registerReplyBoxEmailsAdditionsTargetAction,
-  registerReplyBoxNotesAdditionsTargetAction, ticketReplyEmailsSelectionStateKey,
-  ticketReplyNotesSelectionStateKey
 } from "../utils";
 import { ReplyBoxNoteSelection } from "../types";
-import { useLoadLinkedIssues, useWhenNoLinkedItems } from "../hooks";
+import {
+  useLoadLinkedIssues,
+  useWhenNoLinkedItems,
+  useCheckingCorrectlySettings,
+} from "../hooks";
 import { ViewPermissions } from "./ViewPermissions";
 import { VerifySettings } from "./VerifySettings";
 
@@ -30,6 +36,7 @@ export const Main: FC = () => {
   const { client } = useDeskproAppClient();
   const loadLinkedIssues = useLoadLinkedIssues();
   const [state, dispatch] = useStore();
+  const { isSettingsError } = useCheckingCorrectlySettings();
 
   if (state._error) {
     // eslint-disable-next-line no-console
@@ -200,6 +207,7 @@ export const Main: FC = () => {
   return (
     <>
       {state._error && (<ErrorBlock text="An error occurred" />)}
+      {isSettingsError && (<SettingsError />)}
       {page}
     </>
   );

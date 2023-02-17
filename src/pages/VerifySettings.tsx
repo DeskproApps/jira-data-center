@@ -16,14 +16,14 @@ import { toBase64 } from "../utils";
 
 export const preInstalledRequest = async (
     client: IDeskproClient,
-    settings: Required<Pick<Settings, "domain"|"username"|"api_key">>,
+    settings: Required<Pick<Settings, "instance_url"|"username"|"api_key">>,
 ): Promise<JiraUser|null> => {
-    const { domain, username, api_key } = settings;
+    const { instance_url, username, api_key } = settings;
     const auth = `${username}:${api_key}`;
 
     const dpFetch = await adminGenericProxyFetch(client);
 
-    const res = await dpFetch(`https://${domain}.atlassian.net/rest/api/2/myself`, {
+    const res = await dpFetch(`${instance_url}/rest/api/2/myself`, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -59,7 +59,7 @@ const VerifySettings: FC = () => {
     }, [client]);
 
     const onVerifySettings = useCallback(() => {
-        if (!client || !settings?.domain || !settings?.username || !settings?.api_key) {
+        if (!client || !settings?.instance_url || !settings?.username || !settings?.api_key) {
             return;
         }
 
@@ -68,9 +68,9 @@ const VerifySettings: FC = () => {
         setCurrentUser(null);
 
         return preInstalledRequest(client, {
-            domain: settings.domain,
+            instance_url: settings.instance_url,
             username: settings.username,
-            api_key: settings.api_key
+            api_key: settings.api_key,
         })
             .then(setCurrentUser)
             .catch(() => setError(errorMessage))
@@ -78,7 +78,7 @@ const VerifySettings: FC = () => {
     }, [client, settings, errorMessage]);
 
     return (
-        <div style={{ margin: "-8px" }}>
+        <div style={{ margin: "0 -8px" }}>
             <Stack align="baseline" >
                 <Button
                     text="Verify Settings"
@@ -86,7 +86,7 @@ const VerifySettings: FC = () => {
                     style={{ minWidth: "72px", justifyContent: "center" }}
                     onClick={onVerifySettings}
                     loading={isLoading}
-                    disabled={!every([settings?.domain, settings?.username, settings?.api_key] || isLoading)}
+                    disabled={!every([settings?.instance_url, settings?.username, settings?.api_key] || isLoading)}
                 />&nbsp;
 
                 {currentUser

@@ -28,7 +28,7 @@ import { FieldType, IssueMeta } from "../../types";
 import { SubmitIssueFormData } from "../../components/IssueForm/types";
 
 // JIRA REST API Base URL
-const API_BASE_URL = "https://__domain__.atlassian.net/rest/api/2";
+const API_BASE_URL = "__instance_url__/rest/api/2";
 
 // Key for search dependency caching (milliseconds)
 const SEARCH_DEPS_CACHE_TTL = 5 * (60 * 1000); // 5 Minutes
