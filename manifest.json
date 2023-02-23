@@ -2,7 +2,7 @@
   "name": "@deskpro-apps/jira-data-centre",
   "title": "Jira Data Centre",
   "description": "View Jira issues linked with Deskpro tickets to streamline communication with users",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
