@@ -343,3 +343,13 @@ export type JiraIssueDetails = {
   },
   fields: JiraFields
 };
+
+export type SearchResponse<T> = {
+  nextPage: string,
+  self: string,
+  isLast: boolean,
+  maxResults: number,
+  startAt: number,
+  total: number,
+  values: T[],
+};
