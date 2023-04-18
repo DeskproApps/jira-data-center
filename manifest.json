@@ -2,23 +2,25 @@
   "name": "@deskpro-apps/jira-data-centre",
   "title": "Jira Data Centre",
   "description": "View Jira issues linked with Deskpro tickets to streamline communication with users",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
-  "targets": [{
-    "target": "ticket_sidebar",
-    "entrypoint": "index.html",
-    "options": {
-      "actions": {
-        "linkTicket": {
-          "type": "ticket_addition",
-          "title": "JIRA Issue",
-          "description": "Link ticket to JIRA issue"
+  "targets": [
+    {
+      "target": "ticket_sidebar",
+      "entrypoint": "index.html",
+      "options": {
+        "actions": {
+          "linkTicket": {
+            "type": "ticket_addition",
+            "title": "JIRA Issue",
+            "description": "Link ticket to JIRA issue"
+          }
         }
       }
     }
-  }],
+  ],
   "entityAssociations": {
     "linkedJiraDataCentreIssue": {
       "title": "Linked JIRA Issues",
@@ -55,9 +57,7 @@
     "verify_settings": {
       "title": "",
       "type": "app_embedded",
-      "options": {
-        "entrypoint": "?page=verify_settings"
-      },
+      "options": { "entrypoint": "?page=verify_settings" },
       "isRequired": false,
       "isBackendOnly": false,
       "order": 40
@@ -88,10 +88,12 @@
     }
   },
   "proxy": {
-    "whitelist": [{
-      "url": "__instance_url__/rest/api/.*",
-      "methods": ["GET", "POST", "PUT", "DELETE"],
-      "timeout": 30
-    }]
+    "whitelist": [
+      {
+        "url": "__instance_url__/rest/api/.*",
+        "methods": ["GET", "POST", "PUT", "DELETE"],
+        "timeout": 30
+      }
+    ]
   }
 }
