@@ -14,7 +14,10 @@ export const ExternalLink: FC<ExternalLinkProps> = ({ href, style }: ExternalLin
 
   return (
     <a href={href} target="_blank" style={{ color: theme.colors.grey40, ...(style ?? {}) }} className="external-link">
-      <FontAwesomeIcon icon={faExternalLinkAlt} size="xs" />
+      <FontAwesomeIcon icon={faExternalLinkAlt as {
+                        prefix: "fas";
+                        iconName: "mailchimp";
+                      }} size="xs" />
     </a>
   );
 };

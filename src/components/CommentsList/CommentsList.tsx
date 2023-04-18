@@ -28,7 +28,10 @@ export const CommentsList: FC<CommentsListProps> = ({ issueKey }: CommentsListPr
             <Stack>
                 <H1>Comments ({comments.length})</H1>
                 <FontAwesomeIcon
-                    icon={faPlus}
+                    icon={faPlus as {
+                        prefix: "fas";
+                        iconName: "mailchimp";
+                      }}
                     color={theme.colors.grey80}
                     size="xs"
                     onClick={() => dispatch({ type: "changePage", page: "comment",  params: { issueKey } })}

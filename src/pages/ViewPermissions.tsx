@@ -54,9 +54,15 @@ export const ViewPermissions = () => {
                                 {permission.description}
                             </Property>
                             {permission.havePermission ? (
-                                <FontAwesomeIcon icon={faCheckCircle} color={theme.colors.green100} />
+                                <FontAwesomeIcon icon={faCheckCircle as {
+                                    prefix: "fas";
+                                    iconName: "mailchimp";
+                                  }} color={theme.colors.green100} />
                             ) : (
-                                <FontAwesomeIcon icon={faTimesCircle} color={theme.colors.red100} />
+                                <FontAwesomeIcon icon={faTimesCircle as {
+                                    prefix: "fas";
+                                    iconName: "mailchimp";
+                                  }} color={theme.colors.red100} />
                             )}
                         </Stack>
                         <HorizontalDivider />
