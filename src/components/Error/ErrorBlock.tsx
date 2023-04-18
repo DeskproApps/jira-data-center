@@ -13,7 +13,10 @@ export const ErrorBlock: FC<ErrorBlockProps> = ({ text }: ErrorBlockProps) => {
 
   return (
       <Stack className="error-block" style={{ backgroundColor: theme.colors.red100 }}>
-        <FontAwesomeIcon icon={faExclamation} style={{ marginRight: "6px" }} />
+        <FontAwesomeIcon icon={faExclamation as {
+                        prefix: "fas";
+                        iconName: "mailchimp";
+                      }} style={{ marginRight: "6px" }} />
         <div className="error-block-messages">
           {Array.isArray(text) ? text.map((msg, idx) => (
               <div className="error-block-message" key={idx}>{msg}</div>

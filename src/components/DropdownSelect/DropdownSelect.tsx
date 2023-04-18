@@ -1,5 +1,6 @@
 import {FC, useState} from "react";
 import {
+  AnyIcon,
   DivAsInputWithDisplay,
   Dropdown,
   dropdownRenderOptions,
@@ -46,8 +47,8 @@ export const DropdownSelect: FC<DropdownSelectProps> = ({ helpers, id, placehold
       }}
       fetchMoreText="Fetch more"
       autoscrollText="Autoscroll"
-      selectedIcon={faHandPointer}
-      externalLinkIcon={faExternalLinkAlt}
+      selectedIcon={faHandPointer as AnyIcon}
+      externalLinkIcon={faExternalLinkAlt as AnyIcon}
       optionsRenderer={(
         opts,
         handleSelectOption,
@@ -72,8 +73,8 @@ export const DropdownSelect: FC<DropdownSelectProps> = ({ helpers, id, placehold
                 setActiveSubItem,
                   "Fetch more",
                   "Autoscroll",
-                  faHandPointer,
-                  faExternalLinkAlt,
+                  faHandPointer as AnyIcon,
+                  faExternalLinkAlt as AnyIcon,
                 hideIcons,
                 0
               )
@@ -89,7 +90,7 @@ export const DropdownSelect: FC<DropdownSelectProps> = ({ helpers, id, placehold
           placeholder={placeholder}
           value={selectedValue}
           variant="inline"
-          rightIcon={faCaretDown}
+          rightIcon={faCaretDown as AnyIcon}
           ref={targetRef}
           {...targetProps}
           isVisibleRightIcon
