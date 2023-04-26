@@ -1,7 +1,7 @@
 {
   "name": "@deskpro-apps/jira-data-centre",
   "title": "Jira Data Centre",
-  "description": "View Jira issues linked with Deskpro tickets to streamline communication with users",
+  "description": "Integrate with self managed version of Jira to view issues linked with Deskpro tickets to streamline communication with users",
   "version": "1.0.4",
   "scope": "agent",
   "isSingleInstall": true,
