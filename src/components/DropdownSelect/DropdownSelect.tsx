@@ -20,6 +20,7 @@ export interface DropdownSelectProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
   disabled?: boolean;
+  containerMaxHeight?: number;
 }
 
 export const DropdownSelect: FC<DropdownSelectProps> = ({ helpers, id, placeholder, value, options, ...props }: DropdownSelectProps) => {

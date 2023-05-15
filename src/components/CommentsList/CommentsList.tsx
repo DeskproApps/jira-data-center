@@ -8,6 +8,7 @@ import {JiraComment} from "../../context/StoreProvider/types";
 import "./CommentsList.css";
 import {ExternalLink} from "../ExternalLink/ExternalLink";
 import ReactTimeAgo from "react-time-ago";
+import { addBlankTargetToLinks } from "../../utils";
 
 interface CommentsListProps {
     issueKey: string;
@@ -61,7 +62,7 @@ export const CommentsList: FC<CommentsListProps> = ({ issueKey }: CommentsListPr
                         <div
                             className="comment-list-item-body"
                             style={{ color: theme.colors.grey100 }}
-                            dangerouslySetInnerHTML={{ __html: comment.renderedBody }}
+                            dangerouslySetInnerHTML={{ __html: addBlankTargetToLinks(comment.renderedBody) }}
                         />
                         <HorizontalDivider style={{ width: "100%" }} />
                     </Fragment>

@@ -241,6 +241,7 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
                                                 id={id}
                                                 placeholder="Select value"
                                                 value={field.value}
+                                                containerMaxHeight={350}
                                             />
                                         </Label>
                                     )}
