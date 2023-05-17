@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@atlaskit/adf-utils': 14.4.0
   '@deskpro/app-sdk': ^1.2.8
-  '@deskpro/deskpro-ui': ^6.7.0
+  '@deskpro/deskpro-ui': 4.7.0
   '@fortawesome/free-regular-svg-icons': ^6.4.0
   '@fortawesome/free-solid-svg-icons': ^6.4.0
   '@fortawesome/react-fontawesome': ^0.2.0
@@ -57,7 +57,7 @@ specifiers:
 dependencies:
   '@atlaskit/adf-utils': 14.4.0
   '@deskpro/app-sdk': 1.2.8_dhceg3hmviajx6gkea6trsh6de
-  '@deskpro/deskpro-ui': 6.7.0_hwbgsgnusl2xykda667kee54bi
+  '@deskpro/deskpro-ui': 4.7.0_hwbgsgnusl2xykda667kee54bi
   '@fortawesome/free-regular-svg-icons': 6.4.0
   '@fortawesome/free-solid-svg-icons': 6.4.0
   '@fortawesome/react-fontawesome': 0.2.0_react@17.0.2
@@ -597,43 +597,6 @@ packages:
       csstype: 3.1.1
       formik: 2.2.9_react@17.0.2
       framer-motion: 6.5.1_sfoxds7t5ydpegc3knd667wn6m
-      pretty-bytes: 6.0.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-highlight-words: 0.17.0_react@17.0.2
-      react-is: 17.0.2
-      react-popper: 2.3.0_vov5yimr6vvxyufd6uigwwkst4
-      simplebar: 5.3.9
-      simplebar-react: 2.4.3_sfoxds7t5ydpegc3knd667wn6m
-      styled-components: 5.3.6_sfoxds7t5ydpegc3knd667wn6m
-      tippy.js: 6.3.7
-      ts-pattern: 4.0.6
-      tslib: 2.4.1
-      type-fest: 2.19.0
-      use-debounce: 7.0.1_react@17.0.2
-      uuid: 8.3.2
-    dev: false
-
-  /@deskpro/deskpro-ui/6.7.0_hwbgsgnusl2xykda667kee54bi:
-    resolution: {integrity: sha512-Z6H01uQB7mW+uP/ECsMAHNHATn+hCv/21c3QR+U9I0vYB4KMYKXGvj3LI3/RiVWgNafVNJb3OdFRqqzy1oBhsQ==}
-    engines: {node: ^16.0.0}
-    peerDependencies:
-      '@typescript/lib-dom': npm:@types/web
-      react: ^18
-      react-dom: ^18
-      styled-components: ^5
-    dependencies:
-      '@fortawesome/fontawesome-svg-core': 6.2.1
-      '@fortawesome/free-solid-svg-icons': 6.4.0
-      '@fortawesome/react-fontawesome': 0.1.19_chs37cqfjyeefvqfxhgbgy2rma
-      '@heroicons/react': 1.0.6_react@17.0.2
-      '@popperjs/core': 2.11.6
-      '@tippyjs/react': 4.2.6_sfoxds7t5ydpegc3knd667wn6m
-      csstype: 3.1.1
-      d3-hierarchy: 3.1.2
-      formik: 2.2.9_react@17.0.2
-      framer-motion: 6.5.1_sfoxds7t5ydpegc3knd667wn6m
-      lodash: 4.17.21
       pretty-bytes: 6.0.0
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -2002,11 +1965,6 @@ packages:
 
   /csstype/3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
-
-  /d3-hierarchy/3.1.2:
-    resolution: {integrity: sha512-FX/9frcub54beBdugHjDCdikxThEqjnR93Qt7PvQTOHxyiNCAlvMrHhclk3cD5VeAaq9fxmfRp+CnWw9rEMBuA==}
-    engines: {node: '>=12'}
-    dev: false
 
   /data-urls/2.0.0:
     resolution: {integrity: sha512-X5eWTSXO/BJmpdIKCRuKUgSCgAN0OwliVK3yPKbwIWU1Tdw5BRajxlzMidvh+gwko9AfQ9zIj52pzF91Q3YAvQ==}
