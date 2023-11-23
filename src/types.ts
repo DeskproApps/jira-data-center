@@ -150,7 +150,6 @@ export interface ReplyBoxOnReply {
 
 export type Settings = {
     instance_url?: string,
-    username?: string,
     api_key?: string,
     verify_settings?: string,
     default_comment_on_ticket_reply?: string,

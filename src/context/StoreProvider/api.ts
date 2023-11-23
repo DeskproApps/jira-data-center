@@ -503,7 +503,7 @@ const request = async (client: IDeskproClient, method: ApiRequestMethod, url: st
   }
 
   const headers: Record<string, string> = {
-    "Authorization": "Basic __username+':'+api_key.base64__",
+    "Authorization": "Bearer __api_key__",
     "Accept": "application/json",
   };
 

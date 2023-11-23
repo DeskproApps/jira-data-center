@@ -32,24 +32,16 @@
   "settings": {
     "instance_url": {
       "title": "Jira Data Center Instance URL",
-      "description": "Enter the URL of your Jira Data Center instance, or \"https://<my_company>.atlassian.net\"",
+      "description": "Enter the URL of your Jira Data Center instance",
       "validationPattern": "^https?:\\/\\/.+\\..+\\w$",
       "type": "string",
       "isRequired": true,
       "isBackendOnly": false,
       "order": 10
     },
-    "username": {
-      "title": "Email/Username",
-      "description": "JIRA user email address or username",
-      "type": "string",
-      "isRequired": true,
-      "isBackendOnly": true,
-      "order": 20
-    },
     "api_key": {
-      "title": "API Key",
-      "description": "JIRA user's API key, please follow the app setup guide to get this",
+      "title": "Access Token",
+      "description": "JIRA Data Centre user's access token, please follow the app setup guide to get this",
       "type": "string",
       "isRequired": true,
       "isBackendOnly": true,

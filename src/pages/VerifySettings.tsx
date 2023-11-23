@@ -12,14 +12,12 @@ import {
 } from "@deskpro/app-sdk";
 import { Settings } from "../types";
 import { JiraUser } from "../context/StoreProvider/types";
-import { toBase64 } from "../utils";
 
 export const preInstalledRequest = async (
     client: IDeskproClient,
-    settings: Required<Pick<Settings, "instance_url"|"username"|"api_key">>,
+    settings: Required<Pick<Settings, "instance_url"|"api_key">>,
 ): Promise<JiraUser|null> => {
-    const { instance_url, username, api_key } = settings;
-    const auth = `${username}:${api_key}`;
+    const { instance_url, api_key } = settings;
 
     const dpFetch = await adminGenericProxyFetch(client);
 
@@ -28,7 +26,7 @@ export const preInstalledRequest = async (
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": `Basic ${toBase64(auth)}`,
+            "Authorization": `Bearer ${api_key}`,
         },
     });
 
@@ -59,7 +57,7 @@ const VerifySettings: FC = () => {
     }, [client]);
 
     const onVerifySettings = useCallback(() => {
-        if (!client || !settings?.instance_url || !settings?.username || !settings?.api_key) {
+        if (!client || !settings?.instance_url || !settings?.api_key) {
             return;
         }
 
@@ -69,7 +67,6 @@ const VerifySettings: FC = () => {
 
         return preInstalledRequest(client, {
             instance_url: settings.instance_url,
-            username: settings.username,
             api_key: settings.api_key,
         })
             .then(setCurrentUser)
@@ -86,7 +83,7 @@ const VerifySettings: FC = () => {
                     style={{ minWidth: "72px", justifyContent: "center" }}
                     onClick={onVerifySettings}
                     loading={isLoading}
-                    disabled={!every([settings?.instance_url, settings?.username, settings?.api_key] || isLoading)}
+                    disabled={!every([settings?.instance_url, settings?.api_key] || isLoading)}
                 />&nbsp;
 
                 {currentUser

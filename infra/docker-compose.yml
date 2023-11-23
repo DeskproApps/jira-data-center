@@ -1,0 +1,21 @@
+version: "3"
+services:
+  jira:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    volumes:
+      - jira_data:/var/atlassian/application-data/jira
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: jiradb
+      POSTGRES_USER: jirauser
+      POSTGRES_PASSWORD: yourpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  jira_data:
+  postgres_data:
