@@ -32,7 +32,7 @@
   "settings": {
     "instance_url": {
       "title": "Jira Data Center Instance URL",
-      "description": "Enter the URL of your Jira Data Center instance",
+      "description": "Enter the URL of your Jira Data Centre instance, e.g. https://my-jira-instance.com",
       "validationPattern": "^https?:\\/\\/.+\\..+\\w$",
       "type": "string",
       "isRequired": true,

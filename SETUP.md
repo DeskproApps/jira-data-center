@@ -16,7 +16,7 @@ Click on the "Create token" button.
 [![](/docs/assets/setup/jira-setup-03.png)](/docs/assets/setup/jira-setup-03.png)
 
 Enter a token name for the new one (this can be anything you like). In the following example we've
-labelled it "Deskpro App". (also you can choose or not to "Automatic expiry")
+labelled it "Deskpro App" (you can also choose to enable automatic expiry if you wish).
 
 After creating the access token copy it for a later step. It's **important that you keep your secret access token safe**.
 

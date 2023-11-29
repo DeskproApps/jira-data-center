@@ -8,6 +8,8 @@ import {
   Permissions,
   SearchParams,
   JiraUserInfo,
+  JiraIssueType,
+  JiraFieldMeta,
   AttachmentFile,
   IssueAttachment,
   JiraIssueSearch,
@@ -26,7 +28,6 @@ import {
 import { useAdfToPlainText } from "../../hooks";
 import { FieldType, IssueMeta } from "../../types";
 import { SubmitIssueFormData } from "../../components/IssueForm/types";
-import { fetchAll } from "../../utils";
 
 // JIRA REST API Base URL
 const API_BASE_URL = "__instance_url__/rest/api/2";
@@ -228,7 +229,7 @@ export const listLinkedIssues = async (client: IDeskproClient, keys: string[]): 
   }
 
   const issueJql = encodeURIComponent(`issueKey IN (${keys.join(",")})`);
-  const { issues: fullIssues } = await request(client, "GET", `${API_BASE_URL}/search?jql=${issueJql}&expand=editmeta`);
+  const { issues: fullIssues } = await request(client, "GET", `${API_BASE_URL}/search?jql=${issueJql}&expand=editmeta,renderedFields`);
 
   const issues = (fullIssues ?? []).reduce(
     (list: unknown[], issue: { key: string }) => ({ ...list, [issue.key]: issue }),
@@ -295,7 +296,7 @@ export const listLinkedIssues = async (client: IDeskproClient, keys: string[]): 
       sprintName: sprint.name,
       sprintState: sprint.state,
     })),
-    description: get(issues, [issue.key, "fields", "description"], "-"),
+    description: get(issues, [issue.key, "renderedFields", "description"], "-"),
     labels: issues[issue.key].fields.labels ?? [],
     priority: issues[issue.key].fields.priority.name,
     priorityId: issues[issue.key].fields.priority.id,
@@ -330,7 +331,11 @@ export const getIssueAttachments = async (client: IDeskproClient, key: string): 
   } as IssueAttachment));
 }
 
-export const createIssue = async (client: IDeskproClient, data: SubmitIssueFormData, meta: Record<string, IssueMeta>) => {
+export const createIssue = async (
+    client: IDeskproClient,
+    data: SubmitIssueFormData,
+    meta: Record<string, IssueMeta>,
+) => {
   const customFields = Object.keys(data.customFields).reduce((fields, key) => {
     const value = formatCustomFieldValue(meta[key], data.customFields[key]);
 
@@ -356,8 +361,8 @@ export const createIssue = async (client: IDeskproClient, data: SubmitIssueFormD
       description: paragraphDoc(data.description),
       ...(!data.labels ? {} : { labels: data.labels }),
       ...(!data.priority ? {} : { priority: { id: data.priority } }),
-      ...(!data.assigneeUserId ? {} : { assignee: { id: data.assigneeUserId } }),
-      ...(!data.reporterUserId ? {} : { reporter: { id: data.reporterUserId } }),
+      ...(!data.assigneeUserId ? {} : { assignee: { name: data.assigneeUserId } }),
+      ...(!data.reporterUserId ? {} : { reporter: { name: data.reporterUserId } }),
       ...(!data.parentKey ? {} : { parent: { key: data.parentKey } }),
       ...customFields,
     },
@@ -416,8 +421,8 @@ export const updateIssue = async (client: IDeskproClient, issueKey: string, data
       description: paragraphDoc(data.description),
       ...(!data.labels ? {} : { labels: data.labels }),
       ...(!data.priority ? {} : { priority: { id: data.priority } }),
-      ...(!data.assigneeUserId ? {} : { assignee: { id: data.assigneeUserId } }),
-      ...(!data.reporterUserId ? {} : { reporter: { id: data.reporterUserId } }),
+      ...(!data.assigneeUserId ? {} : { assignee: { name: data.assigneeUserId } }),
+      ...(!data.reporterUserId ? {} : { reporter: { name: data.reporterUserId } }),
       ...(!data.parentKey ? {} : { parent: { key: data.parentKey } }),
       ...customFields,
     },
@@ -460,28 +465,33 @@ export const updateIssue = async (client: IDeskproClient, issueKey: string, data
 
 export const getIssueDependencies = async (client: IDeskproClient) => {
   const cache_key = "data_deps";
-  const requestWithFetchAll = fetchAll(request);
 
   if (!cache.get(cache_key)) {
-    const dependencies = [
-      request(client, "GET", `${API_BASE_URL}/issue/createmeta?expand=projects.issuetypes.fields`),
-      requestWithFetchAll(client, "GET", `${API_BASE_URL}/project/search`),
-      request(client, "GET", `${API_BASE_URL}/users/search?maxResults=999`),
-      requestWithFetchAll(client, "GET", `${API_BASE_URL}/label`),
-    ];
-
-    const [
-      createMeta,
-      projects,
-      users,
-      labels,
-    ] = await Promise.all(dependencies);
+    const projects = await request(client, "GET", `${API_BASE_URL}/project`);
+    const createMeta = {
+      projects: await Promise.all((Array.isArray(projects) ? projects : []).map(async (project) => ({
+        ...project,
+        issuetypes: await request(client, "GET", `${API_BASE_URL}/issue/createmeta/${project.id}/issuetypes?maxResults=999`)
+            .then(async (data) => await Promise.all((get(data, ["values"], []) || []).map(async (issueType: JiraIssueType) => ({
+              ...issueType,
+              fields: await request(client, "GET", `${API_BASE_URL}/issue/createmeta/${project.id}/issuetypes/${issueType.id}?maxResults=999`)
+                  .then((data) => (get(data, ["values"], []) || []).reduce((acc: Record<JiraFieldMeta["fieldId"], JiraFieldMeta>, field: JiraFieldMeta) => {
+                    acc[field.fieldId] = field;
+                    return acc;
+                  }, {})),
+            })))),
+      }))),
+    };
+    const users = (!Array.isArray(projects) || !projects.length)
+        ? await Promise.resolve([])
+        : await request(client, "GET", `${API_BASE_URL}/user/assignable/multiProjectSearch?projectKeys=${projects.map((p) => p.key).join(",")}`);
+    const labels = await request(client, "GET", `${API_BASE_URL}/jql/autocompletedata/suggestions?fieldName=labels`);
 
     const resolved = {
       createMeta,
       projects: projects ?? [],
       users,
-      labels: labels ?? [],
+      labels: (get(labels, ["results"]) || []).map((label: never) => get(label, ["displayName"])).filter(Boolean),
     };
 
     cache.set(cache_key, resolved, SEARCH_DEPS_CACHE_TTL);

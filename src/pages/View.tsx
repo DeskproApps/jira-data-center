@@ -2,7 +2,6 @@ import { FC, useEffect, useMemo } from "react";
 import {
   useSetAppTitle,
   useExternalLink,
-  useAdfToPlainText,
   useFindLinkedIssueByKey,
   useLoadLinkedIssueAttachment,
   useFindLinkedIssueAttachmentsByKey,
@@ -24,6 +23,7 @@ import { useStore } from "../context/StoreProvider/hooks";
 import { faFile } from "@fortawesome/free-regular-svg-icons";
 import { IssueFieldView } from "../components/IssueFieldView/IssueFieldView";
 import { CommentsList } from "../components/CommentsList/CommentsList";
+import { DPNormalize } from "../components/Typography";
 
 export interface ViewProps {
   issueKey: string;
@@ -37,7 +37,6 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
   const loadIssueAttachments = useLoadLinkedIssueAttachment();
   const findAttachmentsByKey = useFindLinkedIssueAttachmentsByKey();
   const findByKey = useFindLinkedIssueByKey();
-  const adfToPlainText = useAdfToPlainText();
   const { getBaseUrl } = useExternalLink();
 
   useSetAppTitle(issueKey || "");
@@ -95,7 +94,7 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
           )}
           {issue.description && (
             <Property title="Description">
-              {adfToPlainText(issue.description)}
+              <DPNormalize text={issue.description as never} />
             </Property>
           )}
           <Property title="Project">
