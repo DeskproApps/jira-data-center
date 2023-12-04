@@ -247,6 +247,7 @@ export interface JiraProject {
 
 export type JiraFieldMeta = {
   key: string,
+  fieldId: string,
   name: string,
   required: boolean,
   operations: string[], // set,copy,add,edit,remove

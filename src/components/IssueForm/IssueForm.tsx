@@ -20,8 +20,8 @@ import { ErrorBlock } from "../Error/ErrorBlock";
 import { useLoadDataDependencies } from "../../hooks";
 import { DropdownSelect } from "../DropdownSelect/DropdownSelect";
 import {
+    JiraUser,
     JiraProject,
-    JiraUserInfo,
     JiraIssueType,
     IssueFormData,
     AttachmentFile,
@@ -110,16 +110,15 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
 
     const userOptions = users
         .filter((u) => u.active)
-        .filter((u) => u.accountType === "atlassian")
-        .map((user, idx: number) => ({
-            key: `${idx}`,
-            label: `${user.displayName}`,
-            value: user.accountId,
+        .map((user) => ({
+            key: get(user, ["name"]),
+            label: get(user, ["displayName"]),
+            value: get(user, ["name"]),
             type: "value" as const,
-        })) as DropdownValueType<JiraUserInfo["accountId"]>[];
+        })) as DropdownValueType<JiraUser["key"]>[];
 
     const buildIssueTypeOptions = (projectId: string) => {
-        const { projects } =  get(state, ["dataDependencies", "createMeta"]);
+        const { projects } =  get(state, ["dataDependencies", "createMeta"], {});
         const project = (projects ?? []).filter((p: JiraProject) => p.id === projectId)[0] ?? null;
 
         if (!project) {
@@ -149,7 +148,7 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
     };
 
     const buildPriorityOptions = (projectId: string, issueTypeId: string) => {
-        const { projects } = get(state, ["dataDependencies", "createMeta"]);
+        const { projects } = get(state, ["dataDependencies", "createMeta"], {});
 
         const project = (projects ?? []).filter((p: JiraProject) => p.id === projectId)[0] ?? null;
 
@@ -168,7 +167,7 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
     };
 
     const getCustomFields = (projectId?: string, issueTypeId?: string): Record<string, IssueMeta> => {
-        const { projects } = get(state, ["dataDependencies", "createMeta"]);
+        const { projects } = get(state, ["dataDependencies", "createMeta"], {});
 
         const project = (projects ?? []).filter((p: JiraProject) => p.id === projectId)[0] ?? null;
 
@@ -229,7 +228,9 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
 
                     return (
                         <Stack gap={10} vertical>
-                            {Object.values({...errors, ...apiErrors}).length > 0 && submitCount > 0 && <ErrorBlock text={Object.values({...errors, ...apiErrors}) as string|string[]} />}
+                            {Object.values({...errors, ...apiErrors}).length > 0 && submitCount > 0 && (
+                                <ErrorBlock text={Object.values({...errors, ...apiErrors}) as string|string[]} />
+                            )}
                             <div className="create-form-field">
                                 <FormikField<string> name="projectId">
                                     {([field, , helpers], { id, error }) => (

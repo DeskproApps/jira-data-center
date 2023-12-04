@@ -120,8 +120,8 @@ export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
         description: adfToPlainText(get(issue, ["fields", "description"])),
         issueTypeId: get(issue, ["fields", "issuetype", "id"], ""),
         projectId: get(issue, ["fields", "project", "id"], ""),
-        reporterUserId: get(issue, ["fields", "reporter", "accountId"], ""),
-        assigneeUserId: get(issue, ["fields", "assignee", "accountId"], ""),
+        reporterUserId: get(issue, ["fields", "reporter", "name"], ""),
+        assigneeUserId: get(issue, ["fields", "assignee", "name"], ""),
         labels: get(issue, ["fields", "labels"], []) || [],
         priority: get(issue, ["fields", "priority", "id"], ""),
         customFields: Object.keys(editMeta).reduce((fields, key) => {

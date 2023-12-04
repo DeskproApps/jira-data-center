@@ -14,8 +14,7 @@ const useLoadLinkedIssues = () => {
         try {
             const keys = await client
                 .getEntityAssociation("linkedJiraDataCentreIssue", state.context?.data.ticket.id as string)
-                .list()
-            ;
+                .list();
 
             client.setBadgeCount(keys.length);
 

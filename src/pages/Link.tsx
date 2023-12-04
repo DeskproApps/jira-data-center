@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLoadLinkedIssues, useSetAppTitle } from "../hooks";
 import { SearchResultItem } from "../components/SearchResultItem/SearchResultItem";
 import { addRemoteLink, getIssueByKey, searchIssues } from "../context/StoreProvider/api";
-import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
+// import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
 import { ticketReplyEmailsSelectionStateKey, ticketReplyNotesSelectionStateKey } from "../utils";
 
 export const Link: FC = () => {
@@ -118,7 +118,7 @@ export const Link: FC = () => {
 
   return (
     <>
-      <CreateLinkIssue selected="link" />
+      {/*<CreateLinkIssue selected="link" />*/}
       <Stack>
         <Input
           ref={searchInputRef}
