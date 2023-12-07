@@ -1,5 +1,5 @@
 import cache from "js-cache";
-import { omit, orderBy, get } from "lodash";
+import { omit, orderBy, get, find, map, uniq } from "lodash";
 import { match } from "ts-pattern";
 import { IDeskproClient, proxyFetch } from "@deskpro/app-sdk";
 import {
@@ -160,10 +160,19 @@ export const searchIssues = async (
     q: string,
     params: SearchParams = {},
 ): Promise<IssueSearchItem[]> => {
-  const url = `${API_BASE_URL}/issue/picker?query=${q}&currentJQL=&showSubTasks=${params.withSubtask ? "true" : "false"}${params.projectId ? `&currentProjectId=${params.projectId}` : ""}`;
+  const url = `${API_BASE_URL}/issue/picker?${[
+    `query=${encodeURIComponent(q)}`,
+    `currentJQL=`,
+    `showSubTasks=${params.withSubtask ? "true" : "false"}`,
+    params.projectId ? `currentProjectId=${params.projectId}` : "",
+  ].join("&")}`;
   const { sections } = await request(client, "GET", url);
-  const { issues: searchIssues } = sections.filter((s: { id: string }) => s.id === "cs")[0];
-  const keys = (searchIssues ?? []).map((i: { key: string }) => i.key);
+  const { issues: searchIssues = [] } = find(sections, { id: "cs" });
+  const { issues: historyIssues = [] } = find(sections, { id: "hs" });
+  const keys = uniq([
+    ...map(searchIssues, "key"),
+    ...map(historyIssues, "key"),
+  ]);
 
   if (!keys.length) {
     return [];
@@ -204,11 +213,11 @@ export const searchIssues = async (
   }
 
   return (searchIssues ?? []).map((searchIssue: JiraIssueSearch) => ({
-    id: searchIssue.id,
-    key: searchIssue.key,
-    keyHtml: searchIssue.keyHtml,
-    summary: searchIssue.summaryText,
-    summaryHtml: searchIssue.summary,
+    id: get(issues, [searchIssue.key, "id"]),
+    key: get(searchIssue, ["key"]),
+    keyHtml: get(searchIssue, ["keyHtml"]),
+    summary: get(searchIssue, ["summaryText"]),
+    summaryHtml: get(searchIssue, ["summary"]),
     status: get(issues, [searchIssue.key, "fields", "status", "name"], "-"),
     projectKey: get(issues, [searchIssue.key, "fields", "project", "key"], ""),
     projectName: get(issues, [searchIssue.key, "fields", "project", "name"], "-"),
