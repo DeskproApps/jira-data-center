@@ -1,5 +1,5 @@
 import cache from "js-cache";
-import { omit, orderBy, get } from "lodash";
+import { omit, orderBy, get, find, map, reduce } from "lodash";
 import { match } from "ts-pattern";
 import { IDeskproClient, proxyFetch } from "@deskpro/app-sdk";
 import {
@@ -160,10 +160,28 @@ export const searchIssues = async (
     q: string,
     params: SearchParams = {},
 ): Promise<IssueSearchItem[]> => {
-  const url = `${API_BASE_URL}/issue/picker?query=${q}&currentJQL=&showSubTasks=${params.withSubtask ? "true" : "false"}${params.projectId ? `&currentProjectId=${params.projectId}` : ""}`;
+  const url = `${API_BASE_URL}/issue/picker?${[
+    `query=${encodeURIComponent(q)}`,
+    `currentJQL=`,
+    `showSubTasks=${params.withSubtask ? "true" : "false"}`,
+    params.projectId ? `currentProjectId=${params.projectId}` : "",
+  ].join("&")}`;
   const { sections } = await request(client, "GET", url);
-  const { issues: searchIssues } = sections.filter((s: { id: string }) => s.id === "cs")[0];
-  const keys = (searchIssues ?? []).map((i: { key: string }) => i.key);
+  const { issues: searchIssues = [] } = find(sections, { id: "cs" });
+  const { issues: historyIssues = [] } = find(sections, { id: "hs" });
+  const allIssues = reduce(
+      [...searchIssues, ...historyIssues],
+      (acc, issue) => {
+        const currentIssue = find(acc, { key: issue.key })
+        if (!currentIssue) {
+          acc.push(issue as never);
+        }
+
+        return acc;
+      },
+      [],
+  );
+  const keys = map(allIssues, "key");
 
   if (!keys.length) {
     return [];
@@ -173,8 +191,8 @@ export const searchIssues = async (
   const { issues: fullIssues } = await request(client, "GET", `${API_BASE_URL}/search?jql=${issueJql}&expand=editmeta`);
 
   const issues = (fullIssues ?? []).reduce(
-    (list: unknown[], issue: { key: string }) => ({ ...list, [issue.key]: issue }),
-    {}
+      (list: unknown[], issue: { key: string }) => ({ ...list, [issue.key]: issue }),
+      {}
   );
 
   const epicKeys = (fullIssues ?? []).reduce((list: unknown[], issue: JiraIssueDetails) => {
@@ -198,25 +216,25 @@ export const searchIssues = async (
     const { issues: fullEpics } = await request(client, "GET", `${API_BASE_URL}/search?jql=${epicJql}`);
 
     epics = (fullEpics ?? []).reduce(
-      (list: unknown[], issue: { key: string }) => ({ ...list, [issue.key]: issue }),
-      {}
+        (list: unknown[], issue: { key: string }) => ({ ...list, [issue.key]: issue }),
+        {}
     );
   }
 
-  return (searchIssues ?? []).map((searchIssue: JiraIssueSearch) => ({
-    id: searchIssue.id,
-    key: searchIssue.key,
-    keyHtml: searchIssue.keyHtml,
-    summary: searchIssue.summaryText,
-    summaryHtml: searchIssue.summary,
-    status: get(issues, [searchIssue.key, "fields", "status", "name"], "-"),
-    projectKey: get(issues, [searchIssue.key, "fields", "project", "key"], ""),
-    projectName: get(issues, [searchIssue.key, "fields", "project", "name"], "-"),
-    reporterId: get(issues, [searchIssue.key, "fields", "reporter", "accountId"], ""),
-    reporterName: get(issues, [searchIssue.key, "fields", "reporter", "displayName"], "-"),
-    reporterAvatarUrl: get(issues, [searchIssue.key, "fields", "reporter", "avatarUrls", "24x24"], ""),
-    epicKey: epics[epicKeys[searchIssue.key]] ? epics[epicKeys[searchIssue.key]].key : undefined,
-    epicName: epics[epicKeys[searchIssue.key]] ? epics[epicKeys[searchIssue.key]].fields.summary : undefined,
+  return (allIssues ?? []).map((issue: JiraIssueSearch) => ({
+    id: get(issues, [issue.key, "id"]),
+    key: get(issue, ["key"]),
+    keyHtml: get(issue, ["keyHtml"]),
+    summary: get(issue, ["summaryText"]),
+    summaryHtml: get(issue, ["summary"]),
+    status: get(issues, [issue.key, "fields", "status", "name"], "-"),
+    projectKey: get(issues, [issue.key, "fields", "project", "key"], ""),
+    projectName: get(issues, [issue.key, "fields", "project", "name"], "-"),
+    reporterId: get(issues, [issue.key, "fields", "reporter", "accountId"], ""),
+    reporterName: get(issues, [issue.key, "fields", "reporter", "displayName"], "-"),
+    reporterAvatarUrl: get(issues, [issue.key, "fields", "reporter", "avatarUrls", "24x24"], ""),
+    epicKey: epics[epicKeys[issue.key]] ? epics[epicKeys[issue.key]].key : undefined,
+    epicName: epics[epicKeys[issue.key]] ? epics[epicKeys[issue.key]].fields.summary : undefined,
   } as IssueSearchItem));
 };
 

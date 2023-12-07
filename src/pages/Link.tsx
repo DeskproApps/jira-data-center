@@ -43,8 +43,7 @@ export const Link: FC = () => {
     }
 
     searchIssues(client, q, { withSubtask: true })
-      .then((list) => dispatch({ type: "linkIssueSearchList", list }))
-    ;
+      .then((list) =>  dispatch({ type: "linkIssueSearchList", list }));
   },500);
 
   useEffect(
