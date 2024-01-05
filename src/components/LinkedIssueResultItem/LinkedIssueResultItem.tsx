@@ -1,9 +1,9 @@
+import { H1, P5, Stack } from "@deskpro/deskpro-ui";
 import {
-  H1,
-  HorizontalDivider,
   Property,
-  Stack, useDeskproAppTheme,
-  VerticalDivider
+  TwoProperties,
+  HorizontalDivider,
+  useDeskproAppTheme,
 } from "@deskpro/app-sdk";
 import { FC, Fragment, ReactElement } from "react";
 import { IssueItem } from "../../context/StoreProvider/types";
@@ -34,43 +34,54 @@ export const LinkedIssueResultItem: FC<LinkedIssueResultItemProps> = ({ item, ch
             <H1 onClick={() => onView && onView()} style={{ color: theme.colors.cyan100, cursor: "pointer", marginRight: "1px" }}>{item.summary}</H1>
             <ExternalLink href={`${getBaseUrl()}/browse/${item.key}`} style={{ position: "relative", top: "-4px" }} />
           </div>
-          <Stack align="stretch">
-            <Property title="Issue Key" width="108px">
-              <span>{item.key}</span>
-              <ExternalLink href={`${getBaseUrl()}/browse/${item.key}`} />
-            </Property>
-            <VerticalDivider width={1} />
-            <Property title="Deskpro Tickets">
-              {entityCount}
-            </Property>
-          </Stack>
-          <Property title="Project">
-            {item.projectName}
-            <ExternalLink href={`${getBaseUrl()}/browse/${item.projectKey}`} />
-          </Property>
+          <TwoProperties
+              leftLabel="Issue Key"
+              leftText={(
+                <P5>
+                  <span>{item.key}</span>
+                  <ExternalLink href={`${getBaseUrl()}/browse/${item.key}`}/>
+                </P5>
+              )}
+              rightLabel="Deskpro Tickets" rightText={entityCount}
+          />
+          <Property
+              label="Project"
+              text={(
+                  <>
+                    {item.projectName}
+                    <ExternalLink href={`${getBaseUrl()}/browse/${item.projectKey}`} />
+                  </>
+              )}
+          />
           {item.epicKey && (
-            <Property title="Epic">
-              {item.epicName}
-              <ExternalLink href={`${getBaseUrl()}/browse/${item.epicKey}`} />
-            </Property>
+            <Property
+              label="Epic"
+              text={(
+                  <>
+                    {item.epicName}
+                    <ExternalLink href={`${getBaseUrl()}/browse/${item.epicKey}`} />
+                  </>
+              )}
+            />
           )}
-          <Property title="Status">
-            {item.status}
-          </Property>
-          <Property title="Reporter">
-            <div style={{ position: "relative" }}>
-              {item.reporterAvatarUrl && (
-                  <img src={item.reporterAvatarUrl} width={18} height={18} alt="" className="user-avatar" />
+          <Property label="Status" text={item.status}/>
+          <Property
+              label="Reporter"
+              text={(
+                  <div style={{position: "relative"}}>
+                    {item.reporterAvatarUrl && (
+                        <img src={item.reporterAvatarUrl} width={18} height={18} alt="" className="user-avatar"/>
+                    )}
+                    <span className="user-name">{item.reporterName}</span>
+                    {item.reporterId && (
+                        <ExternalLink href={`${getBaseUrl()}/jira/people/${item.reporterId}`}/>
+                    )}
+                  </div>
               )}
-              <span className="user-name">{item.reporterName}</span>
-              {item.reporterId && (
-                  <ExternalLink href={`${getBaseUrl()}/jira/people/${item.reporterId}`} />
-              )}
-            </div>
-          </Property>
+          />
         </Stack>
       </Stack>
-      <HorizontalDivider style={{ marginTop: "8px", marginBottom: "8px" }} />
+      <HorizontalDivider style={{marginTop: "8px", marginBottom: "8px"}}/>
     </Fragment>
   );
 };

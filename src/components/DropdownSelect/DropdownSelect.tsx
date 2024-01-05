@@ -1,12 +1,13 @@
 import {FC, useState} from "react";
 import {
   AnyIcon,
-  DivAsInputWithDisplay,
   Dropdown,
-  dropdownRenderOptions,
+  Infinite,
+  DropdownValueType,
   DropdownTargetProps,
-  DropdownValueType, Infinite
-} from "@deskpro/app-sdk";
+  dropdownRenderOptions,
+  DivAsInputWithDisplay,
+} from "@deskpro/deskpro-ui";
 import { faCaretDown, faHandPointer, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { FieldHelperProps } from "formik";
 
@@ -67,18 +68,21 @@ export const DropdownSelect: FC<DropdownSelectProps> = ({ helpers, id, placehold
         >
           <div style={{ maxHeight: "30vh" }}>
             {opts.map(
-              dropdownRenderOptions(
+              dropdownRenderOptions({
                 handleSelectOption,
                 activeItem,
                 activeSubItem,
                 setActiveSubItem,
-                  "Fetch more",
-                  "Autoscroll",
-                  faHandPointer as AnyIcon,
-                  faExternalLinkAlt as AnyIcon,
+                fetchMoreText: "Fetch more",
+                autoscrollText: "Autoscroll",
+                selectedIcon: faHandPointer as AnyIcon,
+                externalLinkIcon: faExternalLinkAlt as AnyIcon,
+                hasSelectedItems: false,
+                hasExpandableItems: false,
                 hideIcons,
-                0
-              )
+                setActiveValueIndex: () => {},
+                valueOptions: [],
+              })
             )}
           </div>
         </Infinite>

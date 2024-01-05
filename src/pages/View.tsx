@@ -8,15 +8,18 @@ import {
 } from "../hooks";
 import {
   H1,
+  P5,
   Pill,
   Stack,
   Spinner,
-  Property,
+  AnyIcon,
   AttachmentTag,
+} from "@deskpro/deskpro-ui";
+import {
+  Property,
   HorizontalDivider,
   useDeskproAppTheme,
   useDeskproAppClient,
-  AnyIcon,
 } from "@deskpro/app-sdk";
 import { ExternalLink } from "../components/ExternalLink/ExternalLink";
 import { useStore } from "../context/StoreProvider/hooks";
@@ -82,107 +85,141 @@ export const View: FC<ViewProps> = ({ issueKey }: ViewProps) => {
             <H1 style={{ marginRight: "1px" }}>{issue.summary}</H1>
             <ExternalLink href={`${getBaseUrl()}/browse/${issue.key}`} style={{ position: "relative", top: "-4px" }} />
           </div>
-          <Property title="Issue Key">
-            {issue.key}
-            <ExternalLink href={`${getBaseUrl()}/browse/${issue.key}`} />
-          </Property>
+          <Property
+              label="Issue Key"
+              text={(
+                  <P5>
+                    {issue.key}
+                    <ExternalLink href={`${getBaseUrl()}/browse/${issue.key}`} />
+                  </P5>
+              )}
+          />
           {issue.parentKey && (
-            <Property title="Parent">
-              {issue.parentKey}
-              <ExternalLink href={`${getBaseUrl()}/browse/${issue.parentKey}`} />
-            </Property>
+            <Property
+                label="Parent"
+                text={(
+                    <P5>
+                      {issue.parentKey}
+                      <ExternalLink href={`${getBaseUrl()}/browse/${issue.parentKey}`} />
+                    </P5>
+                )}
+            />
           )}
           {issue.description && (
-            <Property title="Description">
-              <DPNormalize text={issue.description as never} />
-            </Property>
+            <Property
+                label="Description"
+                text={<DPNormalize text={issue.description as never} />}
+            />
           )}
-          <Property title="Project">
-            {issue.projectName}
-            <ExternalLink href={`${getBaseUrl()}/browse/${issue.projectKey}`} />
-          </Property>
+          <Property
+              label="Project"
+              text={(
+                  <P5>
+                    {issue.projectName}
+                    <ExternalLink href={`${getBaseUrl()}/browse/${issue.projectKey}`} />
+                  </P5>
+              )}
+          />
           {issue.epicKey && (
-            <Property title="Epic">
-              {issue.epicName}
-              <ExternalLink href={`${getBaseUrl()}/browse/${issue.epicKey}`} />
-            </Property>
+            <Property
+                label="Epic"
+                text={(
+                    <P5>
+                      {issue.epicName}
+                      <ExternalLink href={`${getBaseUrl()}/browse/${issue.epicKey}`} />
+                    </P5>
+                )}
+            />
           )}
           {(issue.sprints ?? []).length > 0 && (
-            <Property title="Sprints">
-              {(issue.sprints ?? []).map((sprint, idx) => (
-                <div key={idx}>
-                  {sprint.sprintName} ({sprint.sprintState})
-                  <ExternalLink href={`${getBaseUrl()}/jira/software/c/projects/${issue?.projectKey}/boards/${sprint.sprintBoardId}`} />
-                </div>
-              ))}
-            </Property>
-          )}
-          <Property title="Status">
-            {issue.status}
-          </Property>
-          <Property title="Assignee">
-            {issue.assigneeId ? (
-                <div style={{ position: "relative" }}>
-                  {issue.assigneeAvatarUrl && (
-                      <img src={issue.assigneeAvatarUrl} width={18} height={18} alt="" className="user-avatar" />
-                  )}
-                  <span className="user-name">{issue.assigneeName}</span>
-                  {issue.assigneeId && (
-                      <ExternalLink href={`${getBaseUrl()}/jira/people/${issue.assigneeId}`} />
-                  )}
-                </div>
-            ) : (
-                <span style={{ color: theme.colors.grey80 }}>None</span>
-            )}
-          </Property>
-          <Property title="Reporter">
-            <div style={{ position: "relative" }}>
-              {issue.reporterAvatarUrl && (
-                  <img src={issue.reporterAvatarUrl} width={18} height={18} alt="" className="user-avatar" />
-              )}
-              <span className="user-name">{issue.reporterName}</span>
-              {issue.reporterId && (
-                  <ExternalLink href={`${getBaseUrl()}/jira/people/${issue.reporterId}`} />
-              )}
-            </div>
-          </Property>
-          {(issue.labels && issue.labels.length > 0) && (
-            <Property title="Labels">
-              <Stack gap={3}>
-                {issue.labels.map((label, idx) => (
-                  <Pill label={label} textColor={theme.colors.grey100} backgroundColor={theme.colors.grey10} key={idx} />
+            <Property
+                label="Sprints"
+                text={(issue.sprints ?? []).map((sprint, idx) => (
+                    <div key={idx}>
+                      {sprint.sprintName} ({sprint.sprintState})
+                      <ExternalLink href={`${getBaseUrl()}/jira/software/c/projects/${issue?.projectKey}/boards/${sprint.sprintBoardId}`} />
+                    </div>
                 ))}
-              </Stack>
-            </Property>
+            />
+          )}
+          <Property label="Status" text={issue.status}/>
+          <Property
+              label="Assignee"
+              text={issue.assigneeId ? (
+                  <div style={{ position: "relative" }}>
+                    {issue.assigneeAvatarUrl && (
+                        <img src={issue.assigneeAvatarUrl} width={18} height={18} alt="" className="user-avatar" />
+                    )}
+                    <span className="user-name">{issue.assigneeName}</span>
+                    {issue.assigneeId && (
+                        <ExternalLink href={`${getBaseUrl()}/jira/people/${issue.assigneeId}`} />
+                    )}
+                  </div>
+              ) : (
+                  <span style={{ color: theme.colors.grey80 }}>None</span>
+              )}
+          />
+          <Property
+              label="Reporter"
+              text={(
+                  <div style={{position: "relative"}}>
+                    {issue.reporterAvatarUrl && (
+                        <img src={issue.reporterAvatarUrl} width={18} height={18} alt="" className="user-avatar"/>
+                    )}
+                    <span className="user-name">{issue.reporterName}</span>
+                    {issue.reporterId && (
+                        <ExternalLink href={`${getBaseUrl()}/jira/people/${issue.reporterId}`}/>
+                    )}
+                  </div>
+              )}
+          />
+          {(issue.labels && issue.labels.length > 0) && (
+              <Property
+                  label="Labels"
+                  text={(
+                      <Stack gap={3}>
+                        {issue.labels.map((label, idx) => (
+                            <Pill label={label} textColor={theme.colors.grey100} backgroundColor={theme.colors.grey10}
+                                  key={idx}/>
+                        ))}
+                      </Stack>
+                  )}
+            />
           )}
           {issue.priority && (
-              <Property title="Priority">
-                <Stack gap={3}>
-                  <img src={issue.priorityIconUrl} alt={issue.priority} height={16} />
-                  {issue.priority}
-                </Stack>
-              </Property>
+              <Property
+                  label="Priority"
+                  text={(
+                      <Stack gap={3}>
+                        <img src={issue.priorityIconUrl} alt={issue.priority} height={16} />
+                        {issue.priority}
+                      </Stack>
+                  )}
+              />
           )}
           {state.linkedIssueAttachments?.loading && (
             <Spinner size="small" />
           )}
           {(!state.linkedIssueAttachments?.loading && attachments.length > 0) && (
-            <Property title="Attachments">
-              <Stack gap={3} vertical>
-                {attachments.map((attachment, idx) => (
-                    <AttachmentTag
-                        key={idx}
-                        target="_blank"
-                        download
-                        href={attachment.url}
-                        filename={attachment.filename}
-                        fileSize={attachment.sizeBytes}
-                        icon={faFile as AnyIcon}
-                        maxWidth="244px"
-                    />
-                ))}
-              </Stack>
-            </Property>
+            <Property
+                label="Attachments"
+                text={(
+                    <Stack gap={3} vertical>
+                      {attachments.map((attachment, idx) => (
+                          <AttachmentTag
+                              key={idx}
+                              target="_blank"
+                              download
+                              href={attachment.url}
+                              filename={attachment.filename}
+                              fileSize={attachment.sizeBytes}
+                              icon={faFile as AnyIcon}
+                              maxWidth="244px"
+                          />
+                      ))}
+                    </Stack>
+                )}
+            />
           )}
           {Object.keys(issue.customFields).map((key: string, idx: number) => (
               <IssueFieldView meta={issue.customFields[key].meta} value={issue.customFields[key].value} key={idx} />
