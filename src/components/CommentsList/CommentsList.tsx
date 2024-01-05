@@ -1,5 +1,6 @@
 import {FC, Fragment} from "react";
-import {H1, H4, HorizontalDivider, Spinner, Stack, useDeskproAppTheme} from "@deskpro/app-sdk";
+import {H1, H4, Spinner, Stack } from "@deskpro/deskpro-ui";
+import { HorizontalDivider, useDeskproAppTheme } from "@deskpro/app-sdk";
 import { useFindIssueComments, useExternalLink } from "../../hooks";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
