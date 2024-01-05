@@ -2,7 +2,8 @@ import type { FC } from "react";
 import type { MappedViewProps } from "../types";
 import get from "lodash/get";
 import { NoValue } from "../NoValue";
-import { Pill, Stack, useDeskproAppTheme } from "@deskpro/app-sdk";
+import { Pill, Stack } from "@deskpro/deskpro-ui";
+import { useDeskproAppTheme } from "@deskpro/app-sdk";
 
 export const SelectMultiField: FC<MappedViewProps> = ({ value }) => {
     const { theme } = useDeskproAppTheme();
