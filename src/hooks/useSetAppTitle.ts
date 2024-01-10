@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { useDeskproAppClient } from "@deskpro/app-sdk";
+import { useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 
 const useSetAppTitle = (title: string): void => {
-    const { client } = useDeskproAppClient();
-    useEffect(() => client?.setTitle(title), [client, title]);
+  useInitialisedDeskproAppClient((client) => {
+      client?.setTitle(title);
+    }, [title]);
 };
 
 export { useSetAppTitle };

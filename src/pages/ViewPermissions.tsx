@@ -1,3 +1,4 @@
+import {useState} from "react";
 import { Stack } from "@deskpro/deskpro-ui";
 import {
     useInitialisedDeskproAppClient,
@@ -6,27 +7,30 @@ import {
     useDeskproAppTheme,
     HorizontalDivider
 } from "@deskpro/app-sdk";
-import {useState} from "react";
 import {getMyPermissions} from "../context/StoreProvider/api";
 import { Permissions } from "../context/StoreProvider/types";
 import {orderBy} from "lodash";
 import {faCheckCircle, faTimesCircle} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useSetAppTitle} from "../hooks";
+import { useSetAppTitle, useRegisterElements } from "../hooks";
 
-export const ViewPermissions = () => {
+export const  ViewPermissions = () => {
     const { theme } = useDeskproAppTheme();
     const [ permissionStatuses, setPermissionStatuses ] = useState<null|{ permissions: Permissions }>(null);
 
     useSetAppTitle("JIRA Permissions");
 
     useInitialisedDeskproAppClient((client) => {
-        client.deregisterElement("homeContextMenu");
-        client.registerElement("home", { type: "home_button" });
         getMyPermissions(client)
             .then(setPermissionStatuses)
-            .then(() => setTimeout(() => client.resize(), 500))
-        ;
+            .then(() => setTimeout(() => client.resize(), 500));
+    });
+
+    useRegisterElements(({ registerElement }) => {
+      registerElement("home", {
+        type: "home_button",
+        payload: { type: "changePage", path: "/home" },
+      });
     });
 
     if (permissionStatuses === null) {
@@ -48,12 +52,11 @@ export const ViewPermissions = () => {
             <HorizontalDivider style={{ marginBottom: "15px" }} />
             <Stack vertical gap={14}>
                 {permissions.map((permission, idx) => (
-                    <div style={{ width: "100%" }}>
+                    <div style={{ width: "100%" }} key={idx}>
                         <Stack justify="space-between" align="center" style={{ width: "100%", marginBottom: "10px" }} gap={10}>
                             <Property
                                 label={permission.name}
                                 text={permission.description}
-                                key={idx}
                             />
                             {permission.havePermission ? (
                                 <FontAwesomeIcon icon={faCheckCircle as {

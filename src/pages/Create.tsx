@@ -1,29 +1,38 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import {CreateLinkIssue} from "../components/CreateLinkIssue/CreateLinkIssue";
 import {IssueForm} from "../components/IssueForm/IssueForm";
 import {addRemoteLink, createIssue, getIssueByKey} from "../context/StoreProvider/api";
 import {useDeskproAppClient} from "@deskpro/app-sdk";
 import {IssueFormData, InvalidRequestResponseError} from "../context/StoreProvider/types";
-import {useLoadLinkedIssues, useSetAppTitle} from "../hooks";
+import {
+  useSetAppTitle,
+  useRegisterElements,
+  useLoadLinkedIssues,
+} from "../hooks";
 import {useStore} from "../context/StoreProvider/hooks";
 import {FormikHelpers} from "formik";
 import {IssueMeta} from "../types";
 import { SubmitIssueFormData } from "../components/IssueForm/types";
 
 export const Create: FC = () => {
+    const navigate = useNavigate();
     const { client } = useDeskproAppClient();
     const [ state, dispatch ] = useStore();
     const [loading, setLoading] = useState<boolean>(false);
     const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
 
-    const loadIssues = useLoadLinkedIssues();
+    useLoadLinkedIssues();
 
     useSetAppTitle("Add Issue");
 
-    useEffect(() => {
-        client?.deregisterElement("edit");
-        client?.deregisterElement("homeContextMenu");
-    }, [client, state]);
+    useRegisterElements(({ registerElement }) => {
+      registerElement("refresh", { type: "refresh_button" });
+      registerElement("home", {
+        type: "home_button",
+        payload: { type: "changePage", path: "/home" },
+      });
+    });
 
     const onSubmit = (
         data: SubmitIssueFormData,
@@ -54,10 +63,9 @@ export const Create: FC = () => {
                 state.context?.data.ticket.subject as string,
                 state.context?.data.ticket.permalinkUrl as string
             ))
-            .then(() => loadIssues())
             .then(() => {
                 setLoading(false);
-                dispatch({ type: "changePage", page: "home" });
+                navigate("/home");
             })
             .catch((error) => {
                 if (error instanceof InvalidRequestResponseError && error.response?.errors) {

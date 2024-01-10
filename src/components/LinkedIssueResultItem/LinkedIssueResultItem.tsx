@@ -1,9 +1,9 @@
-import { H1, Stack } from "@deskpro/deskpro-ui";
+import { H1, P5, Stack } from "@deskpro/deskpro-ui";
 import {
-  HorizontalDivider,
   Property,
+  TwoProperties,
+  HorizontalDivider,
   useDeskproAppTheme,
-  VerticalDivider
 } from "@deskpro/app-sdk";
 import { FC, Fragment, ReactElement } from "react";
 import { IssueItem } from "../../context/StoreProvider/types";
@@ -34,19 +34,16 @@ export const LinkedIssueResultItem: FC<LinkedIssueResultItemProps> = ({ item, ch
             <H1 onClick={() => onView && onView()} style={{ color: theme.colors.cyan100, cursor: "pointer", marginRight: "1px" }}>{item.summary}</H1>
             <ExternalLink href={`${getBaseUrl()}/browse/${item.key}`} style={{ position: "relative", top: "-4px" }} />
           </div>
-          <Stack align="stretch">
-            <Property
-                label="Issue Key"
-                text={(
-                    <>
-                      <span>{item.key}</span>
-                      <ExternalLink href={`${getBaseUrl()}/browse/${item.key}`}/>
-                    </>
-                )}
-            />
-            <VerticalDivider width={1}/>
-            <Property label="Deskpro Tickets" text={entityCount}/>
-          </Stack>
+          <TwoProperties
+              leftLabel="Issue Key"
+              leftText={(
+                <P5>
+                  <span>{item.key}</span>
+                  <ExternalLink href={`${getBaseUrl()}/browse/${item.key}`}/>
+                </P5>
+              )}
+              rightLabel="Deskpro Tickets" rightText={entityCount}
+          />
           <Property
               label="Project"
               text={(

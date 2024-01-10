@@ -1,4 +1,5 @@
 import {FC, useEffect, useMemo, useState} from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import get from "lodash/get";
 import { IssueForm } from "../components/IssueForm/IssueForm";
 import {
@@ -18,18 +19,17 @@ import {
     useFindLinkedIssueAttachmentsByKey,
     useLoadLinkedIssueAttachment,
     useLoadLinkedIssues,
-    useSetAppTitle
+    useSetAppTitle,
+    useRegisterElements,
 } from "../hooks";
 import { useStore } from "../context/StoreProvider/hooks";
 import { FormikHelpers } from "formik";
 import { IssueMeta } from "../types";
 import { SubmitIssueFormData } from "../components/IssueForm/types";
 
-interface EditProps {
-    issueKey: string;
-}
-
-export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
+export const Edit: FC = () => {
+    const navigate = useNavigate();
+    const { issueKey } = useParams();
     const { client } = useDeskproAppClient();
     const [ state, dispatch ] = useStore();
     const [loading, setLoading] = useState<boolean>(false);
@@ -38,30 +38,31 @@ export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
 
     const adfToPlainText = useAdfToPlainText();
 
-    const loadIssues = useLoadLinkedIssues();
+    useLoadLinkedIssues();
     const loadIssueAttachments = useLoadLinkedIssueAttachment();
     const findAttachmentsByKey = useFindLinkedIssueAttachmentsByKey();
 
     useSetAppTitle(`Edit ${issueKey}`);
 
-    useEffect(() => {
-        client?.registerElement("home", { type: "home_button" });
-        client?.deregisterElement("homeContextMenu");
-        client?.deregisterElement("edit");
-        client?.deregisterElement("viewContextMenu");
+    useRegisterElements(({ registerElement }) => {
+      registerElement("refresh", { type: "refresh_button" });
+      registerElement("home", {
+        type: "home_button",
+        payload: { type: "changePage", path: "/home" },
+      });
     }, [client, issueKey]);
 
     useEffect(() => {
         (client && issueKey) && getIssueByKey(client, issueKey).then(setIssue);
-    }, [client, issueKey])
+    }, [client, issueKey, state.linkedIssuesResults?.list])
 
     useEffect(() => {
-        loadIssueAttachments(issueKey);
+        loadIssueAttachments(issueKey as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [issueKey]);
 
     const attachments = useMemo(
-        () => findAttachmentsByKey(issueKey),
+        () => findAttachmentsByKey(issueKey as string),
         [issueKey, findAttachmentsByKey]
     );
 
@@ -90,10 +91,9 @@ export const Edit: FC<EditProps> = ({ issueKey }: EditProps) => {
                     .set(issueKey, issue)
                 ;
             })
-            .then(() => loadIssues())
             .then(() => {
                 setLoading(false);
-                dispatch({ type: "changePage", page: "view", params: { issueKey } });
+                navigate(`/view/${issueKey}`);
             })
             .catch((error) => {
                 if (error instanceof InvalidRequestResponseError && (error.response?.errors || error.response?.errorMessages)) {
