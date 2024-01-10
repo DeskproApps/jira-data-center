@@ -1,9 +1,10 @@
-import { FC } from "react";
+import uniq from "lodash/uniq";
 import { Label } from "@deskpro/deskpro-ui";
-import { MappedFieldProps } from "../types";
 import { useStore } from "../../../context/StoreProvider/hooks";
-import { DropdownMultiSelect, DropdownMultiSelectValueType } from "../../DropdownMultiSelect/DropdownMultiSelect";
-import {uniq} from "lodash";
+import { DropdownMultiSelect } from "../../common";
+import type { FC } from "react";
+import type { DropdownMultiSelectValueType } from "../../common/DropdownMultiSelect";
+import type { MappedFieldProps } from "../types";
 
 export const LabelsField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers, extraLabels }: MappedFieldProps) => {
     const [ state ] = useStore();

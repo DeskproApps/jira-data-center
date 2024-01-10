@@ -13,7 +13,6 @@ import {
   AttachmentFile,
   IssueAttachment,
   JiraIssueSearch,
-  IssueSearchItem,
   ApiRequestMethod,
   JiraIssueDetails,
   JiraIssueFieldMeta,
@@ -159,7 +158,7 @@ export const searchIssues = async (
     client: IDeskproClient,
     q: string,
     params: SearchParams = {},
-): Promise<IssueSearchItem[]> => {
+): Promise<IssueItem[]> => {
   const url = `${API_BASE_URL}/issue/picker?${[
     `query=${encodeURIComponent(q)}`,
     `currentJQL=`,
@@ -226,7 +225,7 @@ export const searchIssues = async (
     reporterAvatarUrl: get(issues, [searchIssue.key, "fields", "reporter", "avatarUrls", "24x24"], ""),
     epicKey: epics[epicKeys[searchIssue.key]] ? epics[epicKeys[searchIssue.key]].key : undefined,
     epicName: epics[epicKeys[searchIssue.key]] ? epics[epicKeys[searchIssue.key]].fields.summary : undefined,
-  } as IssueSearchItem));
+  } as IssueItem));
 };
 
 /**
