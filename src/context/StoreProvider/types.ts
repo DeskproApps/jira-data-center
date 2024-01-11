@@ -190,14 +190,16 @@ export type PermissionKeys =
   | "MANAGE_WATCHERS"
 ;
 
-export type Permissions = Record<PermissionKeys, {
+export type Permission = {
   description: string,
   havePermission: boolean,
   id: string,
   key: PermissionKeys,
   name: string,
   type: "PROJECT",
-}>;
+};
+
+export type Permissions = Record<PermissionKeys, Permission>;
 
 export interface JiraIssueType {
   description: string
