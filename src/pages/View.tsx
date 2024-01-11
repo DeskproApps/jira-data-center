@@ -3,6 +3,7 @@ import { faFile } from "@fortawesome/free-regular-svg-icons";
 import { useParams } from "react-router-dom";
 import {
   H1,
+  P5,
   Pill,
   Stack,
   Spinner,
@@ -91,20 +92,20 @@ export const View: FC = () => {
           <Property
               label="Issue Key"
               text={(
-                  <>
+                  <P5>
                     {issue.key}
                     <ExternalLink href={`${getBaseUrl()}/browse/${issue.key}`} />
-                  </>
+                  </P5>
               )}
           />
           {issue.parentKey && (
             <Property
                 label="Parent"
                 text={(
-                    <>
+                    <P5>
                       {issue.parentKey}
                       <ExternalLink href={`${getBaseUrl()}/browse/${issue.parentKey}`} />
-                    </>
+                    </P5>
                 )}
             />
           )}
@@ -117,20 +118,20 @@ export const View: FC = () => {
           <Property
               label="Project"
               text={(
-                  <>
+                  <P5>
                     {issue.projectName}
                     <ExternalLink href={`${getBaseUrl()}/browse/${issue.projectKey}`} />
-                  </>
+                  </P5>
               )}
           />
           {issue.epicKey && (
             <Property
                 label="Epic"
                 text={(
-                    <>
+                    <P5>
                       {issue.epicName}
                       <ExternalLink href={`${getBaseUrl()}/browse/${issue.epicKey}`} />
-                    </>
+                    </P5>
                 )}
             />
           )}
