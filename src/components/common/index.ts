@@ -9,3 +9,4 @@ export { SubtaskDropdownWithSearch } from "./SubtaskDropdownWithSearch";
 export { Card } from "./Card";
 export { NoFound, NoFoundIssues } from "./NoFound";
 export { Container } from "./Layout";
+export { Comment } from "./Comment";

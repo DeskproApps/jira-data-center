@@ -1,7 +1,7 @@
-import type {FC} from "react";
-import { IssueMeta, IssueValue } from "../../types";
-import { Property } from "@deskpro/app-sdk";
 import map from "./map";
+import { Property } from "@deskpro/app-sdk";
+import type { FC } from "react";
+import type { IssueMeta, IssueValue } from "../../../../../types";
 
 interface IssueFieldViewProps {
     meta: IssueMeta;

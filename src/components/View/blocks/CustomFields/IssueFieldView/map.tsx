@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { IssueMeta, FieldType, IssueValue } from "../../types";
+import { IssueMeta, FieldType, IssueValue } from "../../../../../types";
 import { match } from "ts-pattern";
 import { RequestLanguageField } from "./CustomField/RequestLanguageField";
 import { PlainTextField } from "./CustomField/PlainTextField";
@@ -29,5 +29,4 @@ export default (meta: IssueMeta, value: IssueValue[IssueMeta["type"]]): ReactNod
     .with(FieldType.SELECT_SINGLE, () => <SelectSingleField meta={meta} value={value} />)
     .with(FieldType.URL, () => <UrlField meta={meta} value={value} />)
     .with(FieldType.USER_PICKER, () => <UserPickerField meta={meta} value={value} />)
-    .otherwise(() => null)
-;
+    .otherwise(() => null);

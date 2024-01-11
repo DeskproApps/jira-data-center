@@ -23,7 +23,7 @@ describe("NoFoundIssues", () => {
 
   test("should show \"No Space issues found\" if no issues", async () => {
     const { findByText } = renderNoFoundIssues({ issues: [] });
-    expect(await findByText(/No Space issues found/i)).toBeInTheDocument();
+    expect(await findByText(/No Jira issues found/i)).toBeInTheDocument();
   });
 
   test("should show passing \"children\" if issues exist", async () => {

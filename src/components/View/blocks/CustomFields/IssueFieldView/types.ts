@@ -1,4 +1,4 @@
-import { IssueMeta, IssueValue } from "../../types";
+import { IssueMeta, IssueValue } from "../../../../../types";
 
 export interface MappedViewProps {
     meta: IssueMeta;

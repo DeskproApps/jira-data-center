@@ -1,8 +1,8 @@
-import type { FC } from "react";
-import type { MappedViewProps } from "../types";
-import { NoValue } from "../NoValue";
 import { Pill, Stack } from "@deskpro/deskpro-ui";
 import { useDeskproAppTheme } from "@deskpro/app-sdk";
+import { NoValue } from "../NoValue";
+import type { FC } from "react";
+import type { MappedViewProps } from "../types";
 
 export const LabelsField: FC<MappedViewProps> = ({ value }: MappedViewProps) => {
     const { theme } = useDeskproAppTheme();

@@ -5,13 +5,14 @@ import {
   Title,
   Member,
   Property,
+  LinkIcon,
   TwoProperties,
 } from "@deskpro/app-sdk";
 import {
   useExternalLink,
   useAssociatedEntityCount,
 } from "../../hooks";
-import { ExternalLink } from "../ExternalLink/ExternalLink";
+import { nbsp } from "../../constants";
 import { JiraIcon } from "../common";
 import type { FC, MouseEvent } from "react";
 import type { IssueItem as IssueItemType } from "../../context/StoreProvider/types";
@@ -42,8 +43,8 @@ export const IssueItem: FC<Props> = ({ issue, onClickTitle }) => {
         leftLabel="Issue Key"
         leftText={(
           <P5>
-            <span dangerouslySetInnerHTML={{__html: issue.key }}/>
-            <ExternalLink href={`${getBaseUrl()}/browse/${issue.key}`}/>
+            {issue.key}{nbsp}
+            <LinkIcon href={`${getBaseUrl()}/browse/${issue.key}`}/>
           </P5>
         )}
         rightLabel="Deskpro Tickets"
@@ -53,8 +54,8 @@ export const IssueItem: FC<Props> = ({ issue, onClickTitle }) => {
           label="Project"
           text={(
               <P5>
-                {issue.projectName}
-                <ExternalLink href={`${getBaseUrl()}/browse/${issue.projectKey}`} />
+                {issue.projectName}{nbsp}
+                <LinkIcon href={`${getBaseUrl()}/browse/${issue.projectKey}`} />
               </P5>
           )}
       />
@@ -63,8 +64,8 @@ export const IssueItem: FC<Props> = ({ issue, onClickTitle }) => {
             label="Epic"
             text={(
                 <P5>
-                  {issue.epicName}
-                  <ExternalLink href={`${getBaseUrl()}/browse/${issue.epicKey}`} />
+                  {issue.epicName}{nbsp}
+                  <LinkIcon href={`${getBaseUrl()}/browse/${issue.epicKey}`} />
                 </P5>
             )}
         />

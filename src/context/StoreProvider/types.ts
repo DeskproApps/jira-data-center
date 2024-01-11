@@ -1,7 +1,7 @@
 import type { Context } from "@deskpro/app-sdk";
 import type { Reducer } from "react";
 import type { ADFEntity } from "@atlaskit/adf-utils";
-import type { IssueMeta } from "../../types";
+import type { IssueMeta, Maybe } from "../../types";
 
 export type ApiRequestMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -40,7 +40,7 @@ export type Action =
   | { type: "issueAttachments", key: string, attachments: IssueAttachment[] }
   | { type: "loadDataDependencies", deps: IssueDeps }
   | { type: "failedToGenerateIssueForm" }
-  | { type: "error", error: string }
+  | { type: "error", error: Maybe<string> }
   | { type: "issueComments", key: string, comments: JiraComment[] }
 ;
 
