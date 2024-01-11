@@ -107,10 +107,6 @@ const Details: FC<Props> = ({ issue, attachments }) => {
               name={issue.assigneeName}
               avatarUrl={issue.assigneeAvatarUrl}
             />
-            {nbsp}
-            {issue.assigneeId && (
-              <LinkIcon href={`${getBaseUrl()}/jira/people/${issue.assigneeId}`} />
-            )}
           </>
         )}
       />
@@ -122,10 +118,6 @@ const Details: FC<Props> = ({ issue, attachments }) => {
               name={issue.reporterName}
               avatarUrl={issue.reporterAvatarUrl}
             />
-            {nbsp}
-            {issue.reporterId && (
-              <LinkIcon href={`${getBaseUrl()}/jira/people/${issue.reporterId}`}/>
-            )}
           </>
         )}
       />
@@ -166,7 +158,6 @@ const Details: FC<Props> = ({ issue, attachments }) => {
                 filename={attachment.filename}
                 fileSize={attachment.sizeBytes}
                 icon={faFile as AnyIcon}
-                maxWidth="244px"
               />
             ))}
           </Stack>

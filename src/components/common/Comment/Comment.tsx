@@ -27,27 +27,25 @@ type Props = {
   avatarUrl?: string,
 };
 
-const Comment: FC<Props> = ({ name, avatarUrl, text, date }) => {
-  return (
-    <Stack wrap="nowrap" gap={6} style={{ marginBottom: 10 }}>
-      <Author vertical>
-        <Avatar
-          size={18}
-          name={name}
-          backupIcon={faUser as AnyIcon}
-          imageUrl={avatarUrl}
-        />
-        {date && (
-          <P11>
-            <TimeAgo date={date} timeStyle="mini"/>
-          </P11>
-        )}
-      </Author>
-      <Body type="p5">
-        <DPNormalize text={text}/>
-      </Body>
-    </Stack>
-  );
-};
+const Comment: FC<Props> = ({ name, avatarUrl, text, date }) => (
+  <Stack wrap="nowrap" gap={6} style={{ marginBottom: 10 }}>
+    <Author vertical>
+      <Avatar
+        size={18}
+        name={name}
+        backupIcon={faUser as AnyIcon}
+        imageUrl={avatarUrl}
+      />
+      {date && (
+        <P11>
+          <TimeAgo date={date} timeStyle="mini"/>
+        </P11>
+      )}
+    </Author>
+    <Body type="p5">
+      <DPNormalize text={text}/>
+    </Body>
+  </Stack>
+);
 
 export { Comment };

@@ -1,4 +1,4 @@
-export { CommentPage } from "./CommentPage";
+export { CreateIssueCommentPage } from "./CreateIssueCommentPage";
 export { CreatePage } from "./CreatePage";
 export { EditPage } from "./EditPage";
 export { HomePage } from "./HomePage";

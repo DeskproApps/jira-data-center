@@ -29,10 +29,10 @@ import {
   LinkPage,
   ViewPage,
   CreatePage,
-  CommentPage,
   LoadingAppPage,
   VerifySettingsPage,
   ViewPermissionsPage,
+  CreateIssueCommentPage,
 } from "./pages";
 import type { ReplyBoxNoteSelection, ElementEventPayload } from "./types";
 
@@ -191,7 +191,7 @@ const App = () => {
         <Route path="/view/:issueKey" element={<ViewPage />}/>
         <Route path="/create" element={<CreatePage />}/>
         <Route path="/edit" element={<EditPage />}/>
-        <Route path="/comment/:issueKey" element={<CommentPage />}/>
+        <Route path="/comment/:issueKey" element={<CreateIssueCommentPage />}/>
         <Route path="/view_permissions" element={<ViewPermissionsPage />}/>
         <Route index  element={<LoadingAppPage />}/>
       </Routes>
