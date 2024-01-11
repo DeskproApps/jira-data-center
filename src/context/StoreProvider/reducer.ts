@@ -7,11 +7,6 @@ export const initialState: State = {
 
 export const reducer: StoreReducer = (state: State, action: Action): State => {
   return match<[State, Action]>([state, action])
-    .with([P._, { type: "changePage" }],  ([prevState, action]) => ({
-      ...prevState,
-      page: action.page,
-      ...(!action?.params ? {} : { pageParams: action.params }),
-    }))
     .with([P._, { type: "loadContext" }],  ([prevState, action]) => ({
       ...prevState,
       context: action.context as TicketContext,

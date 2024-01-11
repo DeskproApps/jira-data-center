@@ -1,10 +1,10 @@
 import {FC, Fragment} from "react";
+import { useNavigate } from "react-router-dom";
 import {H1, H4, Spinner, Stack } from "@deskpro/deskpro-ui";
 import { HorizontalDivider, useDeskproAppTheme } from "@deskpro/app-sdk";
 import { useFindIssueComments, useExternalLink } from "../../hooks";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {useStore} from "../../context/StoreProvider/hooks";
 import {JiraComment} from "../../context/StoreProvider/types";
 import "./CommentsList.css";
 import {ExternalLink} from "../ExternalLink/ExternalLink";
@@ -16,7 +16,7 @@ interface CommentsListProps {
 }
 
 export const CommentsList: FC<CommentsListProps> = ({ issueKey }: CommentsListProps) => {
-    const [, dispatch] = useStore();
+    const navigate = useNavigate();
     const { theme } = useDeskproAppTheme();
     const comments = useFindIssueComments(issueKey);
     const { getBaseUrl } = useExternalLink();
@@ -36,7 +36,7 @@ export const CommentsList: FC<CommentsListProps> = ({ issueKey }: CommentsListPr
                       }}
                     color={theme.colors.grey80}
                     size="xs"
-                    onClick={() => dispatch({ type: "changePage", page: "comment",  params: { issueKey } })}
+                    onClick={() => navigate(`/comment/${issueKey}`)}
                     className="comment-list-add-comment"
                 />
             </Stack>

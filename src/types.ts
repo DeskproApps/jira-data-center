@@ -1,10 +1,20 @@
-import { Context } from "@deskpro/app-sdk";
-import { JiraUserInfo } from "./context/StoreProvider/types";
+import type { To } from "react-router-dom";
+import type { Context } from "@deskpro/app-sdk";
+import type { JiraUserInfo } from "./context/StoreProvider/types";
 
 export type Maybe<T> = T | undefined | null;
 
 /**  An ISO-8601 encoded UTC date time string. Example value: `""2019-09-07T15:50:00Z"` */
 export type DateTime = string;
+
+export type NavigateToChangePage = { type: "changePage", path: To };
+
+export type ElementEventPayload =
+  | undefined
+  | string
+  | { type: "unlink", issueKey: string }
+  | NavigateToChangePage
+;
 
 export enum FieldType {
     REQUEST_LANG = "com.atlassian.servicedesk.servicedesk-lingo-integration-plugin:sd-request-language",

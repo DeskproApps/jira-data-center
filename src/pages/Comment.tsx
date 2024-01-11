@@ -1,5 +1,6 @@
 import {FC, useState} from "react";
-import {useSetAppTitle} from "../hooks";
+import { useParams, useNavigate } from "react-router-dom";
+import {useSetAppTitle, useRegisterElements} from "../hooks";
 import {
     Label,
     Stack,
@@ -7,10 +8,7 @@ import {
     TextArea,
     FormikField,
 } from "@deskpro/deskpro-ui";
-import {
-    useDeskproAppClient,
-    useInitialisedDeskproAppClient
-} from "@deskpro/app-sdk";
+import { useDeskproAppClient } from "@deskpro/app-sdk";
 import {useStore} from "../context/StoreProvider/hooks";
 import {IntlProvider} from "react-intl";
 import { Formik } from "formik";
@@ -20,22 +18,21 @@ interface CommentFormValues {
     comments: string;
 }
 
-interface CommentProps {
-    issueKey: string;
-}
-
-export const Comment: FC<CommentProps> = ({ issueKey }: CommentProps) => {
-    const {client} = useDeskproAppClient();
+export const Comment: FC = () => {
+    const navigate = useNavigate();
+    const { issueKey } = useParams();
+    const { client } = useDeskproAppClient();
     const [, dispatch] = useStore();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useSetAppTitle("Add Comment");
 
-    useInitialisedDeskproAppClient((client) => {
-        client.deregisterElement("edit");
-        client.deregisterElement("addIssue");
-        client.deregisterElement("viewContextMenu");
-        client.deregisterElement("homeContextMenu");
+    useRegisterElements(({ registerElement }) => {
+      registerElement("refresh", { type: "refresh_button" });
+      registerElement("home", {
+        type: "home_button",
+        payload: { type: "changePage", path: "/home" },
+      });
     }, [issueKey]);
 
     const initialValues: CommentFormValues = {
@@ -43,7 +40,7 @@ export const Comment: FC<CommentProps> = ({ issueKey }: CommentProps) => {
     };
 
     const submit = (data: CommentFormValues) => {
-        if (!client) {
+        if (!client || !issueKey) {
             return;
         }
 
@@ -52,7 +49,7 @@ export const Comment: FC<CommentProps> = ({ issueKey }: CommentProps) => {
         addIssueComment(client, issueKey, data.comments)
             .then(() => getIssueComments(client, issueKey))
             .then((comments) => dispatch({ type: "issueComments", key: issueKey, comments }))
-            .then(() => dispatch({ type: "changePage", page: "view", params: { issueKey } }))
+            .then(() => navigate(`/view/${issueKey}`))
             .finally(() => setIsLoading(false))
         ;
     };
@@ -95,7 +92,7 @@ export const Comment: FC<CommentProps> = ({ issueKey }: CommentProps) => {
                                     <Button
                                         text="Cancel"
                                         intent="secondary"
-                                        onClick={() => dispatch({ type: "changePage", page: "view", params: { issueKey } })}
+                                        onClick={() => navigate(`/view/${issueKey}`)}
                                     />
                                 </Stack>
                             </Stack>

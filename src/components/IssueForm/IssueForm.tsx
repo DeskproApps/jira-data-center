@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 import { orderBy, uniq, get } from "lodash";
 import { IntlProvider } from "react-intl";
 import { Formik, FormikHelpers } from "formik";
@@ -53,7 +54,8 @@ export interface IssueFormProps {
 }
 
 export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiErrors, editMeta, issueKey, loading = false }: IssueFormProps) => {
-    const [ state, dispatch ] = useStore();
+    const navigate = useNavigate();
+    const [state] = useStore();
 
     useLoadDataDependencies();
 
@@ -406,7 +408,7 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
                                 <Stack justify="space-between">
                                     <Button text={type === "create" ? "Create" : "Update"} onClick={() => submitForm()} loading={loading} />
                                     {type === "update" && issueKey ? (
-                                        <Button text="Cancel" intent="secondary" onClick={() => dispatch({ type: "changePage", page: "view", params: { issueKey } })} />
+                                        <Button text="Cancel" intent="secondary" onClick={() => navigate(`/view${issueKey}`)} />
                                     ) : (
                                         <Button text="Reset" intent="secondary" onClick={() => resetForm()} />
                                     )}
