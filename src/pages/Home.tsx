@@ -1,33 +1,41 @@
-import { FC, useEffect, useMemo, useState } from "react";
-import { useStore } from "../context/StoreProvider/hooks";
-import { H3 } from "@deskpro/deskpro-ui";
+import { FC, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   LoadingSpinner,
   HorizontalDivider,
   useDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { useLoadLinkedIssues, useSetAppTitle } from "../hooks";
+import { useStore } from "../context/StoreProvider/hooks";
+import { H3 } from "@deskpro/deskpro-ui";
+import {
+  useSetAppTitle,
+  useRegisterElements,
+  useLoadLinkedIssues,
+} from "../hooks";
 import { LinkedIssueResultItem } from "../components/LinkedIssueResultItem/LinkedIssueResultItem";
-import {ErrorBlock} from "../components/Error/ErrorBlock";
+import { ErrorBlock } from "../components/Error/ErrorBlock";
 
 export const Home: FC = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [state, dispatch] = useStore();
-  const loadLinkedIssues = useLoadLinkedIssues();
+  const navigate = useNavigate();
   const { client } = useDeskproAppClient();
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [state] = useStore();
 
   useSetAppTitle("JIRA Issues");
 
-  useEffect(() => {
-    client?.registerElement("addIssue", { type: "plus_button" });
-    client?.registerElement("homeContextMenu", { type: "menu", items: [
-      { title: "View Permissions", payload: { action: "viewPermissions" }, },
-    ] });
-
-    client?.deregisterElement("home");
-    client?.deregisterElement("edit");
-    client?.deregisterElement("viewContextMenu");
+  useRegisterElements(({ registerElement }) => {
+    registerElement("refresh", { type: "refresh_button" });
+    registerElement("plus", {
+      type: "plus_button",
+      payload: { type: "changePage", path: "/link" },
+    });
+    registerElement("menu", { type: "menu", items: [
+      {
+        title: "View Permissions",
+        payload: { type: "changePage", path: "/view_permissions" },
+      },
+    ]});
   }, [client, state]);
 
   const linkedIssues = useMemo(() => {
@@ -41,12 +49,7 @@ export const Home: FC = () => {
       ));
   }, [state.linkedIssuesResults, searchQuery]);
 
-  useEffect(() => {
-    if (state.linkedIssuesResults === undefined) {
-      loadLinkedIssues();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.context?.data, state.linkedIssuesResults]);
+  useLoadLinkedIssues();
 
   const loading = state.linkedIssuesResults?.loading || state.linkedIssuesResults?.loading === undefined;
 
@@ -64,7 +67,7 @@ export const Home: FC = () => {
             <LinkedIssueResultItem
               key={idx}
               item={item}
-              onView={() => dispatch({ type: "changePage", page: "view", params: { issueKey: item.key } })}
+              onView={() => navigate(`/view/${item.key}`)}
             />
           ))
           : <H3>No linked issues found.</H3>

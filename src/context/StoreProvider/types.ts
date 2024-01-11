@@ -9,17 +9,6 @@ export type StoreReducer = Reducer<State, Action>;
 
 export type Dispatch = (action: Action) => void;
 
-export type Page =
-  "home"
-  | "link"
-  | "view"
-  | "create"
-  | "edit"
-  | "comment"
-  | "view_permissions"
-  | "verify_settings"
-;
-
 export type IssueDeps = {
   createMeta: { expand: "projects", projects: JiraProject[] },
   labels: string[],
@@ -28,9 +17,6 @@ export type IssueDeps = {
 };
 
 export interface State {
-  page?: Page;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  pageParams?: any;
   context?: TicketContext;
   linkIssueSearchResults?: { loading: boolean, list: IssueSearchItem[] };
   linkedIssuesResults?: { loading: boolean, list: IssueItem[] };
@@ -43,7 +29,6 @@ export interface State {
 }
 
 export type Action =
-  | { type: "changePage", page: Page, params?: object }
   | { type: "loadContext", context: Context }
   | { type: "linkIssueSearchListLoading" }
   | { type: "linkIssueSearchList", list: IssueSearchItem[] }
@@ -58,12 +43,6 @@ export type Action =
   | { type: "error", error: string }
   | { type: "issueComments", key: string, comments: JiraComment[] }
 ;
-
-export type ElementEventPayload =
-  | undefined
-  | string
-  | { action: "viewPermissions" }
-  | { action: "unlink", issueKey: string };
 
 export interface TicketContext extends Context {
   data: { ticket: { id: string, permalinkUrl: string, subject: string; } }

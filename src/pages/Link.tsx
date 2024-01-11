@@ -1,4 +1,6 @@
-import { FC, useRef, useEffect, useState } from "react";
+import { FC, useRef, useEffect, useState, useMemo, useCallback } from "react";
+import get from "lodash/get";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../context/StoreProvider/hooks";
 import {
   H3,
@@ -10,9 +12,13 @@ import {
   Search,
   HorizontalDivider,
   useDeskproAppClient,
+  useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { useDebouncedCallback } from "use-debounce";
-import { useLoadLinkedIssues, useSetAppTitle } from "../hooks";
+import {
+  useSetAppTitle,
+  useRegisterElements,
+} from "../hooks";
 import { SearchResultItem } from "../components/SearchResultItem/SearchResultItem";
 import { addRemoteLink, getIssueByKey, searchIssues } from "../context/StoreProvider/api";
 // import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
@@ -20,19 +26,22 @@ import { ticketReplyEmailsSelectionStateKey, ticketReplyNotesSelectionStateKey }
 
 export const Link: FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const { context } = useDeskproLatestAppContext();
   const [state, dispatch] = useStore();
   const [selected, setSelected] = useState<string[]>([]);
   const [isLinkIssuesLoading, setIsLinkIssuesLoading] = useState<boolean>(false);
   const { client } = useDeskproAppClient();
-  const loadLinkedIssues = useLoadLinkedIssues();
+  const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
 
   useSetAppTitle("Add Issues");
 
-  useEffect(() => {
-    client?.deregisterElement("addIssue");
-    client?.deregisterElement("edit");
-    client?.deregisterElement("homeContextMenu");
-    client?.registerElement("home", { type: "home_button" });
+  useRegisterElements(({ registerElement }) => {
+    registerElement("refresh", { type: "refresh_button" });
+    registerElement("home", {
+      type: "home_button",
+      payload: { type: "changePage", path: "/home" },
+    });
   }, [client]);
 
   const debounced = useDebouncedCallback<(v: string) => void>((q) => {
@@ -63,15 +72,13 @@ export const Link: FC = () => {
     }
   };
 
-  const linkIssues = () => {
-    if (!selected.length || !client || !state.context?.data.ticket.id) {
+  const linkIssues = useCallback(() => {
+    if (!selected.length || !client || !ticketId) {
       return;
     }
 
-    const ticketId = state.context?.data.ticket.id as string;
-
-    const commentOnNote = state.context.settings?.default_comment_on_ticket_note === true;
-    const commentOnReply = state.context.settings?.default_comment_on_ticket_reply === true;
+    const commentOnNote = context?.settings?.default_comment_on_ticket_note === true;
+    const commentOnReply = context?.settings?.default_comment_on_ticket_reply === true;
 
     setIsLinkIssuesLoading(true);
 
@@ -95,18 +102,17 @@ export const Link: FC = () => {
     updates.push(...selected.map((key: string) => addRemoteLink(
         client,
         key,
-        state.context?.data.ticket.id as string,
-        state.context?.data.ticket.subject as string,
-        state.context?.data.ticket.permalinkUrl as string
+        context?.data.ticket.id as string,
+        context?.data.ticket.subject as string,
+        context?.data.ticket.permalinkUrl as string
     )));
 
     Promise.all(updates)
-      .then(() => loadLinkedIssues())
-      .then(() => dispatch({ type: "changePage", page: "home" }))
+      .then(() => navigate("/home"))
       .catch((error) => dispatch({ type: "error", error }))
       .finally(() => setIsLinkIssuesLoading(false))
     ;
-  };
+  }, [context, ticketId, dispatch, client, selected, navigate]);
 
   return (
     <>
@@ -126,7 +132,7 @@ export const Link: FC = () => {
         <Button
           text="Cancel"
           intent="secondary"
-          onClick={() => dispatch({ type: "changePage", page: "home" })}
+          onClick={() => navigate("/home")}
         />
       </Stack>
       <HorizontalDivider style={{ marginTop: "8px", marginBottom: "8px" }} />

@@ -1,22 +1,30 @@
-import { useEffect } from "react";
-import { useDeskproAppClient } from "@deskpro/app-sdk";
-import { useStore } from "../context/StoreProvider/hooks";
+import { useMemo } from "react";
+import get from "lodash/get";
+import size from "lodash/size";
+import { useNavigate } from "react-router-dom";
+import {
+  useDeskproLatestAppContext,
+  useInitialisedDeskproAppClient,
+} from "@deskpro/app-sdk";
 
-const useWhenNoLinkedItems = (onNoLinkedItems: () => void) => {
-    const { client } = useDeskproAppClient();
-    const [ state ] = useStore();
+const useWhenNoLinkedItems = () => {
+  const navigate = useNavigate();
+  const { context } = useDeskproLatestAppContext();
+  const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
 
-    useEffect(() => {
-        if (!client || !state.context?.data.ticket.id) {
-            return;
-        }
+  useInitialisedDeskproAppClient((client) => {
+    if (!ticketId) {
+      return;
+    }
 
-        client
-            .getEntityAssociation("linkedJiraDataCentreIssue", state.context?.data.ticket.id as string)
-            .list()
-            .then((items) => items.length === 0 && onNoLinkedItems())
-        ;
-    }, [client, state.context?.data.ticket.id, onNoLinkedItems]);
+    client
+      .getEntityAssociation("linkedJiraDataCentreIssue", ticketId as string)
+      .list()
+      .then((items) => {
+        const page = (Array.isArray(items) && size(items) > 0) ? "/home" : "/link";
+        navigate(page);
+      });
+  }, [ticketId, navigate]);
 };
 
 export { useWhenNoLinkedItems };

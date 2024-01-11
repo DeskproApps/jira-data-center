@@ -11,3 +11,4 @@ export { useSetAppTitle } from "./useSetAppTitle";
 export { useWhenNoLinkedItems } from "./useWhenNoLinkedItems";
 export { useExternalLink } from "./useExternalLink";
 export { useCheckingCorrectlySettings } from "./useCheckingCorrectlySettings";
+export { useRegisterElements } from "./useRegisterElements";
