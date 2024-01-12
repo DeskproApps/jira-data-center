@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { DropdownValueType, Label } from "@deskpro/deskpro-ui";
 import { MappedFieldProps } from "../types";
-import { DropdownSelect } from "../../DropdownSelect/DropdownSelect";
+import { DropdownSelect } from "../../common";
 import { FieldType } from "../../../types";
 
 export const SelectSingleField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {

@@ -19,9 +19,7 @@ import {
 import "./IssueForm.css";
 import { useStore } from "../../context/StoreProvider/hooks";
 import { schema } from "./validation";
-import { ErrorBlock } from "../Error/ErrorBlock";
 import { useLoadDataDependencies } from "../../hooks";
-import { DropdownSelect } from "../DropdownSelect/DropdownSelect";
 import {
     JiraUser,
     JiraProject,
@@ -31,13 +29,17 @@ import {
     JiraPriorityValue,
 } from "../../context/StoreProvider/types";
 import { buildCustomFieldMeta } from "../../context/StoreProvider/api";
-import { FieldType, IssueMeta } from "../../types";
-import { CustomField } from "../IssueFieldForm/map";
-import { DropdownMultiSelect } from "../DropdownMultiSelect/DropdownMultiSelect";
-import {AttachmentsField} from "../AttachmentsField/AttachmentsField";
-import { SubtaskDropdownWithSearch } from "../SubtaskDropdownWithSearch/SubtaskDropdownWithSearch";
 import { isNeedField, isRequiredField } from "../../utils";
-import { SubmitIssueFormData } from "./types";
+import { CustomField } from "../IssueFieldForm/map";
+import {
+  ErrorBlock,
+  DropdownSelect,
+  AttachmentsField,
+  DropdownMultiSelect,
+  SubtaskDropdownWithSearch,
+} from "../common";
+import { FieldType, IssueMeta } from "../../types";
+import type { SubmitIssueFormData } from "./types";
 
 export interface IssueFormProps {
     onSubmit: (

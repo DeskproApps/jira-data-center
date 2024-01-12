@@ -175,3 +175,5 @@ export type TicketData = {
 };
 
 export type TicketContext = Context<TicketData, Maybe<Settings>>;
+
+export type IssueKey = string;

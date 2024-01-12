@@ -1,7 +1,7 @@
-import { Context } from "@deskpro/app-sdk";
-import { Reducer } from "react";
-import { ADFEntity } from "@atlaskit/adf-utils";
-import {IssueMeta} from "../../types";
+import type { Context } from "@deskpro/app-sdk";
+import type { Reducer } from "react";
+import type { ADFEntity } from "@atlaskit/adf-utils";
+import type { IssueMeta, Maybe } from "../../types";
 
 export type ApiRequestMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -18,7 +18,7 @@ export type IssueDeps = {
 
 export interface State {
   context?: TicketContext;
-  linkIssueSearchResults?: { loading: boolean, list: IssueSearchItem[] };
+  linkIssueSearchResults?: { loading: boolean, list: IssueItem[] };
   linkedIssuesResults?: { loading: boolean, list: IssueItem[] };
   linkedIssueAttachments?: { loading: boolean, list: { [key: string]: IssueAttachment[] } };
   dataDependencies?: IssueDeps;
@@ -31,7 +31,7 @@ export interface State {
 export type Action =
   | { type: "loadContext", context: Context }
   | { type: "linkIssueSearchListLoading" }
-  | { type: "linkIssueSearchList", list: IssueSearchItem[] }
+  | { type: "linkIssueSearchList", list: IssueItem[] }
   | { type: "linkIssueSearchListReset" }
   | { type: "linkedIssuesListLoading" }
   | { type: "linkedIssuesList", list: IssueItem[] }
@@ -40,7 +40,7 @@ export type Action =
   | { type: "issueAttachments", key: string, attachments: IssueAttachment[] }
   | { type: "loadDataDependencies", deps: IssueDeps }
   | { type: "failedToGenerateIssueForm" }
-  | { type: "error", error: string }
+  | { type: "error", error: Maybe<string> }
   | { type: "issueComments", key: string, comments: JiraComment[] }
 ;
 
@@ -56,7 +56,9 @@ export interface SearchParams {
 export interface IssueItem {
   id: number;
   key: string;
+  keyHtml: string;
   summary: string;
+  summaryHtml: string;
   projectKey: string;
   projectName: string;
   status: string;
@@ -81,11 +83,6 @@ export interface IssueItem {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customFields: Record<string, { value: any, meta: IssueMeta }>;
   parentKey?: string;
-}
-
-export interface IssueSearchItem extends IssueItem {
-  keyHtml: string;
-  summaryHtml: string;
 }
 
 export interface IssueAttachment {
@@ -193,14 +190,16 @@ export type PermissionKeys =
   | "MANAGE_WATCHERS"
 ;
 
-export type Permissions = Record<PermissionKeys, {
+export type Permission = {
   description: string,
   havePermission: boolean,
   id: string,
   key: PermissionKeys,
   name: string,
   type: "PROJECT",
-}>;
+};
+
+export type Permissions = Record<PermissionKeys, Permission>;
 
 export interface JiraIssueType {
   description: string

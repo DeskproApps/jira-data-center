@@ -1,26 +1,26 @@
 import { useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { getIssueComments } from "../context/StoreProvider/api";
 import { useStore } from "../context/StoreProvider/hooks";
-import { JiraComment } from "../context/StoreProvider/types";
+import type { Maybe } from "../types";
+import type { JiraComment } from "../context/StoreProvider/types";
 
-const useFindIssueComments = (issueKey: string): JiraComment[]|null => {
-    const [ state , dispatch ] = useStore();
+const useFindIssueComments = (issueKey: string): Maybe<JiraComment[]> => {
+  const [state, dispatch] = useStore();
 
-    useInitialisedDeskproAppClient((client) => {
-        if (!issueKey) {
-            return;
-        }
-
-        getIssueComments(client, issueKey)
-            .then((comments) => dispatch({ type: "issueComments", key: issueKey, comments }))
-        ;
-    }, [issueKey]);
-
-    if (!state?.issueComments || !state?.issueComments[issueKey]) {
-        return null;
+  useInitialisedDeskproAppClient((client) => {
+    if (!issueKey) {
+      return;
     }
 
-    return state?.issueComments[issueKey];
+    getIssueComments(client, issueKey)
+      .then((comments) => dispatch({ type: "issueComments", key: issueKey, comments }));
+  }, [issueKey]);
+
+  if (!state?.issueComments || !state?.issueComments[issueKey]) {
+    return null;
+  }
+
+  return state?.issueComments[issueKey];
 };
 
-export { useFindIssueComments };
+export {useFindIssueComments};

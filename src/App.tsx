@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useEffect, useCallback } from "react";
 import get from "lodash/get";
 import noop from "lodash/noop";
 import { match } from "ts-pattern";
@@ -7,7 +7,6 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import {
   Context,
   TargetAction,
-  useDeskproElements,
   useDeskproAppClient,
   useDeskproAppEvents,
   useDeskproLatestAppContext,
@@ -23,18 +22,17 @@ import {
 import { addIssueComment, removeRemoteLink } from "./context/StoreProvider/api";
 import { useCheckingCorrectlySettings } from "./hooks";
 import { useStore } from "./context/StoreProvider/hooks";
-import { ErrorBlock } from "./components/Error/ErrorBlock";
-import { SettingsError } from "./components/Error/SettingsError";
+import { ErrorBlock, SettingsError } from "./components/common";
 import {
-  Edit,
-  Home,
-  Link,
-  View,
-  Create,
-  Comment,
-  LoadingApp,
-  VerifySettings,
-  ViewPermissions,
+  EditPage,
+  HomePage,
+  LinkPage,
+  ViewPage,
+  CreatePage,
+  LoadingAppPage,
+  VerifySettingsPage,
+  ViewPermissionsPage,
+  CreateIssueCommentPage,
 } from "./pages";
 import type { ReplyBoxNoteSelection, ElementEventPayload } from "./types";
 
@@ -64,9 +62,9 @@ const App = () => {
     console.error(state._error);
   }
 
-  useDeskproElements(({ registerElement }) => {
-    registerElement("refresh", { type: "refresh_button" });
-  });
+  useEffect(() => {
+    client?.registerElement("refresh", { type: "refresh_button" });
+  }, [client]);
 
   const debounceTargetAction = useDebouncedCallback<(a: TargetAction<ReplyBoxNoteSelection[]>) => void>(
     (action: TargetAction) => {
@@ -187,15 +185,15 @@ const App = () => {
       {state._error && (<ErrorBlock text="An error occurred" />)}
       {isSettingsError && (<SettingsError />)}
       <Routes>
-        <Route path="/admin/verify_settings" element={<VerifySettings />}/>
-        <Route path="/home" element={<Home />}/>
-        <Route path="/link" element={<Link />}/>
-        <Route path="/view/:issueKey" element={<View />}/>
-        <Route path="/create" element={<Create />}/>
-        <Route path="/edit" element={<Edit />}/>
-        <Route path="/comment/:issueKey" element={<Comment />}/>
-        <Route path="/view_permissions" element={<ViewPermissions />}/>
-        <Route index  element={<LoadingApp />}/>
+        <Route path="/admin/verify_settings" element={<VerifySettingsPage />}/>
+        <Route path="/home" element={<HomePage />}/>
+        <Route path="/link" element={<LinkPage />}/>
+        <Route path="/view/:issueKey" element={<ViewPage />}/>
+        <Route path="/create" element={<CreatePage />}/>
+        <Route path="/edit" element={<EditPage />}/>
+        <Route path="/comment/:issueKey" element={<CreateIssueCommentPage />}/>
+        <Route path="/view_permissions" element={<ViewPermissionsPage />}/>
+        <Route index  element={<LoadingAppPage />}/>
       </Routes>
     </>
   );
