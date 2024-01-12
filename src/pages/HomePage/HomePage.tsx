@@ -9,8 +9,6 @@ import {
   useSetAppTitle,
   useLinkedIssues,
   useRegisterElements,
-
-  useLoadLinkedIssues,
 } from "../../hooks";
 import { Home } from "../../components";
 import type { FC } from "react";
@@ -36,8 +34,6 @@ const HomePage: FC = () => {
   const onNavigateToIssue = useCallback((issueKey: IssueItem["key"]) => {
     navigate(`/view/${issueKey}`)
   }, [navigate]);
-
-  useLoadLinkedIssues();
 
   useSetAppTitle("JIRA Issues");
 
