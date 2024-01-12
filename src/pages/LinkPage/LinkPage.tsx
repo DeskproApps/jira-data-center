@@ -6,12 +6,12 @@ import {
   useDeskproAppClient,
   useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
-import { useStore } from "../../context/StoreProvider/hooks";
 import {
+  useSearch,
   useSetAppTitle,
   useRegisterElements,
 } from "../../hooks";
-import { addRemoteLink, getIssueByKey, searchIssues } from "../../context/StoreProvider/api";
+import { addRemoteLink, getIssueByKey } from "../../context/StoreProvider/api";
 // import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
 import { ticketReplyEmailsSelectionStateKey, ticketReplyNotesSelectionStateKey } from "../../utils";
 import { Link } from "../../components";
@@ -21,11 +21,12 @@ import type { IssueKey } from "../../types";
 const LinkPage: FC = () => {
   const navigate = useNavigate();
   const { context } = useDeskproLatestAppContext();
-  const [state, dispatch] = useStore();
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [selected, setSelected] = useState<IssueKey[]>([]);
-  const [isLinkIssuesLoading, setIsLinkIssuesLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { client } = useDeskproAppClient();
   const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
+  const { issues, isLoading } = useSearch(searchQuery);
 
   useSetAppTitle("Add Issues");
 
@@ -37,20 +38,7 @@ const LinkPage: FC = () => {
     });
   }, [client]);
 
-  const debounced = useDebouncedCallback<(v: string) => void>((q) => {
-    if (!q || !client) {
-      dispatch({ type: "linkIssueSearchList", list: [] });
-      return;
-    }
-
-    searchIssues(client, q, { withSubtask: true })
-      .then((list) =>  dispatch({ type: "linkIssueSearchList", list }));
-  },500);
-
-  const search = (q: string) => {
-    dispatch({ type: "linkIssueSearchListLoading" });
-    debounced(q);
-  };
+  const onChangeSearchQuery = useDebouncedCallback(setSearchQuery, 1000);
 
   const onChangeSelectedIssue = (key: string) => {
     if (selected.includes(key)) {
@@ -68,7 +56,7 @@ const LinkPage: FC = () => {
     const commentOnNote = context?.settings?.default_comment_on_ticket_note === true;
     const commentOnReply = context?.settings?.default_comment_on_ticket_reply === true;
 
-    setIsLinkIssuesLoading(true);
+    setIsSubmitting(true);
 
     const updates = selected.map(async (key: string) => {
       const issue = await getIssueByKey(client, key);
@@ -97,10 +85,9 @@ const LinkPage: FC = () => {
 
     Promise.all(updates)
       .then(() => navigate("/home"))
-      .catch((error) => dispatch({ type: "error", error }))
-      .finally(() => setIsLinkIssuesLoading(false))
+      .finally(() => setIsSubmitting(false))
     ;
-  }, [context, ticketId, dispatch, client, selected, navigate]);
+  }, [context, ticketId, client, selected, navigate]);
 
   const onCancel = useCallback(() => navigate("/home"), [navigate]);
 
@@ -108,13 +95,13 @@ const LinkPage: FC = () => {
     <>
       {/*<CreateLinkIssue selected="link" />*/}
       <Link
-        isFetching={state.linkIssueSearchResults?.loading}
-        onChangeSearch={search}
-        isSubmitting={isLinkIssuesLoading}
+        isFetching={isLoading}
+        onChangeSearch={onChangeSearchQuery}
+        isSubmitting={isSubmitting}
         onLinkIssues={linkIssues}
         onCancel={onCancel}
         selectedIssues={selected}
-        issues={get(state, ["linkIssueSearchResults", "list"], [])}
+        issues={issues}
         selectedIssueIds={selected}
         onChangeSelectedIssue={onChangeSelectedIssue}
       />
