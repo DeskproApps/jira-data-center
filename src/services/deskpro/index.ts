@@ -1,0 +1,1 @@
+export { getEntityListService } from "./getEntityListService";

@@ -4,3 +4,4 @@ export { Home } from "./Home";
 export { View } from "./View";
 export { CreateIssueComment } from "./CreateIssueComment";
 export { ViewPermissions } from "./ViewPermissions";
+export { ErrorFallback } from "./Error";
