@@ -9,7 +9,7 @@ import {
 } from "@deskpro/app-sdk";
 import { Container } from "../common";
 import type { FC } from "react";
-import type { Permission } from "../../context/StoreProvider/types";
+import type { Permission } from "../../services/jira/types";
 
 type Props = {
   permissions: Permission[],

@@ -1,5 +1,6 @@
 import { P, match } from "ts-pattern";
-import { State, Action, StoreReducer, TicketContext } from "./types";
+import type { TicketContext } from "../../types";
+import type { State, Action, StoreReducer } from "./types";
 
 export const initialState: State = {
   _error: undefined,

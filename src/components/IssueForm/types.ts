@@ -1,4 +1,4 @@
-import { IssueFormData } from "../../context/StoreProvider/types";
+import { IssueFormData } from "../../services/jira/types";
 
 export interface JiraField {
     key: string;

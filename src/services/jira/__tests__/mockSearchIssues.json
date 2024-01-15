@@ -1,0 +1,923 @@
+{
+  "expand": "schema,names",
+  "startAt": 0,
+  "maxResults": 50,
+  "total": 2,
+  "issues": [
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10102",
+      "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/10102",
+      "key": "DKA-18",
+      "fields": {
+        "issuetype": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10003",
+          "id": "10003",
+          "description": "A task that needs to be done.",
+          "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+          "name": "Task",
+          "subtask": false,
+          "avatarId": 10318
+        },
+        "components": [],
+        "timespent": null,
+        "timeoriginalestimate": null,
+        "description": "- *Objective:* Arrange a clandestine meeting between Varys and Ser Jorah Mormont to discuss the latest intelligence on the political landscape of Westeros.\n- *Activities:* This task involves selecting a secure location, ensuring confidentiality, and arranging swift and discreet travel for both parties.\n- *Purpose:* The goal of this meeting is to share critical insights and strategies that could influence the movements and decisions of Daenerys Targaryen in her quest for the throne.",
+        "project": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "DKA",
+          "name": "Deskpro Kanban App",
+          "projectTypeKey": "software",
+          "avatarUrls": {
+            "48x48": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?avatarId=10324",
+            "24x24": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?size=small&avatarId=10324",
+            "16x16": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?size=xsmall&avatarId=10324",
+            "32x32": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?size=medium&avatarId=10324"
+          }
+        },
+        "fixVersions": [],
+        "customfield_10110": "0|i0003z:",
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10107": null,
+        "customfield_10108": null,
+        "aggregatetimeestimate": null,
+        "customfield_10109": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "summary": "Coordinating a Secret Council Meeting between Varys and Ser Jorah Mormont",
+        "lastViewed": "2024-01-12T10:44:26.761+0000",
+        "watches": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/DKA-18/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "creator": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/user?username=ilia.makarov",
+          "name": "ilia.makarov",
+          "key": "JIRAUSER10000",
+          "emailAddress": "missandei@seven.kingdom",
+          "avatarUrls": {
+            "48x48": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=48",
+            "24x24": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=24",
+            "16x16": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=16",
+            "32x32": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=32"
+          },
+          "displayName": "Missandei",
+          "active": true,
+          "timeZone": "Europe/Kiev"
+        },
+        "subtasks": [],
+        "created": "2023-11-29T22:34:48.000+0000",
+        "reporter": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/user?username=ilia.makarov",
+          "name": "ilia.makarov",
+          "key": "JIRAUSER10000",
+          "emailAddress": "missandei@seven.kingdom",
+          "avatarUrls": {
+            "48x48": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=48",
+            "24x24": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=24",
+            "16x16": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=16",
+            "32x32": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=32"
+          },
+          "displayName": "Missandei",
+          "active": true,
+          "timeZone": "Europe/Kiev"
+        },
+        "customfield_10000": "{summaryBean=com.atlassian.jira.plugin.devstatus.rest.SummaryBean@8d634be[summary={pullrequest=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@1e536b3a[overall=PullRequestOverallBean{stateCount=0, state='OPEN', details=PullRequestOverallDetails{openCount=0, mergedCount=0, declinedCount=0}},byInstanceType={}], build=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@65b978e4[overall=com.atlassian.jira.plugin.devstatus.summary.beans.BuildOverallBean@60b6d5d2[failedBuildCount=0,successfulBuildCount=0,unknownBuildCount=0,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], review=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@70aa4063[overall=com.atlassian.jira.plugin.devstatus.summary.beans.ReviewsOverallBean@32bbd9a2[stateCount=0,state=<null>,dueDate=<null>,overDue=false,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], deployment-environment=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@1cebe949[overall=com.atlassian.jira.plugin.devstatus.summary.beans.DeploymentOverallBean@4aa5a743[topEnvironments=[],showProjects=false,successfulCount=0,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], repository=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@68ae4f2c[overall=com.atlassian.jira.plugin.devstatus.summary.beans.CommitOverallBean@4b4fd52[count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], branch=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@47d6fd2c[overall=com.atlassian.jira.plugin.devstatus.summary.beans.BranchOverallBean@20aec52a[count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}]},errors=[],configErrors=[]], devSummaryJson={\"cachedValue\":{\"errors\":[],\"configErrors\":[],\"summary\":{\"pullrequest\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"stateCount\":0,\"state\":\"OPEN\",\"details\":{\"openCount\":0,\"mergedCount\":0,\"declinedCount\":0,\"total\":0},\"open\":true},\"byInstanceType\":{}},\"build\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"failedBuildCount\":0,\"successfulBuildCount\":0,\"unknownBuildCount\":0},\"byInstanceType\":{}},\"review\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"stateCount\":0,\"state\":null,\"dueDate\":null,\"overDue\":false,\"completed\":false},\"byInstanceType\":{}},\"deployment-environment\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"topEnvironments\":[],\"showProjects\":false,\"successfulCount\":0},\"byInstanceType\":{}},\"repository\":{\"overall\":{\"count\":0,\"lastUpdated\":null},\"byInstanceType\":{}},\"branch\":{\"overall\":{\"count\":0,\"lastUpdated\":null},\"byInstanceType\":{}}}},\"isStale\":false}}",
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "priority": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/1",
+          "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/highest.svg",
+          "name": "Highest",
+          "id": "1"
+        },
+        "customfield_10100": null,
+        "customfield_10101": null,
+        "customfield_10200": null,
+        "customfield_10102": null,
+        "labels": [],
+        "customfield_10103": null,
+        "environment": null,
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [],
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "issuelinks": [],
+        "votes": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/DKA-18/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "assignee": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/user?username=ilia.makarov",
+          "name": "ilia.makarov",
+          "key": "JIRAUSER10000",
+          "emailAddress": "missandei@seven.kingdom",
+          "avatarUrls": {
+            "48x48": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=48",
+            "24x24": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=24",
+            "16x16": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=16",
+            "32x32": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=32"
+          },
+          "displayName": "Missandei",
+          "active": true,
+          "timeZone": "Europe/Kiev"
+        },
+        "updated": "2023-11-29T22:34:49.000+0000",
+        "status": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "default",
+            "name": "To Do"
+          }
+        }
+      },
+      "renderedFields": {
+        "issuetype": null,
+        "components": null,
+        "timespent": null,
+        "timeoriginalestimate": null,
+        "description": "<ul class=\"alternate\" type=\"square\">\n\t<li><b>Objective:</b> Arrange a clandestine meeting between Varys and Ser Jorah Mormont to discuss the latest intelligence on the political landscape of Westeros.</li>\n\t<li><b>Activities:</b> This task involves selecting a secure location, ensuring confidentiality, and arranging swift and discreet travel for both parties.</li>\n\t<li><b>Purpose:</b> The goal of this meeting is to share critical insights and strategies that could influence the movements and decisions of Daenerys Targaryen in her quest for the throne.</li>\n</ul>\n",
+        "project": null,
+        "fixVersions": null,
+        "customfield_10110": null,
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10107": null,
+        "customfield_10108": null,
+        "aggregatetimeestimate": null,
+        "customfield_10109": null,
+        "resolutiondate": null,
+        "workratio": null,
+        "summary": null,
+        "lastViewed": "3 days ago 12:44 PM",
+        "watches": null,
+        "creator": null,
+        "subtasks": null,
+        "created": "30/Nov/23 12:34 AM",
+        "reporter": null,
+        "customfield_10000": null,
+        "aggregateprogress": null,
+        "priority": null,
+        "customfield_10100": null,
+        "customfield_10101": null,
+        "customfield_10200": null,
+        "customfield_10102": null,
+        "labels": null,
+        "customfield_10103": null,
+        "environment": "",
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": null,
+        "duedate": null,
+        "progress": null,
+        "issuelinks": null,
+        "votes": null,
+        "assignee": null,
+        "updated": "30/Nov/23 12:34 AM",
+        "status": null
+      },
+      "editmeta": {
+        "fields": {
+          "summary": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "system": "summary"
+            },
+            "name": "Summary",
+            "fieldId": "summary",
+            "operations": [
+              "set"
+            ]
+          },
+          "issuetype": {
+            "required": true,
+            "schema": {
+              "type": "issuetype",
+              "system": "issuetype"
+            },
+            "name": "Issue Type",
+            "fieldId": "issuetype",
+            "operations": [],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10003",
+                "id": "10003",
+                "description": "A task that needs to be done.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+                "name": "Task",
+                "subtask": false,
+                "avatarId": 10318
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10002",
+                "id": "10002",
+                "description": "Created by Jira Software - do not edit or delete. Issue type for a user story.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/issuetypes/story.svg",
+                "name": "Story",
+                "subtask": false
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10004",
+                "id": "10004",
+                "description": "A problem which impairs or prevents the functions of the product.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/secure/viewavatar?size=xsmall&avatarId=10303&avatarType=issuetype",
+                "name": "Bug",
+                "subtask": false,
+                "avatarId": 10303
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10001",
+                "id": "10001",
+                "description": "Created by Jira Software - do not edit or delete. Issue type for a big user story that needs to be broken down.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/issuetypes/epic.svg",
+                "name": "Epic",
+                "subtask": false
+              }
+            ]
+          },
+          "reporter": {
+            "required": true,
+            "schema": {
+              "type": "user",
+              "system": "reporter"
+            },
+            "name": "Reporter",
+            "fieldId": "reporter",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/latest/user/search?username=",
+            "operations": [
+              "set"
+            ]
+          },
+          "components": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "component",
+              "system": "components"
+            },
+            "name": "Component/s",
+            "fieldId": "components",
+            "operations": [
+              "add",
+              "set",
+              "remove"
+            ],
+            "allowedValues": []
+          },
+          "description": {
+            "required": false,
+            "schema": {
+              "type": "string",
+              "system": "description"
+            },
+            "name": "Description",
+            "fieldId": "description",
+            "operations": [
+              "set"
+            ]
+          },
+          "fixVersions": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "version",
+              "system": "fixVersions"
+            },
+            "name": "Fix Version/s",
+            "fieldId": "fixVersions",
+            "operations": [
+              "set",
+              "add",
+              "remove"
+            ],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/version/10000",
+                "id": "10000",
+                "name": "1.0",
+                "archived": false,
+                "released": true,
+                "projectId": 10000
+              }
+            ]
+          },
+          "priority": {
+            "required": false,
+            "schema": {
+              "type": "priority",
+              "system": "priority"
+            },
+            "name": "Priority",
+            "fieldId": "priority",
+            "operations": [
+              "set"
+            ],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/1",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/highest.svg",
+                "name": "Highest",
+                "id": "1"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/2",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/high.svg",
+                "name": "High",
+                "id": "2"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/3",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/medium.svg",
+                "name": "Medium",
+                "id": "3"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/4",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/low.svg",
+                "name": "Low",
+                "id": "4"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/5",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/lowest.svg",
+                "name": "Lowest",
+                "id": "5"
+              }
+            ]
+          },
+          "labels": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "string",
+              "system": "labels"
+            },
+            "name": "Labels",
+            "fieldId": "labels",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/1.0/labels/suggest?query=",
+            "operations": [
+              "add",
+              "set",
+              "remove"
+            ]
+          },
+          "issuelinks": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "issuelinks",
+              "system": "issuelinks"
+            },
+            "name": "Linked Issues",
+            "fieldId": "issuelinks",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/picker?currentProjectId=&showSubTaskParent=true&showSubTasks=true&currentIssueKey=DKA-18&query=",
+            "operations": [
+              "add"
+            ]
+          },
+          "customfield_10108": {
+            "required": false,
+            "schema": {
+              "type": "any",
+              "custom": "com.pyxis.greenhopper.jira:gh-epic-link",
+              "customId": 10108
+            },
+            "name": "Epic Link",
+            "fieldId": "customfield_10108",
+            "operations": [
+              "set"
+            ]
+          },
+          "customfield_10200": {
+            "required": false,
+            "schema": {
+              "type": "option",
+              "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+              "customId": 10200
+            },
+            "name": "Colour",
+            "fieldId": "customfield_10200",
+            "operations": [
+              "set"
+            ],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/customFieldOption/10000",
+                "value": "Blue",
+                "id": "10000",
+                "disabled": false
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/customFieldOption/10001",
+                "value": "Green",
+                "id": "10001",
+                "disabled": false
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/customFieldOption/10002",
+                "value": "Red",
+                "id": "10002",
+                "disabled": false
+              }
+            ]
+          },
+          "assignee": {
+            "required": false,
+            "schema": {
+              "type": "user",
+              "system": "assignee"
+            },
+            "name": "Assignee",
+            "fieldId": "assignee",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/latest/user/assignable/search?issueKey=DKA-18&username=",
+            "operations": [
+              "set"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10101",
+      "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/10101",
+      "key": "DKA-17",
+      "fields": {
+        "issuetype": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10003",
+          "id": "10003",
+          "description": "A task that needs to be done.",
+          "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+          "name": "Task",
+          "subtask": false,
+          "avatarId": 10318
+        },
+        "components": [],
+        "timespent": null,
+        "timeoriginalestimate": null,
+        "description": "h2. Task Description:\r\n - *Objective:* Missandei is tasked with gathering and dispatching detailed information about the history, biology, and behavior of dragons from the Citadel to Ser Jorah Mormont.\r\n - *Activities:* This includes researching ancient texts, selecting relevant materials, and organizing the safe delivery of this crucial information through potentially dangerous territories.\r\n - *Purpose:* The information will assist Ser Jorah in better understanding and supporting Daenerys in her campaign for the Iron Throne.\r\n\r\n ",
+        "project": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "DKA",
+          "name": "Deskpro Kanban App",
+          "projectTypeKey": "software",
+          "avatarUrls": {
+            "48x48": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?avatarId=10324",
+            "24x24": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?size=small&avatarId=10324",
+            "16x16": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?size=xsmall&avatarId=10324",
+            "32x32": "http://03ae-188-163-116-205.ngrok-free.app/secure/projectavatar?size=medium&avatarId=10324"
+          }
+        },
+        "fixVersions": [],
+        "customfield_10110": "0|i0003r:",
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10107": null,
+        "customfield_10108": null,
+        "aggregatetimeestimate": null,
+        "customfield_10109": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "summary": "Dispatch of Dragon Lore from Missandei to Ser Jorah Mormont",
+        "lastViewed": "2024-01-12T10:44:16.268+0000",
+        "watches": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/DKA-17/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "creator": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/user?username=ilia.makarov",
+          "name": "ilia.makarov",
+          "key": "JIRAUSER10000",
+          "emailAddress": "missandei@seven.kingdom",
+          "avatarUrls": {
+            "48x48": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=48",
+            "24x24": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=24",
+            "16x16": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=16",
+            "32x32": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=32"
+          },
+          "displayName": "Missandei",
+          "active": true,
+          "timeZone": "Europe/Kiev"
+        },
+        "subtasks": [],
+        "created": "2023-11-29T20:18:45.000+0000",
+        "reporter": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/user?username=ilia.makarov",
+          "name": "ilia.makarov",
+          "key": "JIRAUSER10000",
+          "emailAddress": "missandei@seven.kingdom",
+          "avatarUrls": {
+            "48x48": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=48",
+            "24x24": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=24",
+            "16x16": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=16",
+            "32x32": "https://www.gravatar.com/avatar/79606a80a5e2848ee1636c16ed0b98bb?d=mm&s=32"
+          },
+          "displayName": "Missandei",
+          "active": true,
+          "timeZone": "Europe/Kiev"
+        },
+        "customfield_10000": "{summaryBean=com.atlassian.jira.plugin.devstatus.rest.SummaryBean@122a1049[summary={pullrequest=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@2ce1b12[overall=PullRequestOverallBean{stateCount=0, state='OPEN', details=PullRequestOverallDetails{openCount=0, mergedCount=0, declinedCount=0}},byInstanceType={}], build=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@83e1f6b[overall=com.atlassian.jira.plugin.devstatus.summary.beans.BuildOverallBean@7a5a83f5[failedBuildCount=0,successfulBuildCount=0,unknownBuildCount=0,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], review=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@31f3645[overall=com.atlassian.jira.plugin.devstatus.summary.beans.ReviewsOverallBean@6e97b560[stateCount=0,state=<null>,dueDate=<null>,overDue=false,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], deployment-environment=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@16aa2a9e[overall=com.atlassian.jira.plugin.devstatus.summary.beans.DeploymentOverallBean@38414695[topEnvironments=[],showProjects=false,successfulCount=0,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], repository=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@4296e2c6[overall=com.atlassian.jira.plugin.devstatus.summary.beans.CommitOverallBean@11f97341[count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], branch=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@5640453a[overall=com.atlassian.jira.plugin.devstatus.summary.beans.BranchOverallBean@6487c489[count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}]},errors=[],configErrors=[]], devSummaryJson={\"cachedValue\":{\"errors\":[],\"configErrors\":[],\"summary\":{\"pullrequest\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"stateCount\":0,\"state\":\"OPEN\",\"details\":{\"openCount\":0,\"mergedCount\":0,\"declinedCount\":0,\"total\":0},\"open\":true},\"byInstanceType\":{}},\"build\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"failedBuildCount\":0,\"successfulBuildCount\":0,\"unknownBuildCount\":0},\"byInstanceType\":{}},\"review\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"stateCount\":0,\"state\":null,\"dueDate\":null,\"overDue\":false,\"completed\":false},\"byInstanceType\":{}},\"deployment-environment\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"topEnvironments\":[],\"showProjects\":false,\"successfulCount\":0},\"byInstanceType\":{}},\"repository\":{\"overall\":{\"count\":0,\"lastUpdated\":null},\"byInstanceType\":{}},\"branch\":{\"overall\":{\"count\":0,\"lastUpdated\":null},\"byInstanceType\":{}}}},\"isStale\":false}}",
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "priority": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/3",
+          "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/medium.svg",
+          "name": "Medium",
+          "id": "3"
+        },
+        "customfield_10100": null,
+        "customfield_10101": null,
+        "customfield_10200": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/customFieldOption/10001",
+          "value": "Green",
+          "id": "10001",
+          "disabled": false
+        },
+        "customfield_10102": null,
+        "labels": [
+          "VIP",
+          "build",
+          "development",
+          "label1",
+          "label2",
+          "label3",
+          "review"
+        ],
+        "customfield_10103": null,
+        "environment": null,
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [],
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "issuelinks": [],
+        "votes": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/DKA-17/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "assignee": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/user?username=jorah.mormont",
+          "name": "jorah.mormont",
+          "key": "JIRAUSER10100",
+          "emailAddress": "jorah.mormont@seven.kindom",
+          "avatarUrls": {
+            "48x48": "https://www.gravatar.com/avatar/9fb94f50108c2a8d8fae28ae8ac9d141?d=mm&s=48",
+            "24x24": "https://www.gravatar.com/avatar/9fb94f50108c2a8d8fae28ae8ac9d141?d=mm&s=24",
+            "16x16": "https://www.gravatar.com/avatar/9fb94f50108c2a8d8fae28ae8ac9d141?d=mm&s=16",
+            "32x32": "https://www.gravatar.com/avatar/9fb94f50108c2a8d8fae28ae8ac9d141?d=mm&s=32"
+          },
+          "displayName": "Ser Jorah Mormont",
+          "active": true,
+          "timeZone": "GMT"
+        },
+        "updated": "2024-01-12T09:20:19.000+0000",
+        "status": {
+          "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "default",
+            "name": "To Do"
+          }
+        }
+      },
+      "renderedFields": {
+        "issuetype": null,
+        "components": null,
+        "timespent": null,
+        "timeoriginalestimate": null,
+        "description": "<h2><a name=\"TaskDescription%3A\"></a>Task Description:</h2>\n<ul class=\"alternate\" type=\"square\">\n\t<li><b>Objective:</b> Missandei is tasked with gathering and dispatching detailed information about the history, biology, and behavior of dragons from the Citadel to Ser Jorah Mormont.</li>\n\t<li><b>Activities:</b> This includes researching ancient texts, selecting relevant materials, and organizing the safe delivery of this crucial information through potentially dangerous territories.</li>\n\t<li><b>Purpose:</b> The information will assist Ser Jorah in better understanding and supporting Daenerys in her campaign for the Iron Throne.</li>\n</ul>\n\n\n<p> </p>",
+        "project": null,
+        "fixVersions": null,
+        "customfield_10110": null,
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10107": null,
+        "customfield_10108": null,
+        "aggregatetimeestimate": null,
+        "customfield_10109": null,
+        "resolutiondate": null,
+        "workratio": null,
+        "summary": null,
+        "lastViewed": "3 days ago 12:44 PM",
+        "watches": null,
+        "creator": null,
+        "subtasks": null,
+        "created": "29/Nov/23 10:18 PM",
+        "reporter": null,
+        "customfield_10000": null,
+        "aggregateprogress": null,
+        "priority": null,
+        "customfield_10100": null,
+        "customfield_10101": null,
+        "customfield_10200": null,
+        "customfield_10102": null,
+        "labels": null,
+        "customfield_10103": null,
+        "environment": "",
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": null,
+        "duedate": null,
+        "progress": null,
+        "issuelinks": null,
+        "votes": null,
+        "assignee": null,
+        "updated": "3 days ago 11:20 AM",
+        "status": null
+      },
+      "editmeta": {
+        "fields": {
+          "summary": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "system": "summary"
+            },
+            "name": "Summary",
+            "fieldId": "summary",
+            "operations": [
+              "set"
+            ]
+          },
+          "issuetype": {
+            "required": true,
+            "schema": {
+              "type": "issuetype",
+              "system": "issuetype"
+            },
+            "name": "Issue Type",
+            "fieldId": "issuetype",
+            "operations": [],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10003",
+                "id": "10003",
+                "description": "A task that needs to be done.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+                "name": "Task",
+                "subtask": false,
+                "avatarId": 10318
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10002",
+                "id": "10002",
+                "description": "Created by Jira Software - do not edit or delete. Issue type for a user story.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/issuetypes/story.svg",
+                "name": "Story",
+                "subtask": false
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10004",
+                "id": "10004",
+                "description": "A problem which impairs or prevents the functions of the product.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/secure/viewavatar?size=xsmall&avatarId=10303&avatarType=issuetype",
+                "name": "Bug",
+                "subtask": false,
+                "avatarId": 10303
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issuetype/10001",
+                "id": "10001",
+                "description": "Created by Jira Software - do not edit or delete. Issue type for a big user story that needs to be broken down.",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/issuetypes/epic.svg",
+                "name": "Epic",
+                "subtask": false
+              }
+            ]
+          },
+          "reporter": {
+            "required": true,
+            "schema": {
+              "type": "user",
+              "system": "reporter"
+            },
+            "name": "Reporter",
+            "fieldId": "reporter",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/latest/user/search?username=",
+            "operations": [
+              "set"
+            ]
+          },
+          "components": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "component",
+              "system": "components"
+            },
+            "name": "Component/s",
+            "fieldId": "components",
+            "operations": [
+              "add",
+              "set",
+              "remove"
+            ],
+            "allowedValues": []
+          },
+          "description": {
+            "required": false,
+            "schema": {
+              "type": "string",
+              "system": "description"
+            },
+            "name": "Description",
+            "fieldId": "description",
+            "operations": [
+              "set"
+            ]
+          },
+          "fixVersions": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "version",
+              "system": "fixVersions"
+            },
+            "name": "Fix Version/s",
+            "fieldId": "fixVersions",
+            "operations": [
+              "set",
+              "add",
+              "remove"
+            ],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/version/10000",
+                "id": "10000",
+                "name": "1.0",
+                "archived": false,
+                "released": true,
+                "projectId": 10000
+              }
+            ]
+          },
+          "priority": {
+            "required": false,
+            "schema": {
+              "type": "priority",
+              "system": "priority"
+            },
+            "name": "Priority",
+            "fieldId": "priority",
+            "operations": [
+              "set"
+            ],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/1",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/highest.svg",
+                "name": "Highest",
+                "id": "1"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/2",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/high.svg",
+                "name": "High",
+                "id": "2"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/3",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/medium.svg",
+                "name": "Medium",
+                "id": "3"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/4",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/low.svg",
+                "name": "Low",
+                "id": "4"
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/priority/5",
+                "iconUrl": "http://03ae-188-163-116-205.ngrok-free.app/images/icons/priorities/lowest.svg",
+                "name": "Lowest",
+                "id": "5"
+              }
+            ]
+          },
+          "labels": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "string",
+              "system": "labels"
+            },
+            "name": "Labels",
+            "fieldId": "labels",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/1.0/labels/suggest?query=",
+            "operations": [
+              "add",
+              "set",
+              "remove"
+            ]
+          },
+          "issuelinks": {
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": "issuelinks",
+              "system": "issuelinks"
+            },
+            "name": "Linked Issues",
+            "fieldId": "issuelinks",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/issue/picker?currentProjectId=&showSubTaskParent=true&showSubTasks=true&currentIssueKey=DKA-17&query=",
+            "operations": [
+              "add"
+            ]
+          },
+          "customfield_10108": {
+            "required": false,
+            "schema": {
+              "type": "any",
+              "custom": "com.pyxis.greenhopper.jira:gh-epic-link",
+              "customId": 10108
+            },
+            "name": "Epic Link",
+            "fieldId": "customfield_10108",
+            "operations": [
+              "set"
+            ]
+          },
+          "customfield_10200": {
+            "required": false,
+            "schema": {
+              "type": "option",
+              "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+              "customId": 10200
+            },
+            "name": "Colour",
+            "fieldId": "customfield_10200",
+            "operations": [
+              "set"
+            ],
+            "allowedValues": [
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/customFieldOption/10000",
+                "value": "Blue",
+                "id": "10000",
+                "disabled": false
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/customFieldOption/10001",
+                "value": "Green",
+                "id": "10001",
+                "disabled": false
+              },
+              {
+                "self": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/2/customFieldOption/10002",
+                "value": "Red",
+                "id": "10002",
+                "disabled": false
+              }
+            ]
+          },
+          "assignee": {
+            "required": false,
+            "schema": {
+              "type": "user",
+              "system": "assignee"
+            },
+            "name": "Assignee",
+            "fieldId": "assignee",
+            "autoCompleteUrl": "http://03ae-188-163-116-205.ngrok-free.app/rest/api/latest/user/assignable/search?issueKey=DKA-17&username=",
+            "operations": [
+              "set"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDeskproAppClient } from "@deskpro/app-sdk";
-import { getIssueDependencies } from "../context/StoreProvider/api";
+import { getIssueDependencies } from "../services/jira";
 import { useStore } from "../context/StoreProvider/hooks";
 
 const useLoadDataDependencies = () => {

@@ -1,5 +1,5 @@
 import { useDeskproAppClient } from "@deskpro/app-sdk";
-import { getIssueAttachments } from "../context/StoreProvider/api";
+import { getIssueAttachments } from "../services/jira";
 import { useStore } from "../context/StoreProvider/hooks";
 
 const useLoadLinkedIssueAttachment = () => {

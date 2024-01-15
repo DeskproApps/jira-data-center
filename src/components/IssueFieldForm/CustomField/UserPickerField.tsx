@@ -4,7 +4,7 @@ import { MappedFieldProps } from "../types";
 import { DropdownSelect } from "../../common";
 import { FieldType } from "../../../types";
 import { useStore } from "../../../context/StoreProvider/hooks";
-import { JiraUserInfo } from "../../../context/StoreProvider/types";
+import { JiraUserInfo } from "../../../services/jira/types";
 
 export const UserPickerField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {
     const [ state ] = useStore();

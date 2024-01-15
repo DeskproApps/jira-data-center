@@ -15,7 +15,8 @@ const ErrorFallback: FC<Props> = ({ error }) => {
   let consoleMsg = null;
 
   if (error instanceof JiraError) {
-    consoleMsg = get(error, ["data", "errorMessages", 0]);
+    consoleMsg = get(error, ["data", "message"])
+      || get(error, ["data", "errorMessages", 0]);
   }
 
   // eslint-disable-next-line no-console

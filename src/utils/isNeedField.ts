@@ -1,6 +1,7 @@
 import get from "lodash/get";
 import has from "lodash/has";
-import type { JiraIssueType, JiraProject, State } from "../context/StoreProvider/types";
+import type { State } from "../context/StoreProvider/types";
+import type { JiraIssueType, JiraProject } from "../services/jira/types";
 
 const isNeedField = ({ state, fieldName, projectId, issueTypeId }: {
   state: State,

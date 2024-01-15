@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDeskproAppClient } from "@deskpro/app-sdk";
 import { useSetAppTitle, useRegisterElements } from "../../hooks";
 import { useStore } from "../../context/StoreProvider/hooks";
-import { addIssueComment, getIssueComments } from "../../context/StoreProvider/api";
+import { addIssueComment, getIssueComments } from "../../services/jira";
 import { CreateIssueComment } from "../../components";
 import type { FC } from "react";
 import type { CommentFormValues } from "../../components/IssueCommentForm";

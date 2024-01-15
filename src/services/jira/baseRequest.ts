@@ -19,7 +19,7 @@ const baseRequest: Request = async (client, {
 }) => {
   const dpFetch = await proxyFetch(client);
 
-  const baseUrl = rawUrl ? rawUrl : `${BASE_URL}/rest/api/2${url || ""}`;
+  const baseUrl = rawUrl ? rawUrl : `${BASE_URL}${url || ""}`;
   const params = getQueryParams(queryParams);
   const body = getRequestBody(data);
 

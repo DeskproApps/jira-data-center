@@ -15,7 +15,7 @@ import {
 import { nbsp } from "../../constants";
 import { JiraIcon } from "../common";
 import type { FC, MouseEvent } from "react";
-import type { IssueItem as IssueItemType } from "../../context/StoreProvider/types";
+import type { IssueItem as IssueItemType } from "../../services/jira/types";
 
 export type Props = {
   issue: IssueItemType,

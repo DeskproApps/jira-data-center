@@ -19,7 +19,7 @@ import {
   registerReplyBoxNotesAdditionsTargetAction,
   registerReplyBoxEmailsAdditionsTargetAction,
 } from "./utils";
-import { addIssueComment, removeRemoteLink } from "./context/StoreProvider/api";
+import { addIssueComment, removeRemoteLink } from "./services/jira";
 import { useCheckingCorrectlySettings } from "./hooks";
 import { useStore } from "./context/StoreProvider/hooks";
 import { ErrorBlock, SettingsError } from "./components/common";
@@ -72,7 +72,7 @@ const App = () => {
         .with("jiraReplyBoxNoteAdditions", () => (action.payload ?? []).forEach((selection: { id: string; selected: boolean; }) => {
           const ticketId = action.subject;
 
-          if (state.context?.data.ticket.id) {
+          if (context?.data.ticket.id) {
             client?.setState(
               ticketReplyNotesSelectionStateKey(ticketId, selection.id),
               { id: selection.id, selected: selection.selected }
@@ -86,7 +86,7 @@ const App = () => {
         .with("jiraReplyBoxEmailAdditions", () => (action.payload ?? []).forEach((selection: { id: string; selected: boolean; }) => {
           const ticketId = action.subject;
 
-          if (state.context?.data.ticket.id) {
+          if (context?.data.ticket.id) {
             client?.setState(
               ticketReplyEmailsSelectionStateKey(ticketId, selection.id),
               { id: selection.id, selected: selection.selected }
@@ -105,7 +105,7 @@ const App = () => {
             return;
           }
 
-          if (ticketId !== state.context?.data.ticket.id) {
+          if (ticketId !== context?.data.ticket.id) {
             return;
           }
 
@@ -130,7 +130,7 @@ const App = () => {
             return;
           }
 
-          if (ticketId !== state.context?.data.ticket.id) {
+          if (ticketId !== context?.data.ticket.id) {
             return;
           }
 

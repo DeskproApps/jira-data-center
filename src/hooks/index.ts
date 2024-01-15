@@ -14,3 +14,4 @@ export { useCheckingCorrectlySettings } from "./useCheckingCorrectlySettings";
 export { useRegisterElements } from "./useRegisterElements";
 export { useLinkedIssues } from "./useLinkedIssues";
 export { useSearch } from "./useSearch";
+export { useAsyncError } from "./useAsyncError";

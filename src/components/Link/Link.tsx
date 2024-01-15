@@ -3,7 +3,7 @@ import { Container } from "../common";
 import { Buttons, Issues } from "./blocks";
 import type { FC } from "react";
 import type { IssueKey } from "../../types";
-import type { IssueItem as IssueItemType } from "../../context/StoreProvider/types";
+import type { IssueItem as IssueItemType } from "../../services/jira/types";
 
 type Props = {
   isFetching?: boolean,

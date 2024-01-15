@@ -12,4 +12,4 @@ export const placeholders = {
 };
 
 /** Jira */
-export const BASE_URL = `${placeholders.URL}`;
+export const BASE_URL = `${placeholders.URL}/rest/api/2`;

@@ -11,7 +11,7 @@ import type {
   IssueItem,
   JiraComment,
   IssueAttachment,
-} from "../../context/StoreProvider/types";
+} from "../../services/jira/types";
 
 type Props = {
   issue: IssueItem,

@@ -4,14 +4,15 @@ import {
     LoadingSpinner,
     useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { getMyPermissions } from "../../context/StoreProvider/api";
+import { getMyPermissions } from "../../services/jira";
 import { useSetAppTitle, useRegisterElements } from "../../hooks";
 import { ViewPermissions } from "../../components";
 import type { FC } from "react";
-import type { Permissions } from "../../context/StoreProvider/types";
+import type { Maybe } from "../../types";
+import type { Permissions } from "../../services/jira/types";
 
 const ViewPermissionsPage: FC = () => {
-    const [ permissionStatuses, setPermissionStatuses ] = useState<null|{ permissions: Permissions }>(null);
+    const [permissionStatuses, setPermissionStatuses] = useState<Maybe<{ permissions: Permissions }>>(null);
 
     useSetAppTitle("JIRA Permissions");
 

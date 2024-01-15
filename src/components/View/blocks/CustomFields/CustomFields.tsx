@@ -1,7 +1,7 @@
 import size from "lodash/size";
 import { IssueFieldView } from "./IssueFieldView/IssueFieldView";
 import type { FC } from "react";
-import type { IssueItem } from "../../../../context/StoreProvider/types";
+import type { IssueItem } from "../../../../services/jira/types";
 
 type Props = {
   customFields: IssueItem["customFields"],

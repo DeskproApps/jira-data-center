@@ -9,7 +9,7 @@ import {
     adminGenericProxyFetch,
 } from "@deskpro/app-sdk";
 import type { FC } from "react";
-import type { JiraUser } from "../../context/StoreProvider/types";
+import type { JiraUser } from "../../services/jira/types";
 import type { Settings } from "../../types";
 
 const preInstalledRequest = async (

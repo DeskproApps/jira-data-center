@@ -6,9 +6,9 @@ import {
   useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { getEntityListService } from "../services/deskpro";
-import { listLinkedIssues } from "../context/StoreProvider/api";
+import { listLinkedIssues } from "../services/jira";
 import { QueryKey } from "../query";
-import type { IssueItem } from "../context/StoreProvider/types";
+import type { IssueItem } from "../services/jira/types";
 
 export type Result = {
   isLoading: boolean,

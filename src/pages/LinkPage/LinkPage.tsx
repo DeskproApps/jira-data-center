@@ -11,7 +11,7 @@ import {
   useSetAppTitle,
   useRegisterElements,
 } from "../../hooks";
-import { addRemoteLink, getIssueByKey } from "../../context/StoreProvider/api";
+import { addRemoteLink, getIssueByKey } from "../../services/jira";
 // import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
 import { ticketReplyEmailsSelectionStateKey, ticketReplyNotesSelectionStateKey } from "../../utils";
 import { Link } from "../../components";

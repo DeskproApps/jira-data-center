@@ -5,12 +5,14 @@ import {
   useDeskproLatestAppContext,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { listLinkedIssues } from "../context/StoreProvider/api";
+import { listLinkedIssues } from "../services/jira";
+import { useAsyncError } from "./useAsyncError";
 import { useStore } from "../context/StoreProvider/hooks";
 
 const useLoadLinkedIssues = () => {
     const { context } = useDeskproLatestAppContext();
-    const [state, dispatch] = useStore();
+    const { asyncErrorHandler } = useAsyncError();
+    const [, dispatch] = useStore();
     const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
 
 
@@ -30,8 +32,8 @@ const useLoadLinkedIssues = () => {
           const item = list.filter((item) => item.id.toString() === id.toString())[0];
           if (item) {
             return Promise.all([
-              client.getEntityAssociation("linkedJiraDataCentreIssue", state.context?.data.ticket.id as string).delete(id),
-              client.getEntityAssociation("linkedJiraDataCentreIssue", state.context?.data.ticket.id as string).set(item.key),
+              client.getEntityAssociation("linkedJiraDataCentreIssue", ticketId).delete(id),
+              client.getEntityAssociation("linkedJiraDataCentreIssue", ticketId).set(item.key),
             ]);
           }
 
@@ -41,8 +43,8 @@ const useLoadLinkedIssues = () => {
         await Promise.all(idToKeyUpdates);
 
         dispatch({ type: "linkedIssuesList", list });
-      } catch (e) {
-        dispatch({ type: "error", error: `${e}` });
+      } catch (e: unknown) {
+        asyncErrorHandler(e as Error);
       }
     })();
   }, [ticketId]);

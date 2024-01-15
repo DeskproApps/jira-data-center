@@ -1,8 +1,8 @@
 import { useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
-import { getIssueComments } from "../context/StoreProvider/api";
+import { getIssueComments } from "../services/jira";
 import { useStore } from "../context/StoreProvider/hooks";
 import type { Maybe } from "../types";
-import type { JiraComment } from "../context/StoreProvider/types";
+import type { JiraComment } from "../services/jira/types";
 
 const useFindIssueComments = (issueKey: string): Maybe<JiraComment[]> => {
   const [state, dispatch] = useStore();

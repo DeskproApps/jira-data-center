@@ -1,0 +1,39 @@
+{
+  "sections": [
+    {
+      "label": "History Search",
+      "sub": "Showing 2 of 2 matching issues",
+      "id": "hs",
+      "issues": [
+        {
+          "key": "DKA-17",
+          "keyHtml": "DKA-17",
+          "img": "/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+          "summary": "Dispatch of Dragon Lore from Missandei to Ser <b>Jorah</b> Mormont",
+          "summaryText": "Dispatch of Dragon Lore from Missandei to Ser Jorah Mormont"
+        },
+        {
+          "key": "DKA-18",
+          "keyHtml": "DKA-18",
+          "img": "/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+          "summary": "Coordinating a Secret Council Meeting between Varys and Ser <b>Jorah</b> Mormont",
+          "summaryText": "Coordinating a Secret Council Meeting between Varys and Ser Jorah Mormont"
+        }
+      ]
+    },
+    {
+      "label": "Current Search",
+      "sub": "Showing 2 of 2 matching issues",
+      "id": "cs",
+      "issues": [
+        {
+          "key": "DKA-18",
+          "keyHtml": "DKA-18",
+          "img": "/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+          "summary": "Coordinating a Secret Council Meeting between Varys and Ser <b>Jorah</b> Mormont",
+          "summaryText": "Coordinating a Secret Council Meeting between Varys and Ser Jorah Mormont"
+        }
+      ]
+    }
+  ]
+}

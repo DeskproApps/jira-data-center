@@ -1,5 +1,5 @@
 import { useStore } from "../context/StoreProvider/hooks";
-import { IssueAttachment } from "../context/StoreProvider/types";
+import { IssueAttachment } from "../services/jira/types";
 
 const useFindLinkedIssueAttachmentsByKey = () => {
     const [ state ] = useStore();

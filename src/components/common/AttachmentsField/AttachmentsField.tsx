@@ -5,7 +5,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { AttachmentTag, Button, Stack } from "@deskpro/deskpro-ui";
 import type { FC, ChangeEvent } from "react";
 import type { AnyIcon } from "@deskpro/deskpro-ui";
-import type { AttachmentFile } from "../../../context/StoreProvider/types";
+import type { AttachmentFile } from "../../../services/jira/types";
 
 interface AttachmentsFieldProps {
     onFiles?: (files: AttachmentFile[]) => void;

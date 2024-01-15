@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import get from "lodash/get";
 import { useParams, useNavigate } from "react-router-dom";
-import { IssueForm } from "../../components/IssueForm/IssueForm";
 import {
-    buildCustomFieldMeta,
-    formatCustomFieldValueForSet,
-    getIssueByKey, updateIssue
-} from "../../context/StoreProvider/api";
-import { useDeskproAppClient, LoadingSpinner } from "@deskpro/app-sdk";
+  LoadingSpinner,
+  useDeskproAppClient,
+  useDeskproLatestAppContext,
+} from "@deskpro/app-sdk";
+import { IssueForm } from "../../components/IssueForm/IssueForm";
+import { updateIssue, getIssueByKey, InvalidRequestResponseError } from "../../services/jira";
+import { formatCustomFieldValueForSet } from "../../services/jira/utils";
+import { buildCustomFieldMeta } from "../../services/jira/utils";
 import {
     useAdfToPlainText,
     useFindLinkedIssueAttachmentsByKey,
@@ -17,21 +19,21 @@ import {
     useRegisterElements,
 } from "../../hooks";
 import { useStore } from "../../context/StoreProvider/hooks";
-import {
-    IssueFormData,
-    AttachmentFile,
-    JiraIssueDetails,
-    InvalidRequestResponseError,
-} from "../../context/StoreProvider/types";
 import type { FormikHelpers } from "formik";
 import type { FC } from "react";
 import type { IssueMeta } from "../../types";
+import type {
+    IssueFormData,
+    AttachmentFile,
+    JiraIssueDetails,
+} from "../../services/jira/types";
 import type { SubmitIssueFormData } from "../../components/IssueForm/types";
 
 const EditPage: FC = () => {
     const navigate = useNavigate();
     const { issueKey } = useParams();
     const { client } = useDeskproAppClient();
+    const { context } = useDeskproLatestAppContext();
     const [ state, dispatch ] = useStore();
     const [loading, setLoading] = useState<boolean>(false);
     const [apiErrors, setApiErrors] = useState<Record<string, string>|undefined>({});
@@ -76,7 +78,7 @@ const EditPage: FC = () => {
         _helpers: FormikHelpers<IssueFormData>,
         meta: Record<string, IssueMeta>,
     ) => {
-        if (!client || !state.context?.data.ticket || !issueKey) {
+        if (!client || !context?.data.ticket || !issueKey) {
             return;
         }
 
@@ -88,7 +90,7 @@ const EditPage: FC = () => {
                 const issue = await getIssueByKey(client, issueKey);
 
                 return client
-                    .getEntityAssociation("linkedJiraDataCentreIssue", state.context?.data.ticket.id as string)
+                    .getEntityAssociation("linkedJiraDataCentreIssue", context?.data.ticket.id as string)
                     .set(issueKey, issue)
                 ;
             })

@@ -3,7 +3,7 @@ import type { IDeskproClient } from "@deskpro/app-sdk";
 import type { State } from "../context/StoreProvider/types";
 
 const registerReplyBoxNotesAdditionsTargetAction = (client: IDeskproClient, state: State) => {
-  const ticketId = state?.context?.data.ticket.id;
+  const ticketId = state?.context?.data?.ticket.id;
   const linkedIssues = (state.linkedIssuesResults?.list ?? []);
 
   if (!ticketId) {

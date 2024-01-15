@@ -12,7 +12,7 @@ import {
 } from "../../hooks";
 import { Home } from "../../components";
 import type { FC } from "react";
-import type { IssueItem } from "../../context/StoreProvider/types";
+import type { IssueItem } from "../../services/jira/types";
 
 const HomePage: FC = () => {
   const navigate = useNavigate();

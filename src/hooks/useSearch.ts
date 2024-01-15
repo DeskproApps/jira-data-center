@@ -1,7 +1,7 @@
 import { useQueryWithClient } from "@deskpro/app-sdk";
-import { searchIssues } from "../context/StoreProvider/api";
+import { searchIssues } from "../services/jira";
 import { QueryKey } from "../query";
-import type { IssueItem } from "../context/StoreProvider/types";
+import type { IssueItem } from "../services/jira/types";
 
 export type Result = {
   isLoading: boolean,

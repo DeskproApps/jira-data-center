@@ -1,6 +1,6 @@
 import type { To, ParamKeyValuePair } from "react-router-dom";
 import type { Context, IDeskproClient, V2ProxyRequestInitBody } from "@deskpro/app-sdk";
-import type { JiraUserInfo } from "./context/StoreProvider/types";
+import type { JiraUserInfo } from "./services/jira/types";
 import type { Response } from "./services/jira/types";
 
 /** Common types */
@@ -197,8 +197,12 @@ export type Settings = {
 export type TicketData = {
     env: object,
     app: object,
-    ticket: object,
     currentAgent: object,
+    ticket: {
+      id: string,
+      subject: string,
+      permalinkUrl: string,
+    },
 };
 
 export type TicketContext = Context<TicketData, Maybe<Settings>>;

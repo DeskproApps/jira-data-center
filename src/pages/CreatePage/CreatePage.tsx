@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDeskproAppClient } from "@deskpro/app-sdk";
-import { addRemoteLink, createIssue, getIssueByKey } from "../../context/StoreProvider/api";
+import { useDeskproAppClient, useDeskproLatestAppContext } from "@deskpro/app-sdk";
 import {
+  createIssue,
+  addRemoteLink,
+  getIssueByKey,
+  InvalidRequestResponseError,
+} from "../../services/jira";
+import {
+  useAsyncError,
   useSetAppTitle,
   useRegisterElements,
   useLoadLinkedIssues,
 } from "../../hooks";
-import { useStore } from "../../context/StoreProvider/hooks";
 import { CreateLinkIssue} from "../../components/CreateLinkIssue/CreateLinkIssue";
 import { IssueForm } from "../../components/IssueForm/IssueForm";
-import { IssueFormData, InvalidRequestResponseError } from "../../context/StoreProvider/types";
+import {IssueFormData, JiraIssueDetails} from "../../services/jira/types";
 import type { FC } from "react";
 import type { FormikHelpers } from "formik";
 import type { SubmitIssueFormData } from "../../components/IssueForm/types";
@@ -19,7 +24,8 @@ import type { IssueMeta } from "../../types";
 const CreatePage: FC = () => {
     const navigate = useNavigate();
     const { client } = useDeskproAppClient();
-    const [ state, dispatch ] = useStore();
+    const { context } = useDeskproLatestAppContext();
+    const { asyncErrorHandler } = useAsyncError();
     const [loading, setLoading] = useState<boolean>(false);
     const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
 
@@ -40,7 +46,7 @@ const CreatePage: FC = () => {
         _helpers: FormikHelpers<IssueFormData>,
         meta: Record<string, IssueMeta>,
     ) => {
-        if (!client || !state.context?.data.ticket) {
+        if (!client || !context?.data.ticket) {
             return;
         }
 
@@ -49,20 +55,19 @@ const CreatePage: FC = () => {
 
         createIssue(client, data, meta)
             .then(({ key }) => getIssueByKey(client, key))
-            .then(async (issue) => {
+            .then(async (issue: JiraIssueDetails) => {
                 await client
-                    .getEntityAssociation("linkedJiraDataCentreIssue", state.context?.data.ticket.id as string)
-                    .set(issue.key, issue)
-                ;
+                    .getEntityAssociation("linkedJiraDataCentreIssue", context?.data.ticket.id as string)
+                    .set(issue.key, issue);
 
                 return issue.key;
             })
             .then((key) => addRemoteLink(
                 client,
                 key,
-                state.context?.data.ticket.id as string,
-                state.context?.data.ticket.subject as string,
-                state.context?.data.ticket.permalinkUrl as string
+                context?.data.ticket.id as string,
+                context?.data.ticket.subject as string,
+                context?.data.ticket.permalinkUrl as string
             ))
             .then(() => {
                 setLoading(false);
@@ -72,13 +77,10 @@ const CreatePage: FC = () => {
                 if (error instanceof InvalidRequestResponseError && error.response?.errors) {
                     setApiErrors(error.response.errors);
                 } else {
-                    dispatch({ type: "error", error });
+                  asyncErrorHandler(error);
                 }
             })
-            .finally(() => {
-                setLoading(false);
-            })
-        ;
+            .finally(() => setLoading(false));
     };
 
     return (

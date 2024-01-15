@@ -4,7 +4,7 @@ import { LoadingSpinner, HorizontalDivider } from "@deskpro/app-sdk";
 import { NoFoundIssues, Card } from "../../common";
 import { IssueItem } from "../../IssueItem";
 import type { FC } from "react";
-import type { IssueItem as IssueItemType } from "../../../context/StoreProvider/types";
+import type { IssueItem as IssueItemType } from "../../../services/jira/types";
 import type { IssueKey } from "../../../types";
 
 type Props = {

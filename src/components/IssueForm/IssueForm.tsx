@@ -13,8 +13,9 @@ import {
     DropdownValueType,
 } from "@deskpro/deskpro-ui";
 import {
-    HorizontalDivider,
     LoadingSpinner,
+    HorizontalDivider,
+    useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import "./IssueForm.css";
 import { useStore } from "../../context/StoreProvider/hooks";
@@ -27,8 +28,8 @@ import {
     IssueFormData,
     AttachmentFile,
     JiraPriorityValue,
-} from "../../context/StoreProvider/types";
-import { buildCustomFieldMeta } from "../../context/StoreProvider/api";
+} from "../../services/jira/types";
+import { buildCustomFieldMeta } from "../../services/jira/utils";
 import { isNeedField, isRequiredField } from "../../utils";
 import { CustomField } from "../IssueFieldForm/map";
 import {
@@ -57,6 +58,7 @@ export interface IssueFormProps {
 
 export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiErrors, editMeta, issueKey, loading = false }: IssueFormProps) => {
     const navigate = useNavigate();
+    const { context } = useDeskproLatestAppContext();
     const [state] = useStore();
 
     useLoadDataDependencies();
@@ -76,8 +78,8 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
         labels.forEach((labels) => labels.forEach((l: string) => extraLabels.push(l)));
     }
 
-    const initialSummary = state?.context?.settings.ticket_subject_as_issue_summary
-        ? `[Ticket #${state?.context?.data.ticket.id}] ${state?.context?.data.ticket.subject}`
+    const initialSummary = context?.settings.ticket_subject_as_issue_summary
+        ? `[Ticket #${context?.data.ticket.id}] ${context?.data.ticket.subject}`
         : ""
     ;
 
