@@ -1,5 +1,5 @@
 export { JiraIcon } from "./JiraIcon";
-export { DPNormalize } from "./Typography";
+export * from "./Typography";
 export { Label } from "./Label";
 export { AttachmentsField } from "./AttachmentsField";
 export { DropdownMultiSelect } from "./DropdownMultiSelect";
