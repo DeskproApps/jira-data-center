@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import get from "lodash/get";
-import size from "lodash/size";
+import { get, size } from "lodash";
 import { useNavigate } from "react-router-dom";
 import {
   useDeskproLatestAppContext,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { getEntityListService } from "../services/deskpro";
 
 const useWhenNoLinkedItems = () => {
   const navigate = useNavigate();
@@ -17,13 +17,8 @@ const useWhenNoLinkedItems = () => {
       return;
     }
 
-    client
-      .getEntityAssociation("linkedJiraDataCentreIssue", ticketId as string)
-      .list()
-      .then((items) => {
-        const page = (Array.isArray(items) && size(items) > 0) ? "/home" : "/link";
-        navigate(page);
-      });
+    return getEntityListService(client, ticketId)
+      .then((items) => navigate(size(items) ? "/home" : "/link"));
   }, [ticketId, navigate]);
 };
 
