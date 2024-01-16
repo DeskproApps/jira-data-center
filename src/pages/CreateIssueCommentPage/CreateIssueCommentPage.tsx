@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDeskproAppClient } from "@deskpro/app-sdk";
 import { useSetAppTitle, useRegisterElements } from "../../hooks";
-import { useStore } from "../../context/StoreProvider/hooks";
 import { addIssueComment, getIssueComments } from "../../services/jira";
 import { CreateIssueComment } from "../../components";
 import type { FC } from "react";
@@ -12,7 +11,6 @@ const CreateIssueCommentPage: FC = () => {
   const navigate = useNavigate();
   const { issueKey } = useParams();
   const { client } = useDeskproAppClient();
-  const [, dispatch] = useStore();
 
   useSetAppTitle("Add Comment");
 
@@ -31,9 +29,8 @@ const CreateIssueCommentPage: FC = () => {
 
     return addIssueComment(client, issueKey, data.comments)
       .then(() => getIssueComments(client, issueKey))
-      .then((comments) => dispatch({ type: "issueComments", key: issueKey, comments }))
       .then(() => navigate(`/view/${issueKey}`));
-  }, [client, issueKey, dispatch, navigate]);
+  }, [client, issueKey, navigate]);
 
   const onCancel = useCallback(() => {
     navigate(`/view/${issueKey}`)
@@ -47,4 +44,4 @@ const CreateIssueCommentPage: FC = () => {
   );
 };
 
-export {CreateIssueCommentPage};
+export { CreateIssueCommentPage };

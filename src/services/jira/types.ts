@@ -272,9 +272,9 @@ export type JiraIssueSearch = {
 };
 
 export type JiraIssueDetails = {
-  id: string,     // "10028"
-  key: string,    // "DP-22"
-  self: string,   // "https://deskpro.atlassian.net/rest/api/2/issue/10028",
+  id: IssueItem["id"], // "10028"
+  key: IssueItem["key"], // "DP-22"
+  self: string, // "https://deskpro.atlassian.net/rest/api/2/issue/10028",
   expand: string, // "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations,customfield_10024.requestTypePractice"
   editmeta: {
     fields: Record<string, JiraIssueFieldMeta|JiraIssueCustomFieldMeta>,

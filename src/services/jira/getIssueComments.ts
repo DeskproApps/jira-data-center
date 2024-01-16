@@ -14,7 +14,7 @@ export const getIssueComments = async (client: IDeskproClient, key: string): Pro
     },
   });
 
-  const comments = (get(data, ["comments"], []) || []).comments.map((comment: {
+  const comments = (get(data, ["comments"], []) || []).map((comment: {
     author: JiraUserInfo,
     body: string,
     created: string,

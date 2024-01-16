@@ -1,10 +1,11 @@
 import size from "lodash/size";
 import { IssueFieldView } from "./IssueFieldView/IssueFieldView";
 import type { FC } from "react";
+import type { Maybe } from "../../../../types";
 import type { IssueItem } from "../../../../services/jira/types";
 
 type Props = {
-  customFields: IssueItem["customFields"],
+  customFields: Maybe<IssueItem["customFields"]>,
 };
 
 const CustomFields: FC<Props> = ({ customFields }) => {
