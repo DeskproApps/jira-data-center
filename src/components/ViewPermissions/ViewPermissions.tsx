@@ -1,3 +1,4 @@
+import { size, isEmpty } from "lodash";
 import { faCheckCircle, faTimesCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { P5, Stack } from "@deskpro/deskpro-ui";
@@ -18,6 +19,14 @@ type Props = {
 const ViewPermissions: FC<Props> = ({ permissions }) => {
   const { theme } = useDeskproAppTheme();
 
+  if (!size(permissions) || isEmpty(permissions)) {
+    return (
+      <Container>
+        <P5>[Permissions Not Found]</P5>
+      </Container>
+    );
+  }
+
   return (
     <>
       <Container>
@@ -27,14 +36,13 @@ const ViewPermissions: FC<Props> = ({ permissions }) => {
         </P5>
       </Container>
 
-      <HorizontalDivider style={{ marginBottom: "15px" }} />
+      <HorizontalDivider style={{marginBottom: "15px"}}/>
 
       <Container>
-
         <Stack vertical gap={14}>
-          {permissions.map((permission, idx) => (
-            <div style={{ width: "100%" }} key={idx}>
-              <Stack justify="space-between" align="center" style={{ width: "100%", marginBottom: "10px" }} gap={10}>
+          {permissions.map((permission) => (
+            <div style={{ width: "100%" }} key={permission.id}>
+              <Stack justify="space-between" align="center" style={{width: "100%", marginBottom: "10px"}} gap={10}>
                 <Property
                   label={permission.name}
                   text={permission.description}
@@ -51,7 +59,7 @@ const ViewPermissions: FC<Props> = ({ permissions }) => {
                   />
                 )}
               </Stack>
-              <HorizontalDivider />
+              <HorizontalDivider/>
             </div>
           ))}
         </Stack>
