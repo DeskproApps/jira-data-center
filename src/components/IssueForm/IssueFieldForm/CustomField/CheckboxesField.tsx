@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { MappedFieldProps } from "../types";
-import { FieldType } from "../../../types";
 import { Checkbox, Label } from "@deskpro/deskpro-ui";
+import { FieldType } from "../../../../types";
+import type { FC } from "react";
+import type { MappedFieldProps } from "../types";
 
 export const CheckboxesField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {
     if (meta.type !== FieldType.CHECKBOXES) {

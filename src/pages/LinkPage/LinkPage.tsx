@@ -8,12 +8,13 @@ import {
 } from "@deskpro/app-sdk";
 import {
   useSearch,
+  useReplyBox,
   useSetAppTitle,
   useRegisterElements,
 } from "../../hooks";
+import { setEntityService } from "../../services/deskpro";
 import { addRemoteLink, getIssueByKey } from "../../services/jira";
 // import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
-import { ticketReplyEmailsSelectionStateKey, ticketReplyNotesSelectionStateKey } from "../../utils";
 import { Link } from "../../components";
 import type { FC } from "react";
 import type { IssueItem } from "../../services/jira/types";
@@ -27,6 +28,7 @@ const LinkPage: FC = () => {
   const { client } = useDeskproAppClient();
   const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
   const { issues, isLoading } = useSearch(searchQuery);
+  const { setSelectionState } = useReplyBox();
 
   useSetAppTitle("Add Issues");
 
@@ -53,41 +55,27 @@ const LinkPage: FC = () => {
       return;
     }
 
-    const commentOnNote = context?.settings?.default_comment_on_ticket_note === true;
-    const commentOnReply = context?.settings?.default_comment_on_ticket_reply === true;
-
     setIsSubmitting(true);
 
-    const updates = selected.map(async (key: string) => {
-      const issue = await getIssueByKey(client, key);
-
-      return client
-          .getEntityAssociation("linkedJiraDataCentreIssue", ticketId)
-          .set(key, issue)
-          .then(async () => commentOnNote && client?.setState(ticketReplyNotesSelectionStateKey(ticketId, issue.id), {
-            id: issue.id,
-            selected: true,
-          }))
-          .then(async () => commentOnReply && client?.setState(ticketReplyEmailsSelectionStateKey(ticketId, issue.id), {
-            id: issue.id,
-            selected: true,
-          }))
-      ;
-    });
-
-    updates.push(...selected.map((key: string) => addRemoteLink(
+    Promise.all([
+      ...selected.map(async (key: IssueItem["key"]) => {
+        const issue = await getIssueByKey(client, key);
+        return setEntityService(client, ticketId, key, issue);
+      }),
+      ...selected.map((key: string) => addRemoteLink(
         client,
         key,
         context?.data.ticket.id as string,
         context?.data.ticket.subject as string,
         context?.data.ticket.permalinkUrl as string
-    )));
-
-    Promise.all(updates)
+      )),
+      ...selected.map((issueKey) => setSelectionState(issueKey, true, "email")),
+      ...selected.map((issueKey) => setSelectionState(issueKey, true, "note")),
+    ])
       .then(() => navigate("/home"))
       .finally(() => setIsSubmitting(false))
     ;
-  }, [context, ticketId, client, selected, navigate]);
+  }, [context, ticketId, client, selected, navigate, setSelectionState]);
 
   const onCancel = useCallback(() => navigate("/home"), [navigate]);
 

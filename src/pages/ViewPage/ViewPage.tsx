@@ -6,7 +6,6 @@ import {
 } from "@deskpro/app-sdk";
 import {
   useSetAppTitle,
-  useLoadLinkedIssues,
   useRegisterElements,
 } from "../../hooks";
 import { useIssue } from "./hooks";
@@ -24,8 +23,6 @@ const ViewPage: FC = () => {
       navigate(`/comment/${issueKey}`);
     }
   }, [navigate, issueKey]);
-
-  useLoadLinkedIssues();
 
   useSetAppTitle(issueKey || "");
 

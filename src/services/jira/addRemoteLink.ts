@@ -1,13 +1,14 @@
 import { baseRequest } from "./baseRequest";
 import { remoteLinkGlobalId } from "./utils";
 import type { IDeskproClient } from "@deskpro/app-sdk";
+import type { IssueItem } from "./types";
 
 /**
  * Add remote link
  */
 export const addRemoteLink = (
   client: IDeskproClient,
-  key: string,
+  key: IssueItem["key"],
   ticketId: string,
   subject: string,
   url: string,

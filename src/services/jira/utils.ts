@@ -27,37 +27,43 @@ export const findSprintLinkMeta = (issue: JiraIssueDetails) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const combineCustomFieldValueAndMeta = (values: any, meta: any) => Object.keys(meta).reduce((fields, key) => ({
-  ...fields,
-  [key]: {
-    value: values[key],
-    meta: meta[key],
-  },
-}), {});
+export const combineCustomFieldValueAndMeta = (values: any, meta: any) => {
+  return Object.keys(meta).reduce((fields, key) => ({
+    ...fields,
+    [key]: {
+      value: values[key],
+      meta: meta[key],
+    },
+  }), {});
+};
 
 export const isCustomFieldKey = (key: string): boolean => {
   return /^customfield_[0-9]+$/.test(key);
 };
 
-export const extractCustomFieldValues = (fields: JiraIssueDetails["fields"]) => Object.keys(fields).reduce((customFields, key) => {
-  if (!isCustomFieldKey(key)) {
-    return customFields;
-  }
+export const extractCustomFieldValues = (fields: JiraIssueDetails["fields"]) => {
+  return Object.keys(fields).reduce((customFields, key) => {
+    if (!isCustomFieldKey(key)) {
+      return customFields;
+    }
 
-  return { ...customFields, [key]: get(fields, [key]) };
-}, {});
+    return { ...customFields, [key]: get(fields, [key]) };
+  }, {});
+};
 
 export const remoteLinkGlobalId = (ticketId: string) => {
   return `deskpro_ticket_${ticketId}`;
 };
 
-export const extractCustomFieldMeta = (fields: JiraIssueDetails["editmeta"]["fields"]) => Object.keys(fields).reduce((customFields, key) => {
-  if (!isCustomFieldKey(key)) {
-    return customFields;
-  }
+export const extractCustomFieldMeta = (fields: JiraIssueDetails["editmeta"]["fields"]) => {
+  return Object.keys(fields).reduce((customFields, key) => {
+    if (!isCustomFieldKey(key)) {
+      return customFields;
+    }
 
-  return { ...customFields, [key]: get(fields, [key]) };
-}, {});
+    return { ...customFields, [key]: get(fields, [key]) };
+  }, {});
+};
 
 export const transformFieldMeta = (field: JiraIssueCustomFieldMeta) => ({
   type: field.schema.custom,

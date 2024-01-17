@@ -18,7 +18,7 @@ import {
 import { isNeedField, isRequiredField } from "../../utils";
 import { useFormDeps } from "./hooks";
 import { schema, getInitValues } from "./utils";
-import { CustomField } from "../IssueFieldForm/map";
+import { CustomField } from "./IssueFieldForm/map";
 import {
   ErrorBlock,
   DropdownSelect,

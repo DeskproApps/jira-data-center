@@ -8,6 +8,7 @@ import {
 import {
   useSetAppTitle,
   useLinkedIssues,
+  useSetBadgeCount,
   useRegisterElements,
 } from "../../hooks";
 import { Home } from "../../components";
@@ -36,6 +37,8 @@ const HomePage: FC = () => {
   }, [navigate]);
 
   useSetAppTitle("JIRA Issues");
+
+  useSetBadgeCount(issues);
 
   useRegisterElements(({ registerElement }) => {
     registerElement("refresh", { type: "refresh_button" });

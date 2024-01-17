@@ -10,10 +10,10 @@ import {
   InvalidRequestResponseError,
 } from "../../services/jira";
 import {
+  useReplyBox,
   useAsyncError,
   useSetAppTitle,
   useRegisterElements,
-  useLoadLinkedIssues,
 } from "../../hooks";
 import { CreateLinkIssue} from "../../components/CreateLinkIssue/CreateLinkIssue";
 import { IssueForm } from "../../components/IssueForm/IssueForm";
@@ -28,11 +28,10 @@ const CreatePage: FC = () => {
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
     const { asyncErrorHandler } = useAsyncError();
+    const { setSelectionState } = useReplyBox();
     const [loading, setLoading] = useState<boolean>(false);
     const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
     const ticket = useMemo(() => get(context, ["data", "ticket"]), [context]);
-
-    useLoadLinkedIssues();
 
     useSetAppTitle("Add Issue");
 
@@ -60,19 +59,13 @@ const CreatePage: FC = () => {
             .then(({ key }) => getIssueByKey(client, key))
             .then(async (issue: JiraIssueDetails) => {
                 await setEntityService(client, ticket.id, issue.key, issue);
-                return issue.key;
+                return Promise.all([
+                  addRemoteLink(client, issue.key, ticket.id, ticket.subject, ticket.permalinkUrl),
+                  setSelectionState(issue.key, true, "email"),
+                  setSelectionState(issue.key, true, "note"),
+                ]);
             })
-            .then((key) => addRemoteLink(
-                client,
-                key,
-                ticket.id,
-                ticket.subject,
-                ticket.permalinkUrl,
-            ))
-            .then(() => {
-                setLoading(false);
-                navigate("/home");
-            })
+            .then(() => navigate("/home"))
             .catch((error) => {
                 if (error instanceof InvalidRequestResponseError && error.response?.errors) {
                     setApiErrors(error.response.errors);
@@ -81,7 +74,7 @@ const CreatePage: FC = () => {
                 }
             })
             .finally(() => setLoading(false));
-    }, [client, ticket, navigate, asyncErrorHandler]);
+    }, [client, ticket, navigate, asyncErrorHandler, setSelectionState]);
 
     return (
         <>

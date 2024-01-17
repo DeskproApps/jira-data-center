@@ -3,16 +3,23 @@ import { find } from "lodash";
 import { useQueryWithClient } from "@deskpro/app-sdk";
 import { QueryKey } from "../../query";
 import { getIssueDependencies } from "../../services/jira";
+import { buildCustomFieldMeta } from "../../services/jira/utils";
 import {
   getUserOptions,
   getLabelOptions,
   getProjectOptions,
 } from "./utils";
 import { getOption } from "../../utils";
+import { FieldType } from "../../types";
 import type { DropdownValueType } from "@deskpro/deskpro-ui";
-import {FieldType, IssueMeta} from "../../types";
-import {IssueFormData, JiraIssueType, JiraPriorityValue, JiraProject, JiraUser} from "../../services/jira/types";
-import {buildCustomFieldMeta} from "../../services/jira/utils";
+import type { IssueMeta } from "../../types";
+import {
+  JiraUser,
+  JiraProject,
+  IssueFormData,
+  JiraIssueType,
+  JiraPriorityValue, JiraUserInfo,
+} from "../../services/jira/types";
 
 type UseFormDeps = (
   values?: IssueFormData,
@@ -20,8 +27,10 @@ type UseFormDeps = (
 ) => {
   isLoading: boolean,
   projects: JiraProject[],
+  labels: string[],
   extraLabels: string[],
   projectOptions: Array<DropdownValueType<JiraProject["id"]>>,
+  users: JiraUserInfo[],
   userOptions: Array<DropdownValueType<JiraUser["key"]>>,
   labelOptions: Array<DropdownValueType<string>>,
   buildIssueTypeOptions: (projectId: JiraProject["id"]) => Array<DropdownValueType<JiraIssueType["id"]>>,
@@ -106,6 +115,8 @@ const useFormDeps: UseFormDeps = (values, editMeta) => {
     buildIssueTypeOptions,
     buildPriorityOptions,
     getCustomFields,
+    labels: data?.labels || [],
+    users: data?.users || [],
   };
 };
 

@@ -1,8 +1,9 @@
-import { FC } from "react";
-import { DropdownValueType, Label } from "@deskpro/deskpro-ui";
-import { MappedFieldProps } from "../types";
-import { DropdownSelect } from "../../common";
-import { FieldType } from "../../../types";
+import { Label } from "@deskpro/deskpro-ui";
+import { DropdownSelect } from "../../../common";
+import { FieldType } from "../../../../types";
+import type { FC } from "react";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
+import type { MappedFieldProps } from "../types";
 
 export const SelectSingleField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {
     if (meta.type !== FieldType.SELECT_SINGLE) {

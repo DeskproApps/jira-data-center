@@ -4,6 +4,8 @@ export const nbsp = "\u00A0";
 /** Deskpro */
 export const ENTITY = "linkedJiraDataCentreIssue";
 
+export const APP_PREFIX = "jira-data-centre";
+
 export const DEFAULT_ERROR = "There was an error!";
 
 export const placeholders = {

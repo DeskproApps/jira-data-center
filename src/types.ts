@@ -1,7 +1,7 @@
 import type { To, ParamKeyValuePair } from "react-router-dom";
 import type { DropdownValueType } from "@deskpro/deskpro-ui";
 import type { Context, IDeskproClient, V2ProxyRequestInitBody } from "@deskpro/app-sdk";
-import type { JiraUserInfo, JiraIssueDetails } from "./services/jira/types";
+import type {JiraUserInfo, JiraIssueDetails, IssueItem} from "./services/jira/types";
 import type { Response } from "./services/jira/types";
 
 /** Common types */
@@ -42,7 +42,7 @@ export type NavigateToChangePage = { type: "changePage", path: To };
 export type ElementEventPayload =
   | undefined
   | string
-  | { type: "unlink", issueKey: string }
+  | { type: "unlink", issueKey: IssueItem["key"] }
   | NavigateToChangePage
 ;
 

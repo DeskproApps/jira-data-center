@@ -6,9 +6,14 @@ import { InvalidRequestResponseError } from "./InvalidRequestResponseError";
 import type { IDeskproClient } from "@deskpro/app-sdk";
 import type { SubmitIssueFormData } from "../../components/IssueForm/types";
 import type { IssueMeta } from "../../types";
-import type { AttachmentFile, JiraAPIError } from "./types";
+import type { IssueItem, AttachmentFile, JiraAPIError } from "./types";
 
-export const updateIssue = async (client: IDeskproClient, issueKey: string, data: SubmitIssueFormData, meta: Record<string, IssueMeta>) => {
+export const updateIssue = async (
+  client: IDeskproClient,
+  issueKey: IssueItem["key"],
+  data: SubmitIssueFormData,
+  meta: Record<string, IssueMeta>,
+) => {
   const customFields = Object.keys(data.customFields).reduce((fields, key) => {
     const value = formatCustomFieldValue(meta[key], data.customFields[key]);
 

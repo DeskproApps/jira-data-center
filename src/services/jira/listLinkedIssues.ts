@@ -13,7 +13,10 @@ import type { IssueItem, JiraIssueDetails } from "./types";
 /**
  * List linked issues
  */
-export const listLinkedIssues = async (client: IDeskproClient, keys: string[]): Promise<IssueItem[]> => {
+export const listLinkedIssues = async (
+  client: IDeskproClient,
+  keys: Array<IssueItem["key"]>,
+): Promise<IssueItem[]> => {
   if (!keys.length) {
     return [];
   }

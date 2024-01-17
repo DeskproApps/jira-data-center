@@ -1,9 +1,7 @@
-import type { FC } from "react";
-import get from "lodash/get";
-import { FieldType, IssueMeta } from "../../types";
+import { get } from "lodash";
 import { match } from "ts-pattern";
-import type { MappedFieldProps } from "./types";
 import { FormikField } from "@deskpro/deskpro-ui";
+import { FieldType } from "../../../types";
 import { PlainTextField } from "./CustomField/PlainTextField";
 import { DateTimeField } from "./CustomField/DateTimeField";
 import { ParagraphField } from "./CustomField/ParagraphField";
@@ -14,8 +12,11 @@ import { NumberField } from "./CustomField/NumberField";
 import { RadioButtonsField } from "./CustomField/RadioButtonsField";
 import { SelectMultiField } from "./CustomField/SelectMultiField";
 import { SelectSingleField } from "./CustomField/SelectSingleField";
-import {UrlField} from "./CustomField/UrlField";
-import {UserPickerField} from "./CustomField/UserPickerField";
+import { UrlField } from "./CustomField/UrlField";
+import { UserPickerField } from "./CustomField/UserPickerField";
+import type { FC } from "react";
+import type { IssueMeta } from "../../../types";
+import type { MappedFieldProps } from "./types";
 
 type MaybeField = FC<MappedFieldProps> | null;
 

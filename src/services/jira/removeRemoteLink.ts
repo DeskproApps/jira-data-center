@@ -1,13 +1,14 @@
 import { baseRequest } from "./baseRequest";
 import { remoteLinkGlobalId } from "./utils";
 import type { IDeskproClient } from "@deskpro/app-sdk";
+import type { IssueItem } from "./types";
 
 /**
  * Remove remote link
  */
-export const removeRemoteLink = async (
+export const removeRemoteLink = (
   client: IDeskproClient,
-  key: string,
+  key: IssueItem["key"],
   ticketId: string,
 ) => {
   return baseRequest(client, {

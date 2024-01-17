@@ -1,7 +1,7 @@
-import { FC } from "react";
 import { Label, Radio } from "@deskpro/deskpro-ui";
-import { MappedFieldProps } from "../types";
-import { FieldType } from "../../../types";
+import { FieldType } from "../../../../types";
+import type { MappedFieldProps } from "../types";
+import type { FC } from "react";
 
 export const RadioButtonsField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {
     if (meta.type !== FieldType.RADIO_BUTTONS) {

@@ -1,25 +1,26 @@
-import { FC } from "react";
-import { DropdownValueType, Label } from "@deskpro/deskpro-ui";
-import { MappedFieldProps } from "../types";
-import { DropdownSelect } from "../../common";
-import { FieldType } from "../../../types";
-import { useStore } from "../../../context/StoreProvider/hooks";
-import { JiraUserInfo } from "../../../services/jira/types";
+import { size } from "lodash";
+import { Label } from "@deskpro/deskpro-ui";
+import { DropdownSelect } from "../../../common";
+import { FieldType } from "../../../../types";
+import { useFormDeps } from "../../hooks";
+import type { FC } from "react";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
+import type { JiraUserInfo } from "../../../../services/jira/types";
+import type { MappedFieldProps } from "../types";
 
 export const UserPickerField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {
-    const [ state ] = useStore();
+    const { users } = useFormDeps();
 
     if (meta.type !== FieldType.USER_PICKER) {
         return (<></>);
     }
 
-    if (!state?.dataDependencies?.users) {
+    if (!size(users)) {
         return (<></>);
     }
 
-    const users: JiraUserInfo[] = (state.dataDependencies.users ?? [])
-        .filter((user) => user.active && user.accountType === "atlassian")
-    ;
+    const filteredUsers: JiraUserInfo[] = (Array.isArray(users) ? users : [])
+        .filter((user) => user.active && user.accountType === "atlassian");
 
     return (
         <Label
@@ -29,7 +30,7 @@ export const UserPickerField: FC<MappedFieldProps> = ({ id, meta, field, error, 
         >
             <DropdownSelect
                 helpers={helpers}
-                options={users.map((user, idx: number) => ({
+                options={filteredUsers.map((user, idx: number) => ({
                     key: `${idx}`,
                     label: user.displayName,
                     value: user.accountId,

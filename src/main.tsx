@@ -4,8 +4,8 @@ import { HashRouter } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { DeskproAppProvider, LoadingSpinner } from "@deskpro/app-sdk";
-import { StoreProvider } from "./context/StoreProvider/StoreProvider";
 import { queryClient } from "./query";
+import { ReplyBoxProvider } from "./hooks";
 import { App } from "./App";
 import { ErrorFallback } from "./components";
 import TimeAgo from "javascript-time-ago";
@@ -28,9 +28,9 @@ root.render((
         <QueryClientProvider client={queryClient}>
           <Suspense fallback={<LoadingSpinner/>}>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <StoreProvider>
+              <ReplyBoxProvider>
                 <App />
-              </StoreProvider>
+              </ReplyBoxProvider>
             </ErrorBoundary>
           </Suspense>
         </QueryClientProvider>

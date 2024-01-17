@@ -1,12 +1,15 @@
 import { get, orderBy } from "lodash";
 import { baseRequest } from "./baseRequest";
 import type { IDeskproClient } from "@deskpro/app-sdk";
-import type { JiraComment, JiraUserInfo } from "./types";
+import type { IssueItem, JiraComment, JiraUserInfo } from "./types";
 
 /**
  * Get list of comments for a given issue key
  */
-export const getIssueComments = async (client: IDeskproClient, key: string): Promise<JiraComment[]> => {
+export const getIssueComments = async (
+  client: IDeskproClient,
+  key: IssueItem["key"],
+): Promise<JiraComment[]> => {
   const data = await baseRequest(client, {
     url: `/issue/${key}/comment`,
     queryParams: {

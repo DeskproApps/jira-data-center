@@ -1,12 +1,15 @@
 import { get } from "lodash";
 import { baseRequest } from "./baseRequest";
 import type { IDeskproClient } from "@deskpro/app-sdk";
-import type { IssueAttachment } from "./types";
+import type { IssueItem, IssueAttachment } from "./types";
 
 /**
  * Get attachments for a JIRA issue
  */
-export const getIssueAttachments = async (client: IDeskproClient, key: string): Promise<IssueAttachment[]> => {
+export const getIssueAttachments = async (
+  client: IDeskproClient,
+  key: IssueItem["key"],
+): Promise<IssueAttachment[]> => {
   const res = await baseRequest(client, {
     url: `/issue/${key}`,
     queryParams: {

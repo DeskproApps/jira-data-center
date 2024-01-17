@@ -1,9 +1,9 @@
-import { FC } from "react";
 import { Label } from "@deskpro/deskpro-ui";
-import { DropdownMultiSelect } from "../../common";
-import { FieldType } from "../../../types";
+import { DropdownMultiSelect } from "../../../common";
+import { FieldType } from "../../../../types";
+import type { FC } from "react";
 import type { MappedFieldProps } from "../types";
-import type { DropdownMultiSelectValueType } from "../../common/DropdownMultiSelect";
+import type { DropdownMultiSelectValueType } from "../../../common/DropdownMultiSelect";
 
 export const SelectMultiField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers }: MappedFieldProps) => {
     if (meta.type !== FieldType.SELECT_MULTI) {

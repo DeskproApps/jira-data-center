@@ -1,5 +1,5 @@
 import { FieldHelperProps, FieldInputProps } from "formik/dist/types";
-import { IssueMeta } from "../../types";
+import { IssueMeta } from "../../../types";
 
 export interface MappedFieldProps {
     meta: IssueMeta;

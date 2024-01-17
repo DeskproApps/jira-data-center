@@ -1,20 +1,20 @@
 import uniq from "lodash/uniq";
 import { Label } from "@deskpro/deskpro-ui";
-import { useStore } from "../../../context/StoreProvider/hooks";
-import { DropdownMultiSelect } from "../../common";
+import { useFormDeps } from "../../hooks";
+import { DropdownMultiSelect } from "../../../common";
 import type { FC } from "react";
-import type { DropdownMultiSelectValueType } from "../../common/DropdownMultiSelect";
+import type { DropdownMultiSelectValueType } from "../../../common/DropdownMultiSelect";
 import type { MappedFieldProps } from "../types";
 
 export const LabelsField: FC<MappedFieldProps> = ({ id, meta, field, error, helpers, extraLabels }: MappedFieldProps) => {
-    const [ state ] = useStore();
+    const { labels } = useFormDeps();
 
-    if (!state?.dataDependencies?.labels) {
+    if (!labels) {
         return (<></>);
     }
 
-    const labels = [
-        ...state.dataDependencies.labels ?? [],
+    const allLabels = [
+        ...labels ?? [],
         ...extraLabels ?? []
     ];
 
@@ -26,7 +26,7 @@ export const LabelsField: FC<MappedFieldProps> = ({ id, meta, field, error, help
         >
             <DropdownMultiSelect
                 helpers={helpers}
-                options={uniq(labels).map((label: string, idx: number) => ({
+                options={uniq(allLabels).map((label: string, idx: number) => ({
                     label,
                     key: `${idx}`,
                     valueLabel: label,
