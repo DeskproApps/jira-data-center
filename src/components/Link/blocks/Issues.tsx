@@ -5,13 +5,12 @@ import { NoFoundIssues, Card } from "../../common";
 import { IssueItem } from "../../IssueItem";
 import type { FC } from "react";
 import type { IssueItem as IssueItemType } from "../../../services/jira/types";
-import type { IssueKey } from "../../../types";
 
 type Props = {
   isLoading?: boolean,
   issues?: IssueItemType[],
-  selectedIssueIds: IssueKey[],
-  onChangeSelectedIssue: (issueKey: IssueKey) => void,
+  selectedIssueIds: Array<IssueItemType["key"]>,
+  onChangeSelectedIssue: (issueKey: IssueItemType["key"]) => void,
 };
 
 const Issues: FC<Props> = ({

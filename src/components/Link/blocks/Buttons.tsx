@@ -1,11 +1,11 @@
 import size from "lodash/size";
 import { Stack, Button } from "@deskpro/deskpro-ui";
 import type { FC } from "react";
-import type { IssueKey } from "../../../types";
+import type { IssueItem } from "../../../services/jira/types";
 
 type Props = {
   isSubmitting: boolean,
-  selectedIssues: IssueKey[],
+  selectedIssues: Array<IssueItem["key"]>,
   onCancel: () => void,
   onLinkIssues: () => void,
 };

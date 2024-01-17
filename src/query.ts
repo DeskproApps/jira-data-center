@@ -19,6 +19,7 @@ const QueryKey = {
   PERMISSIONS: "permissions",
   ATTACHMENTS: "attachments",
   ISSUE_COMMENTS: "issue_comments",
+  ISSUE_DEPENDENCIES: "issue_dependencies",
 }
 
 export { queryClient, QueryKey };

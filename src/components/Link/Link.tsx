@@ -2,26 +2,23 @@ import { Search, HorizontalDivider } from "@deskpro/app-sdk";
 import { Container } from "../common";
 import { Buttons, Issues } from "./blocks";
 import type { FC } from "react";
-import type { IssueKey } from "../../types";
 import type { IssueItem as IssueItemType } from "../../services/jira/types";
 
 type Props = {
   isFetching?: boolean,
   onChangeSearch: (q: string) => void,
   isSubmitting: boolean,
-  selectedIssues: IssueKey[],
   onCancel: () => void,
   onLinkIssues: () => void,
   issues?: IssueItemType[],
-  selectedIssueIds: IssueKey[],
-  onChangeSelectedIssue: (issueKey: IssueKey) => void,
+  selectedIssueIds: Array<IssueItemType["key"]>,
+  onChangeSelectedIssue: (issueKey: IssueItemType["key"]) => void,
 };
 
 const Link: FC<Props> = ({
   isFetching,
   isSubmitting,
   onChangeSearch,
-  selectedIssues,
   onLinkIssues,
   onCancel,
   issues,
@@ -40,7 +37,7 @@ const Link: FC<Props> = ({
           isSubmitting={isSubmitting}
           onCancel={onCancel}
           onLinkIssues={onLinkIssues}
-          selectedIssues={selectedIssues}
+          selectedIssues={selectedIssueIds}
         />
       </Container>
 

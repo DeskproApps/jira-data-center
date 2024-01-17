@@ -16,13 +16,13 @@ import { addRemoteLink, getIssueByKey } from "../../services/jira";
 import { ticketReplyEmailsSelectionStateKey, ticketReplyNotesSelectionStateKey } from "../../utils";
 import { Link } from "../../components";
 import type { FC } from "react";
-import type { IssueKey } from "../../types";
+import type { IssueItem } from "../../services/jira/types";
 
 const LinkPage: FC = () => {
   const navigate = useNavigate();
   const { context } = useDeskproLatestAppContext();
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selected, setSelected] = useState<IssueKey[]>([]);
+  const [selected, setSelected] = useState<Array<IssueItem["key"]>>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { client } = useDeskproAppClient();
   const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
@@ -100,7 +100,6 @@ const LinkPage: FC = () => {
         isSubmitting={isSubmitting}
         onLinkIssues={linkIssues}
         onCancel={onCancel}
-        selectedIssues={selected}
         issues={issues}
         selectedIssueIds={selected}
         onChangeSelectedIssue={onChangeSelectedIssue}

@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState, useCallback } from "react";
+import { get } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { useDeskproAppClient, useDeskproLatestAppContext } from "@deskpro/app-sdk";
+import { setEntityService } from "../../services/deskpro";
 import {
   createIssue,
   addRemoteLink,
@@ -28,6 +30,7 @@ const CreatePage: FC = () => {
     const { asyncErrorHandler } = useAsyncError();
     const [loading, setLoading] = useState<boolean>(false);
     const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
+    const ticket = useMemo(() => get(context, ["data", "ticket"]), [context]);
 
     useLoadLinkedIssues();
 
@@ -41,12 +44,12 @@ const CreatePage: FC = () => {
       });
     });
 
-    const onSubmit = (
+    const onSubmit = useCallback((
         data: SubmitIssueFormData,
         _helpers: FormikHelpers<IssueFormData>,
         meta: Record<string, IssueMeta>,
     ) => {
-        if (!client || !context?.data.ticket) {
+        if (!client || !ticket) {
             return;
         }
 
@@ -56,18 +59,15 @@ const CreatePage: FC = () => {
         createIssue(client, data, meta)
             .then(({ key }) => getIssueByKey(client, key))
             .then(async (issue: JiraIssueDetails) => {
-                await client
-                    .getEntityAssociation("linkedJiraDataCentreIssue", context?.data.ticket.id as string)
-                    .set(issue.key, issue);
-
+                await setEntityService(client, ticket.id, issue.key, issue);
                 return issue.key;
             })
             .then((key) => addRemoteLink(
                 client,
                 key,
-                context?.data.ticket.id as string,
-                context?.data.ticket.subject as string,
-                context?.data.ticket.permalinkUrl as string
+                ticket.id,
+                ticket.subject,
+                ticket.permalinkUrl,
             ))
             .then(() => {
                 setLoading(false);
@@ -81,7 +81,7 @@ const CreatePage: FC = () => {
                 }
             })
             .finally(() => setLoading(false));
-    };
+    }, [client, ticket, navigate, asyncErrorHandler]);
 
     return (
         <>

@@ -1,6 +1,7 @@
 import type { To, ParamKeyValuePair } from "react-router-dom";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
 import type { Context, IDeskproClient, V2ProxyRequestInitBody } from "@deskpro/app-sdk";
-import type { JiraUserInfo } from "./services/jira/types";
+import type { JiraUserInfo, JiraIssueDetails } from "./services/jira/types";
 import type { Response } from "./services/jira/types";
 
 /** Common types */
@@ -9,6 +10,8 @@ export type Maybe<T> = T | undefined | null;
 export type Nothing = undefined;
 
 export type Dict<T> = Record<string, T>;
+
+export type Option<Value = unknown> = Omit<DropdownValueType<Value>, "subItems">;
 
 /** Request types */
 export type ApiRequestMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -207,4 +210,4 @@ export type TicketData = {
 
 export type TicketContext = Context<TicketData, Maybe<Settings>>;
 
-export type IssueKey = string;
+export type EntityMetadata = JiraIssueDetails;
