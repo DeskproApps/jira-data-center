@@ -1,32 +1,27 @@
-import { useEffect, useMemo, useState } from "react";
-import get from "lodash/get";
+import { useMemo, useState } from "react";
+import { get } from "lodash";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   LoadingSpinner,
   useDeskproAppClient,
   useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
-import { IssueForm } from "../../components/IssueForm/IssueForm";
-import { updateIssue, getIssueByKey, InvalidRequestResponseError } from "../../services/jira";
-import { formatCustomFieldValueForSet } from "../../services/jira/utils";
-import { buildCustomFieldMeta } from "../../services/jira/utils";
+import { setEntityService } from "../../services/deskpro";
 import {
-    useAdfToPlainText,
-    useFindLinkedIssueAttachmentsByKey,
-    useLoadLinkedIssueAttachment,
-    useLoadLinkedIssues,
-    useSetAppTitle,
-    useRegisterElements,
+  updateIssue,
+  InvalidRequestResponseError,
+} from "../../services/jira";
+import { useIssueDeps } from "./hooks";
+import {
+  useAsyncError,
+  useSetAppTitle,
+  useRegisterElements,
 } from "../../hooks";
-import { useStore } from "../../context/StoreProvider/hooks";
+import { IssueForm } from "../../components/IssueForm/IssueForm";
 import type { FormikHelpers } from "formik";
 import type { FC } from "react";
 import type { IssueMeta } from "../../types";
-import type {
-    IssueFormData,
-    AttachmentFile,
-    JiraIssueDetails,
-} from "../../services/jira/types";
+import type { IssueFormData } from "../../services/jira/types";
 import type { SubmitIssueFormData } from "../../components/IssueForm/types";
 
 const EditPage: FC = () => {
@@ -34,16 +29,11 @@ const EditPage: FC = () => {
     const { issueKey } = useParams();
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
-    const [ state, dispatch ] = useStore();
     const [loading, setLoading] = useState<boolean>(false);
     const [apiErrors, setApiErrors] = useState<Record<string, string>|undefined>({});
-    const [issue, setIssue] = useState<null|JiraIssueDetails>(null);
-
-    const adfToPlainText = useAdfToPlainText();
-
-    useLoadLinkedIssues();
-    const loadIssueAttachments = useLoadLinkedIssueAttachment();
-    const findAttachmentsByKey = useFindLinkedIssueAttachmentsByKey();
+    const { isLoading, values, editMeta, issue } = useIssueDeps(issueKey);
+    const { asyncErrorHandler } = useAsyncError();
+    const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
 
     useSetAppTitle(`Edit ${issueKey}`);
 
@@ -55,30 +45,12 @@ const EditPage: FC = () => {
       });
     }, [client, issueKey]);
 
-    useEffect(() => {
-        (client && issueKey) && getIssueByKey(client, issueKey).then(setIssue);
-    }, [client, issueKey, state.linkedIssuesResults?.list])
-
-    useEffect(() => {
-        loadIssueAttachments(issueKey as string);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [issueKey]);
-
-    const attachments = useMemo(
-        () => findAttachmentsByKey(issueKey as string),
-        [issueKey, findAttachmentsByKey]
-    );
-
-    if (!issue) {
-        return (<LoadingSpinner />);
-    }
-
     const onSubmit = (
         data: SubmitIssueFormData,
         _helpers: FormikHelpers<IssueFormData>,
         meta: Record<string, IssueMeta>,
     ) => {
-        if (!client || !context?.data.ticket || !issueKey) {
+        if (!client || !ticketId || !issueKey) {
             return;
         }
 
@@ -86,61 +58,23 @@ const EditPage: FC = () => {
         setApiErrors({});
 
         updateIssue(client, issueKey, data, meta)
-            .then(async () => {
-                const issue = await getIssueByKey(client, issueKey);
-
-                return client
-                    .getEntityAssociation("linkedJiraDataCentreIssue", context?.data.ticket.id as string)
-                    .set(issueKey, issue)
-                ;
-            })
-            .then(() => {
-                setLoading(false);
-                navigate(`/view/${issueKey}`);
-            })
+            .then(() => setEntityService(client, ticketId, issueKey, issue))
+            .then(() => navigate(`/view/${issueKey}`))
             .catch((error) => {
                 if (error instanceof InvalidRequestResponseError && (error.response?.errors || error.response?.errorMessages)) {
                     setApiErrors(error.response.errors ?? error.response?.errorMessages);
                 } else {
-                    dispatch({ type: "error", error });
+                  asyncErrorHandler(error);
                 }
             })
-            .finally(() => {
-                setLoading(false);
-            })
-        ;
+            .finally(() => setLoading(false));
     };
 
-    const editMeta: Record<string, IssueMeta> = buildCustomFieldMeta(issue.editmeta.fields ?? {});
-
-    const values = {
-        attachments: attachments.map((a) => ({
-            id: a.id,
-            name: a.filename,
-            size: a.sizeBytes,
-        } as AttachmentFile)),
-        summary: get(issue, ["fields", "summary"], ""),
-        description: adfToPlainText(get(issue, ["fields", "description"])),
-        issueTypeId: get(issue, ["fields", "issuetype", "id"], ""),
-        projectId: get(issue, ["fields", "project", "id"], ""),
-        reporterUserId: get(issue, ["fields", "reporter", "name"], ""),
-        assigneeUserId: get(issue, ["fields", "assignee", "name"], ""),
-        labels: get(issue, ["fields", "labels"], []) || [],
-        priority: get(issue, ["fields", "priority", "id"], ""),
-        customFields: Object.keys(editMeta).reduce((fields, key) => {
-            const value = formatCustomFieldValueForSet(editMeta[key], get(issue, ["fields", key], null));
-
-            if (value === undefined) {
-                return fields;
-            }
-
-            return {
-                ...fields,
-                [key]: formatCustomFieldValueForSet(editMeta[key], get(issue, ["fields", key], null)),
-            };
-        }, {}),
-        parentKey: get(issue, ["fields", "parent", "key"], ""),
-    };
+    if (isLoading) {
+        return (
+          <LoadingSpinner />
+        );
+    }
 
     return (
         <IssueForm
