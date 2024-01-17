@@ -1,4 +1,4 @@
-import get from "lodash/get";
+import { get, find } from "lodash";
 import type { JiraIssueType, JiraProject, } from "../services/jira/types";
 
 const isRequiredField = ({ projects, fieldName, projectId, issueTypeId }: {
@@ -17,7 +17,7 @@ const isRequiredField = ({ projects, fieldName, projectId, issueTypeId }: {
     return false;
   }
 
-  const issueType = project.issuetypes.find(({ id }: JiraIssueType) => id === issueTypeId);
+  const issueType = find(project.issuetypes, { id: issueTypeId });
 
   return get(issueType, ["fields", fieldName, "required"]);
 };

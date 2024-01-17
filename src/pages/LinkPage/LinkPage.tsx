@@ -14,7 +14,6 @@ import {
 } from "../../hooks";
 import { setEntityService } from "../../services/deskpro";
 import { addRemoteLink, getIssueByKey } from "../../services/jira";
-// import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
 import { Link } from "../../components";
 import type { FC } from "react";
 import type { IssueItem } from "../../services/jira/types";
@@ -41,6 +40,8 @@ const LinkPage: FC = () => {
   }, [client]);
 
   const onChangeSearchQuery = useDebouncedCallback(setSearchQuery, 1000);
+
+  const onNavigateToCreate = useCallback(() => navigate("/create"), [navigate]);
 
   const onChangeSelectedIssue = (key: string) => {
     if (selected.includes(key)) {
@@ -80,19 +81,17 @@ const LinkPage: FC = () => {
   const onCancel = useCallback(() => navigate("/home"), [navigate]);
 
   return (
-    <>
-      {/*<CreateLinkIssue selected="link" />*/}
-      <Link
-        isFetching={isLoading}
-        onChangeSearch={onChangeSearchQuery}
-        isSubmitting={isSubmitting}
-        onLinkIssues={linkIssues}
-        onCancel={onCancel}
-        issues={issues}
-        selectedIssueIds={selected}
-        onChangeSelectedIssue={onChangeSelectedIssue}
-      />
-    </>
+    <Link
+      isFetching={isLoading}
+      onChangeSearch={onChangeSearchQuery}
+      isSubmitting={isSubmitting}
+      onLinkIssues={linkIssues}
+      onCancel={onCancel}
+      issues={issues}
+      selectedIssueIds={selected}
+      onChangeSelectedIssue={onChangeSelectedIssue}
+      onNavigateToCreate={onNavigateToCreate}
+    />
   );
 };
 

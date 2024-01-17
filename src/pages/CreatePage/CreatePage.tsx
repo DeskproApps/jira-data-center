@@ -15,9 +15,8 @@ import {
   useSetAppTitle,
   useRegisterElements,
 } from "../../hooks";
-import { CreateLinkIssue} from "../../components/CreateLinkIssue/CreateLinkIssue";
-import { IssueForm } from "../../components/IssueForm/IssueForm";
-import {IssueFormData, JiraIssueDetails} from "../../services/jira/types";
+import { CreateIssue } from "../../components";
+import type { IssueFormData, JiraIssueDetails } from "../../services/jira/types";
 import type { FC } from "react";
 import type { FormikHelpers } from "formik";
 import type { SubmitIssueFormData } from "../../components/IssueForm/types";
@@ -32,6 +31,8 @@ const CreatePage: FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
     const ticket = useMemo(() => get(context, ["data", "ticket"]), [context]);
+
+    const onNavigateToLink = useCallback(() => navigate("/link"), [navigate]);
 
     useSetAppTitle("Add Issue");
 
@@ -68,7 +69,7 @@ const CreatePage: FC = () => {
             .then(() => navigate("/home"))
             .catch((error) => {
                 if (error instanceof InvalidRequestResponseError && error.response?.errors) {
-                    setApiErrors(error.response.errors);
+                  setApiErrors(error.response.errors);
                 } else {
                   asyncErrorHandler(error);
                 }
@@ -77,15 +78,12 @@ const CreatePage: FC = () => {
     }, [client, ticket, navigate, asyncErrorHandler, setSelectionState]);
 
     return (
-        <>
-            <CreateLinkIssue selected="create" />
-            <IssueForm
-                type="create"
-                onSubmit={onSubmit}
-                loading={loading}
-                apiErrors={apiErrors}
-            />
-        </>
+      <CreateIssue
+        loading={loading}
+        apiErrors={apiErrors}
+        onSubmit={onSubmit}
+        onNavigateToLink={onNavigateToLink}
+      />
     );
 };
 

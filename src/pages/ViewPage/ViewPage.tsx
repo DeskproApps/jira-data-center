@@ -32,8 +32,14 @@ const ViewPage: FC = () => {
       type: "home_button",
       payload: { type: "changePage", path: "/home" },
     });
-    // registerElement("edit", { type: "edit_button", payload: issueKey });
-    registerElement("menu", {
+    // issueKey && registerElement("edit", {
+    //   type: "edit_button",
+    //   payload: {
+    //     type: "changePage",
+    //     path: `/edit/${issueKey}`,
+    //   },
+    // });
+    issueKey && registerElement("menu", {
       type: "menu",
       items: [{
         title: "Unlink Ticket",

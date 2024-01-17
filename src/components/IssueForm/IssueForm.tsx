@@ -30,7 +30,15 @@ import type { IssueFormData, AttachmentFile } from "../../services/jira/types";
 import type { IssueFormProps } from "./types";
 import "./IssueForm.css";
 
-export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiErrors, editMeta, issueKey, loading = false }: IssueFormProps) => {
+export const IssueForm: FC<IssueFormProps> = ({
+    onSubmit,
+    values,
+    type,
+    apiErrors,
+    editMeta,
+    issueKey,
+    loading = false,
+}: IssueFormProps) => {
     const navigate = useNavigate();
     const { context } = useDeskproLatestAppContext();
     const {
@@ -261,7 +269,7 @@ export const IssueForm: FC<IssueFormProps> = ({ onSubmit, values, type, apiError
                                 </div>
                             )}
                             {Object.values(getCustomFields(values.projectId, values.issueTypeId)).map((meta, idx: number) => (
-                                <CustomField meta={meta} key={idx} apiErrors={apiErrors} extraLabels={extraLabels} />
+                              <CustomField meta={meta} key={idx} apiErrors={apiErrors} extraLabels={extraLabels} />
                             ))}
                             <HorizontalDivider />
                             <div className="create-form-field">

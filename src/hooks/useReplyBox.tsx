@@ -66,7 +66,7 @@ const registerReplyBoxNotesAdditionsTargetAction = (
     }))
     .then((flags) => {
       client.registerTargetAction(`${APP_PREFIX}ReplyBoxNoteAdditions`, "reply_box_note_item_selection", {
-        title: "Add to Jira",
+        title: "Add to JIRA",
         payload: issueKeys.map((issueKey, idx) => ({
           id: issueKey,
           title: issueKey,
@@ -96,7 +96,7 @@ const registerReplyBoxEmailsAdditionsTargetAction = (
     }))
     .then((flags) => {
       return client.registerTargetAction(`${APP_PREFIX}ReplyBoxEmailAdditions`, "reply_box_email_item_selection", {
-        title: `Add to Jira`,
+        title: `Add to JIRA`,
         payload: issueKeys.map((issueKey, idx) => ({
           id: issueKey,
           title: issueKey,

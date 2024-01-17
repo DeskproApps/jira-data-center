@@ -65,13 +65,15 @@ export const extractCustomFieldMeta = (fields: JiraIssueDetails["editmeta"]["fie
   }, {});
 };
 
-export const transformFieldMeta = (field: JiraIssueCustomFieldMeta) => ({
-  type: field.schema.custom,
-  key: field.key,
-  name: field.name,
-  required: field.required,
-  ...omit(field, ["key", "name", "operations", "schema", "required"]),
-});
+export const transformFieldMeta = (field: JiraIssueCustomFieldMeta) => {
+  return {
+    type: field.schema.custom,
+    key: field.fieldId,
+    name: field.name,
+    required: field.required,
+    ...omit(field, ["key", "name", "operations", "schema", "required"]),
+  };
+};
 
 export const buildCustomFieldMeta = (fields: JiraIssueDetails["editmeta"]["fields"]) => {
   const customFields: Record<string, JiraIssueCustomFieldMeta> = extractCustomFieldMeta(fields);

@@ -70,7 +70,7 @@ const App = () => {
         <Route path="/link" element={<LinkPage />}/>
         <Route path="/view/:issueKey" element={<ViewPage />}/>
         <Route path="/create" element={<CreatePage />}/>
-        <Route path="/edit" element={<EditPage />}/>
+        <Route path="/edit/:issueKey" element={<EditPage />}/>
         <Route path="/comment/:issueKey" element={<CreateIssueCommentPage />}/>
         <Route path="/view_permissions" element={<ViewPermissionsPage />}/>
         <Route index  element={<LoadingAppPage />}/>

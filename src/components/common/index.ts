@@ -11,3 +11,4 @@ export { NoFound, NoFoundIssues } from "./NoFound";
 export { Container } from "./Layout";
 export { Comment } from "./Comment";
 export { TextArea } from "./TextArea";
+export { Navigation } from "./Navigation";

@@ -1,5 +1,5 @@
 import { Search, HorizontalDivider } from "@deskpro/app-sdk";
-import { Container } from "../common";
+import { Container, Navigation } from "../common";
 import { Buttons, Issues } from "./blocks";
 import type { FC } from "react";
 import type { IssueItem as IssueItemType } from "../../services/jira/types";
@@ -13,6 +13,7 @@ type Props = {
   issues?: IssueItemType[],
   selectedIssueIds: Array<IssueItemType["key"]>,
   onChangeSelectedIssue: (issueKey: IssueItemType["key"]) => void,
+  onNavigateToCreate: () => void,
 };
 
 const Link: FC<Props> = ({
@@ -24,11 +25,12 @@ const Link: FC<Props> = ({
   issues,
   selectedIssueIds,
   onChangeSelectedIssue,
-
+  onNavigateToCreate,
 }) => {
   return (
     <>
       <Container>
+        <Navigation onNavigateToCreate={onNavigateToCreate} />
         <Search
           isFetching={isFetching}
           onChange={onChangeSearch}

@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from "react";
-import { find } from "lodash";
+import { get, find } from "lodash";
 import { useQueryWithClient } from "@deskpro/app-sdk";
 import { QueryKey } from "../../query";
 import { getIssueDependencies } from "../../services/jira";
@@ -105,7 +105,7 @@ const useFormDeps: UseFormDeps = (values, editMeta) => {
 
   return {
     isLoading: isLoading,
-    projects: data?.projects || [],
+    projects: get(data, ["createMeta", "projects"], []) || [],
     projectOptions: useMemo(() => getProjectOptions(data?.projects), [data?.projects]),
     userOptions: useMemo(() => getUserOptions(data?.users), [data?.users]),
     labelOptions: useMemo(() => {
