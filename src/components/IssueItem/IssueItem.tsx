@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { get } from "lodash";
 import { P5 } from "@deskpro/deskpro-ui";
 import {
   Link,
@@ -15,7 +16,7 @@ import {
 import { nbsp } from "../../constants";
 import { JiraIcon } from "../common";
 import type { FC, MouseEvent } from "react";
-import type { IssueItem as IssueItemType } from "../../context/StoreProvider/types";
+import type { IssueItem as IssueItemType } from "../../services/jira/types";
 
 export type Props = {
   issue: IssueItemType,
@@ -24,7 +25,9 @@ export type Props = {
 
 export const IssueItem: FC<Props> = ({ issue, onClickTitle }) => {
   const entityCount = useAssociatedEntityCount(issue.key);
-  const { getBaseUrl } = useExternalLink();
+  const { getBaseUrl, getIssueUrl } = useExternalLink();
+  const issueUrl = getIssueUrl(get(issue, ["key"]));
+
   const onClick = useCallback((e: MouseEvent) => {
     e.preventDefault();
     onClickTitle && onClickTitle();
@@ -36,8 +39,8 @@ export const IssueItem: FC<Props> = ({ issue, onClickTitle }) => {
         title={(
           <Link onClick={onClick} href="#">{issue.summary}</Link>
         )}
-        link={`${getBaseUrl()}/browse/${issue.key}`}
-        icon={<JiraIcon/>}
+        {...(!issueUrl ? {} : { link: issueUrl })}
+        {...(!issueUrl ? {} : { icon: <JiraIcon/> })}
       />
       <TwoProperties
         leftLabel="Issue Key"

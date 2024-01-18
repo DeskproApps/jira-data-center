@@ -1,16 +1,18 @@
-import size from "lodash/size";
+import { isEmpty } from "lodash";
 import { IssueFieldView } from "./IssueFieldView/IssueFieldView";
 import type { FC } from "react";
-import type { IssueItem } from "../../../../context/StoreProvider/types";
+import type { Maybe } from "../../../../types";
+import type { IssueItem } from "../../../../services/jira/types";
 
 type Props = {
-  customFields: IssueItem["customFields"],
+  customFields: Maybe<IssueItem["customFields"]>,
 };
 
 const CustomFields: FC<Props> = ({ customFields }) => {
-  if (!Array.isArray(customFields) || !size(customFields)) {
+  if (isEmpty(customFields)) {
     return (<></>);
   }
+
 
   return (
     <>

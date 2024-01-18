@@ -5,7 +5,7 @@ import { Title, HorizontalDivider } from "@deskpro/app-sdk";
 import { Comment } from "../../common";
 import type { FC } from "react";
 import type { Maybe } from "../../../types";
-import type { JiraComment } from "../../../context/StoreProvider/types";
+import type { JiraComment } from "../../../services/jira/types";
 
 type Props = {
   comments?: Maybe<JiraComment[]>,

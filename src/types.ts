@@ -1,8 +1,38 @@
-import type { To } from "react-router-dom";
-import type { Context } from "@deskpro/app-sdk";
-import type { JiraUserInfo } from "./context/StoreProvider/types";
+import type { To, ParamKeyValuePair } from "react-router-dom";
+import type { DropdownValueType } from "@deskpro/deskpro-ui";
+import type { Context, IDeskproClient, V2ProxyRequestInitBody } from "@deskpro/app-sdk";
+import type {JiraUserInfo, JiraIssueDetails, IssueItem} from "./services/jira/types";
+import type { Response } from "./services/jira/types";
 
+/** Common types */
 export type Maybe<T> = T | undefined | null;
+
+export type Nothing = undefined;
+
+export type Dict<T> = Record<string, T>;
+
+export type Option<Value = unknown> = Omit<DropdownValueType<Value>, "subItems">;
+
+/** Request types */
+export type ApiRequestMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+export type RequestParams = {
+  url?: string,
+  rawUrl?: string,
+  method?: ApiRequestMethod,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: Dict<any>|RequestInit["body"]|V2ProxyRequestInitBody["body"]
+  headers?: Dict<string>,
+  queryParams?: string|Dict<string>|ParamKeyValuePair[],
+};
+
+export type Request = <T>(
+  client: IDeskproClient,
+  params: RequestParams,
+) => Response<T>;
+
+// V2ProxyRequestInit
+export type FetchOptions = Pick<RequestParams, "method"|"headers"> & V2ProxyRequestInitBody;
 
 /**  An ISO-8601 encoded UTC date time string. Example value: `""2019-09-07T15:50:00Z"` */
 export type DateTime = string;
@@ -12,7 +42,7 @@ export type NavigateToChangePage = { type: "changePage", path: To };
 export type ElementEventPayload =
   | undefined
   | string
-  | { type: "unlink", issueKey: string }
+  | { type: "unlink", issueKey: IssueItem["key"] }
   | NavigateToChangePage
 ;
 
@@ -31,6 +61,7 @@ export enum FieldType {
     SELECT_SINGLE = "com.atlassian.jira.plugin.system.customfieldtypes:select",
     URL = "com.atlassian.jira.plugin.system.customfieldtypes:url",
     USER_PICKER = "com.atlassian.jira.plugin.system.customfieldtypes:userpicker",
+    EPIC_NAME = "com.pyxis.greenhopper.jira:gh-epic-label",
 }
 
 export type IssueMeta = {
@@ -170,10 +201,14 @@ export type Settings = {
 export type TicketData = {
     env: object,
     app: object,
-    ticket: object,
     currentAgent: object,
+    ticket: {
+      id: string,
+      subject: string,
+      permalinkUrl: string,
+    },
 };
 
 export type TicketContext = Context<TicketData, Maybe<Settings>>;
 
-export type IssueKey = string;
+export type EntityMetadata = JiraIssueDetails;

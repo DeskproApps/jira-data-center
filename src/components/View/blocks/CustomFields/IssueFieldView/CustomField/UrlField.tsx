@@ -1,4 +1,5 @@
 import isString from "lodash/isString";
+import { P5 } from "@deskpro/deskpro-ui";
 import { Link, LinkIcon } from "@deskpro/app-sdk";
 import { NoValue } from "../NoValue";
 import type { FC } from "react";
@@ -10,9 +11,9 @@ export const UrlField: FC<MappedViewProps> = ({ value }: MappedViewProps) => {
     }
 
     return (
-        <>
+        <P5>
             <Link href={value} target="_blank">{value}</Link>
             <LinkIcon href={value} />
-        </>
+        </P5>
     );
 };

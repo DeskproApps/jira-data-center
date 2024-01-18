@@ -11,10 +11,10 @@ import type {
   IssueItem,
   JiraComment,
   IssueAttachment,
-} from "../../context/StoreProvider/types";
+} from "../../services/jira/types";
 
 type Props = {
-  issue: IssueItem,
+  issue: Maybe<IssueItem>,
   attachments?: Maybe<IssueAttachment[]>,
   comments?: Maybe<JiraComment[]>,
   onNavigateToAddComment: () => void,

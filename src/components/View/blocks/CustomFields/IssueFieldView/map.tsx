@@ -1,6 +1,5 @@
-import type { ReactNode } from "react";
-import { IssueMeta, FieldType, IssueValue } from "../../../../../types";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
+import { FieldType } from "../../../../../types";
 import { RequestLanguageField } from "./CustomField/RequestLanguageField";
 import { PlainTextField } from "./CustomField/PlainTextField";
 import { ParagraphField } from "./CustomField/ParagraphField";
@@ -14,10 +13,19 @@ import { SelectMultiField } from "./CustomField/SelectMultiField";
 import { SelectSingleField } from "./CustomField/SelectSingleField";
 import { UrlField } from "./CustomField/UrlField";
 import { UserPickerField } from "./CustomField/UserPickerField";
+import type { IssueMeta, IssueValue } from "../../../../../types";
+import type { ReactNode } from "react";
 
-export default (meta: IssueMeta, value: IssueValue[IssueMeta["type"]]): ReactNode => match<FieldType, ReactNode|null>(meta.type)
+export default (
+  meta: IssueMeta,
+  value: IssueValue[IssueMeta["type"]],
+): ReactNode => {
+  return match<FieldType, ReactNode|null>(meta.type)
     .with(FieldType.REQUEST_LANG, () => <RequestLanguageField meta={meta} value={value} />)
-    .with(FieldType.TEXT_PLAIN, () => <PlainTextField meta={meta} value={value} />)
+    .with(P.union(
+      FieldType.TEXT_PLAIN,
+      FieldType.EPIC_NAME,
+    ), () => <PlainTextField meta={meta} value={value} />)
     .with(FieldType.TEXT_PARAGRAPH, () => <ParagraphField meta={meta} value={value} />)
     .with(FieldType.DATE, () => <DateField meta={meta} value={value} />)
     .with(FieldType.DATETIME, () => <DateTimeField meta={meta} value={value} />)
@@ -29,4 +37,5 @@ export default (meta: IssueMeta, value: IssueValue[IssueMeta["type"]]): ReactNod
     .with(FieldType.SELECT_SINGLE, () => <SelectSingleField meta={meta} value={value} />)
     .with(FieldType.URL, () => <UrlField meta={meta} value={value} />)
     .with(FieldType.USER_PICKER, () => <UserPickerField meta={meta} value={value} />)
-    .otherwise(() => null);
+    .otherwise(() => null)
+};

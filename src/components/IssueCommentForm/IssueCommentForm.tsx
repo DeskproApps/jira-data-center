@@ -4,7 +4,6 @@ import {
   Label,
   Stack,
   Button,
-  // TextArea,
   FormikField,
 } from "@deskpro/deskpro-ui";
 import { getInitValues } from "./utils";

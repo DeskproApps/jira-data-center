@@ -1,6 +1,6 @@
 import { times, floor, flatten } from "lodash";
 import { IDeskproClient } from "@deskpro/app-sdk";
-import type { SearchResponse } from "../context/StoreProvider/types";
+import type { SearchResponse } from "../services/jira/types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fetchAll = <T>(fn: (...args: any) => Promise<SearchResponse<T>>) => {

@@ -23,10 +23,10 @@ import {
 import type { FC } from "react";
 import type { AnyIcon } from "@deskpro/deskpro-ui";
 import type { Maybe } from "../../../types";
-import type { IssueItem, IssueAttachment } from "../../../context/StoreProvider/types";
+import type { IssueItem, IssueAttachment } from "../../../services/jira/types";
 
 type Props = {
-  issue?: IssueItem,
+  issue?: Maybe<IssueItem>,
   attachments?: Maybe<IssueAttachment[]>,
 };
 
@@ -167,4 +167,4 @@ const Details: FC<Props> = ({ issue, attachments }) => {
   );
 };
 
-export {Details};
+export { Details };

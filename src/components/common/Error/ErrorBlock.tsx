@@ -17,12 +17,12 @@ const StyledErrorBlock = styled(P5)`
 `;
 
 const ErrorBlock: FC<Props> = ({ text = DEFAULT_ERROR }) => (
-  <>
+  <div style={{ width: "100%" }}>
     {Array.isArray(text)
       ? text.map((msg, idx) => (<StyledErrorBlock key={idx}>{msg}</StyledErrorBlock>))
       : <StyledErrorBlock>{text}</StyledErrorBlock>
     }
-  </>
+  </div>
 );
 
 export { ErrorBlock };

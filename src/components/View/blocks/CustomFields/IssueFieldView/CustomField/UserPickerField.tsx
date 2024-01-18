@@ -14,13 +14,13 @@ export const UserPickerField: FC<MappedViewProps> = ({ value }: MappedViewProps)
     }
 
     return (
-      <>
+      <div>
         <Member
           name={get(value, ["displayName"])}
           avatarUrl={get(value, ["avatarUrls", "24x24"])}
         />
         {nbsp}
         <LinkIcon href={`${getBaseUrl()}/jira/people/${get(value, ["accountId"])}`} />
-      </>
+      </div>
     );
 };

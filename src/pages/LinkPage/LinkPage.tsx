@@ -6,26 +6,28 @@ import {
   useDeskproAppClient,
   useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
-import { useStore } from "../../context/StoreProvider/hooks";
 import {
+  useSearch,
+  useReplyBox,
   useSetAppTitle,
   useRegisterElements,
 } from "../../hooks";
-import { addRemoteLink, getIssueByKey, searchIssues } from "../../context/StoreProvider/api";
-// import { CreateLinkIssue } from "../components/CreateLinkIssue/CreateLinkIssue";
-import { ticketReplyEmailsSelectionStateKey, ticketReplyNotesSelectionStateKey } from "../../utils";
+import { setEntityService } from "../../services/deskpro";
+import { addRemoteLink, getIssueByKey } from "../../services/jira";
 import { Link } from "../../components";
 import type { FC } from "react";
-import type { IssueKey } from "../../types";
+import type { IssueItem } from "../../services/jira/types";
 
 const LinkPage: FC = () => {
   const navigate = useNavigate();
   const { context } = useDeskproLatestAppContext();
-  const [state, dispatch] = useStore();
-  const [selected, setSelected] = useState<IssueKey[]>([]);
-  const [isLinkIssuesLoading, setIsLinkIssuesLoading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selected, setSelected] = useState<Array<IssueItem["key"]>>([]);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { client } = useDeskproAppClient();
   const ticketId = useMemo(() => get(context, ["data", "ticket", "id"]), [context]);
+  const { issues, isLoading } = useSearch(searchQuery);
+  const { setSelectionState } = useReplyBox();
 
   useSetAppTitle("Add Issues");
 
@@ -37,20 +39,9 @@ const LinkPage: FC = () => {
     });
   }, [client]);
 
-  const debounced = useDebouncedCallback<(v: string) => void>((q) => {
-    if (!q || !client) {
-      dispatch({ type: "linkIssueSearchList", list: [] });
-      return;
-    }
+  const onChangeSearchQuery = useDebouncedCallback(setSearchQuery, 1000);
 
-    searchIssues(client, q, { withSubtask: true })
-      .then((list) =>  dispatch({ type: "linkIssueSearchList", list }));
-  },500);
-
-  const search = (q: string) => {
-    dispatch({ type: "linkIssueSearchListLoading" });
-    debounced(q);
-  };
+  const onNavigateToCreate = useCallback(() => navigate("/create"), [navigate]);
 
   const onChangeSelectedIssue = (key: string) => {
     if (selected.includes(key)) {
@@ -65,60 +56,42 @@ const LinkPage: FC = () => {
       return;
     }
 
-    const commentOnNote = context?.settings?.default_comment_on_ticket_note === true;
-    const commentOnReply = context?.settings?.default_comment_on_ticket_reply === true;
+    setIsSubmitting(true);
 
-    setIsLinkIssuesLoading(true);
-
-    const updates = selected.map(async (key: string) => {
-      const issue = await getIssueByKey(client, key);
-
-      return client
-          .getEntityAssociation("linkedJiraDataCentreIssue", ticketId)
-          .set(key, issue)
-          .then(async () => commentOnNote && client?.setState(ticketReplyNotesSelectionStateKey(ticketId, issue.id), {
-            id: issue.id,
-            selected: true,
-          }))
-          .then(async () => commentOnReply && client?.setState(ticketReplyEmailsSelectionStateKey(ticketId, issue.id), {
-            id: issue.id,
-            selected: true,
-          }))
-      ;
-    });
-
-    updates.push(...selected.map((key: string) => addRemoteLink(
+    Promise.all([
+      ...selected.map(async (key: IssueItem["key"]) => {
+        const issue = await getIssueByKey(client, key);
+        return setEntityService(client, ticketId, key, issue);
+      }),
+      ...selected.map((key: string) => addRemoteLink(
         client,
         key,
         context?.data.ticket.id as string,
         context?.data.ticket.subject as string,
         context?.data.ticket.permalinkUrl as string
-    )));
-
-    Promise.all(updates)
+      )),
+      ...selected.map((issueKey) => setSelectionState(issueKey, true, "email")),
+      ...selected.map((issueKey) => setSelectionState(issueKey, true, "note")),
+    ])
       .then(() => navigate("/home"))
-      .catch((error) => dispatch({ type: "error", error }))
-      .finally(() => setIsLinkIssuesLoading(false))
+      .finally(() => setIsSubmitting(false))
     ;
-  }, [context, ticketId, dispatch, client, selected, navigate]);
+  }, [context, ticketId, client, selected, navigate, setSelectionState]);
 
   const onCancel = useCallback(() => navigate("/home"), [navigate]);
 
   return (
-    <>
-      {/*<CreateLinkIssue selected="link" />*/}
-      <Link
-        isFetching={state.linkIssueSearchResults?.loading}
-        onChangeSearch={search}
-        isSubmitting={isLinkIssuesLoading}
-        onLinkIssues={linkIssues}
-        onCancel={onCancel}
-        selectedIssues={selected}
-        issues={get(state, ["linkIssueSearchResults", "list"], [])}
-        selectedIssueIds={selected}
-        onChangeSelectedIssue={onChangeSelectedIssue}
-      />
-    </>
+    <Link
+      isFetching={isLoading}
+      onChangeSearch={onChangeSearchQuery}
+      isSubmitting={isSubmitting}
+      onLinkIssues={linkIssues}
+      onCancel={onCancel}
+      issues={issues}
+      selectedIssueIds={selected}
+      onChangeSelectedIssue={onChangeSelectedIssue}
+      onNavigateToCreate={onNavigateToCreate}
+    />
   );
 };
 

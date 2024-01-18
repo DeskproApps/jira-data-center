@@ -23,8 +23,8 @@ import {
   useDeskproAppTheme,
   useDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { searchIssues } from "../../../context/StoreProvider/api";
-import { IssueItem, IssueFormData } from "../../../context/StoreProvider/types";
+import { searchIssues } from "../../../services/jira";
+import { IssueItem, IssueFormData } from "../../../services/jira/types";
 import { normalize } from "../../../utils";
 import type { FC } from "react";
 import type { FieldHelperProps } from "formik";

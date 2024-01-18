@@ -1,7 +1,7 @@
 import size from "lodash/size";
 import { NoFound } from "./NoFound";
 import type { FC, ReactNode } from "react";
-import type { IssueItem } from "../../../context/StoreProvider/types";
+import type { IssueItem } from "../../../services/jira/types";
 
 export type Props = {
   issues?: IssueItem[],

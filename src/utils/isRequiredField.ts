@@ -1,14 +1,12 @@
-import get from "lodash/get";
-import type { JiraIssueType, JiraProject, State } from "../context/StoreProvider/types";
+import { get, find } from "lodash";
+import type { JiraIssueType, JiraProject, } from "../services/jira/types";
 
-const isRequiredField = ({ state, fieldName, projectId, issueTypeId }: {
-  state: State,
+const isRequiredField = ({ projects, fieldName, projectId, issueTypeId }: {
+  projects: JiraProject[],
   fieldName: string,
   projectId: JiraProject["id"],
   issueTypeId: JiraIssueType["id"],
 }): boolean => {
-  const projects = get(state, ["dataDependencies", "createMeta", "projects"], null);
-
   if (!Array.isArray(projects) || projects.length === 0) {
     return false;
   }
@@ -19,7 +17,7 @@ const isRequiredField = ({ state, fieldName, projectId, issueTypeId }: {
     return false;
   }
 
-  const issueType = project.issuetypes.find(({ id }: JiraIssueType) => id === issueTypeId);
+  const issueType = find(project.issuetypes, { id: issueTypeId });
 
   return get(issueType, ["fields", fieldName, "required"]);
 };

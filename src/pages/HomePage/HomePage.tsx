@@ -1,44 +1,44 @@
 import { useMemo, useState, useCallback } from "react";
+import { toLower } from "lodash";
 import { useNavigate } from "react-router-dom";
 import {
   LoadingSpinner,
   useDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { useStore } from "../../context/StoreProvider/hooks";
 import {
   useSetAppTitle,
+  useLinkedIssues,
+  useSetBadgeCount,
   useRegisterElements,
-  useLoadLinkedIssues,
 } from "../../hooks";
 import { Home } from "../../components";
 import type { FC } from "react";
-import type { IssueItem } from "../../context/StoreProvider/types";
+import type { IssueItem } from "../../services/jira/types";
 
 const HomePage: FC = () => {
   const navigate = useNavigate();
   const { client } = useDeskproAppClient();
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [state] = useStore();
-  const isLoading = state.linkedIssuesResults?.loading || state.linkedIssuesResults?.loading === undefined;
+  const { issues, isLoading } = useLinkedIssues();
 
   const linkedIssues = useMemo(() => {
     if (!searchQuery) {
-      return state.linkedIssuesResults?.list || [];
+      return issues || [];
     }
 
-    return (state.linkedIssuesResults?.list || [])
-      .filter((item) => item.key.replace('-', '').toLowerCase().includes(
-        searchQuery.replace('-', '').toLowerCase()
-      ));
-  }, [state.linkedIssuesResults, searchQuery]);
+    return (issues || []).filter((item) => {
+      return toLower(item.key.replace('-', ''))
+        .includes(toLower(searchQuery.replace('-', '')))
+    });
+  }, [issues, searchQuery]);
 
   const onNavigateToIssue = useCallback((issueKey: IssueItem["key"]) => {
     navigate(`/view/${issueKey}`)
   }, [navigate]);
 
-  useLoadLinkedIssues();
-
   useSetAppTitle("JIRA Issues");
+
+  useSetBadgeCount(issues);
 
   useRegisterElements(({ registerElement }) => {
     registerElement("refresh", { type: "refresh_button" });
@@ -52,7 +52,7 @@ const HomePage: FC = () => {
           payload: { type: "changePage", path: "/view_permissions" },
         },
       ]});
-  }, [client, state]);
+  }, [client]);
 
   if (isLoading) {
     return (
@@ -65,7 +65,6 @@ const HomePage: FC = () => {
       issues={linkedIssues}
       onChangeSearch={setSearchQuery}
       onNavigateToIssue={onNavigateToIssue}
-      isError={state.hasGeneratedIssueFormSuccessfully === false}
     />
   );
 };

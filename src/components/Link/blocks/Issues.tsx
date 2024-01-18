@@ -4,14 +4,13 @@ import { LoadingSpinner, HorizontalDivider } from "@deskpro/app-sdk";
 import { NoFoundIssues, Card } from "../../common";
 import { IssueItem } from "../../IssueItem";
 import type { FC } from "react";
-import type { IssueItem as IssueItemType } from "../../../context/StoreProvider/types";
-import type { IssueKey } from "../../../types";
+import type { IssueItem as IssueItemType } from "../../../services/jira/types";
 
 type Props = {
   isLoading?: boolean,
   issues?: IssueItemType[],
-  selectedIssueIds: IssueKey[],
-  onChangeSelectedIssue: (issueKey: IssueKey) => void,
+  selectedIssueIds: Array<IssueItemType["key"]>,
+  onChangeSelectedIssue: (issueKey: IssueItemType["key"]) => void,
 };
 
 const Issues: FC<Props> = ({

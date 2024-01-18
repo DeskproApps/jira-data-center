@@ -1,15 +1,15 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import every from "lodash/every";
 import { P1, Stack, Button } from "@deskpro/deskpro-ui";
 import {
     IDeskproClient,
-    useDeskproAppTheme,
     useDeskproAppClient,
     useDeskproAppEvents,
     adminGenericProxyFetch,
 } from "@deskpro/app-sdk";
+import { Invalid, Secondary } from "../../components/common";
 import type { FC } from "react";
-import type { JiraUser } from "../../context/StoreProvider/types";
+import type { JiraUser } from "../../services/jira/types";
 import type { Settings } from "../../types";
 
 const preInstalledRequest = async (
@@ -42,14 +42,12 @@ const preInstalledRequest = async (
 
 const VerifySettingsPage: FC = () => {
     const { client } = useDeskproAppClient();
-    const { theme } = useDeskproAppTheme();
-
     const [currentUser, setCurrentUser] = useState<JiraUser|null>(null);
     const [settings, setSettings] = useState<Settings>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
-    const errorMessage = useMemo(() => "Failed to connect to Jira, settings seem to be invalid", []);
+    const errorMessage = "Failed to connect to Jira, settings seem to be invalid";
 
     useDeskproAppEvents({
         onAdminSettingsChange: setSettings,
@@ -74,29 +72,27 @@ const VerifySettingsPage: FC = () => {
     }, [client, settings, errorMessage]);
 
     return (
-        <div style={{ margin: "0 -8px" }}>
-            <Stack align="baseline" >
-                <Button
-                    text="Verify Settings"
-                    intent="secondary"
-                    style={{ minWidth: "72px", justifyContent: "center" }}
-                    onClick={onVerifySettings}
-                    loading={isLoading}
-                    disabled={!every([settings?.instance_url, settings?.api_key] || isLoading)}
-                />&nbsp;
+        <Stack align="baseline" >
+            <Button
+                text="Verify Settings"
+                intent="secondary"
+                style={{ minWidth: "72px", justifyContent: "center" }}
+                onClick={onVerifySettings}
+                loading={isLoading}
+                disabled={!every([settings?.instance_url, settings?.api_key] || isLoading)}
+            />&nbsp;
 
-                {currentUser
-                    ? (
-                        <P1 style={{ marginBottom: "6px" }}>
-                            Verified as <span style={{ color: theme.colors.grey100 }}>
-                                {currentUser.displayName} {`<${currentUser.emailAddress}>`}
-                            </span>
-                        </P1>
-                    )
-                    : <P1 style={{ color: theme.colors.red100 }}>{error}</P1> || ""
-                }
-            </Stack>
-        </div>
+            {currentUser
+                ? (
+                    <P1 style={{ marginBottom: "6px" }}>
+                        Verified as <Secondary type="p1">
+                            {currentUser.displayName} {`<${currentUser.emailAddress}>`}
+                        </Secondary>
+                    </P1>
+                )
+                : <Invalid type="p1">{error}</Invalid> || ""
+            }
+        </Stack>
     );
 };
 
