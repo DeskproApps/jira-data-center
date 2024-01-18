@@ -1,5 +1,4 @@
-import isNumber from "lodash/isNumber";
-import isNaN from "lodash/isNaN";
+import { isNaN, isNumber } from "lodash";
 import { NoValue } from "../NoValue";
 import type { FC } from "react";
 import type { MappedViewProps } from "../types";

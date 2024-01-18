@@ -6,3 +6,4 @@ export { View } from "./View";
 export { CreateIssueComment } from "./CreateIssueComment";
 export { ViewPermissions } from "./ViewPermissions";
 export { ErrorFallback } from "./Error";
+export { Edit } from "./Edit";

@@ -1,4 +1,4 @@
-import size from "lodash/size";
+import { isEmpty } from "lodash";
 import { IssueFieldView } from "./IssueFieldView/IssueFieldView";
 import type { FC } from "react";
 import type { Maybe } from "../../../../types";
@@ -9,9 +9,10 @@ type Props = {
 };
 
 const CustomFields: FC<Props> = ({ customFields }) => {
-  if (!Array.isArray(customFields) || !size(customFields)) {
+  if (isEmpty(customFields)) {
     return (<></>);
   }
+
 
   return (
     <>

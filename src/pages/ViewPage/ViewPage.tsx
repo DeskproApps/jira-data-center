@@ -32,13 +32,13 @@ const ViewPage: FC = () => {
       type: "home_button",
       payload: { type: "changePage", path: "/home" },
     });
-    // issueKey && registerElement("edit", {
-    //   type: "edit_button",
-    //   payload: {
-    //     type: "changePage",
-    //     path: `/edit/${issueKey}`,
-    //   },
-    // });
+    issueKey && registerElement("edit", {
+      type: "edit_button",
+      payload: {
+        type: "changePage",
+        path: `/edit/${issueKey}`,
+      },
+    });
     issueKey && registerElement("menu", {
       type: "menu",
       items: [{

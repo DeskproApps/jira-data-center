@@ -17,7 +17,7 @@ import {
   useSetAppTitle,
   useRegisterElements,
 } from "../../hooks";
-import { IssueForm } from "../../components/IssueForm/IssueForm";
+import { Edit } from "../../components";
 import type { FormikHelpers } from "formik";
 import type { FC } from "react";
 import type { IssueMeta } from "../../types";
@@ -77,14 +77,13 @@ const EditPage: FC = () => {
     }
 
     return (
-        <IssueForm
-            type="update"
-            onSubmit={onSubmit}
-            loading={loading}
-            apiErrors={apiErrors}
-            values={values}
-            editMeta={editMeta}
-            issueKey={issueKey}
+        <Edit
+          onSubmit={onSubmit}
+          loading={loading}
+          apiErrors={apiErrors}
+          values={values}
+          editMeta={editMeta}
+          issueKey={issueKey}
         />
     );
 };

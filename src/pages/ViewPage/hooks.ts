@@ -18,7 +18,7 @@ type UseIssue = (issueKey?: Maybe<IssueItem["key"]>) => {
 
 const useIssue: UseIssue = (issueKey) => {
   const issue = useQueryWithClient(
-    [QueryKey.ISSUE, issueKey as IssueItem["key"]],
+    [QueryKey.ISSUES, issueKey as IssueItem["key"]],
     (client) => listLinkedIssues(client, [issueKey as IssueItem["key"]]),
     { enabled: Boolean(issueKey) },
   );

@@ -22,16 +22,16 @@ export const mandatoryFields = [
 export type SubmitIssueFormData = Omit<IssueFormData, "labels"|"priority"|"assigneeUserId"|"reporterUserId">
     & Partial<Pick<IssueFormData, "labels"|"priority"|"assigneeUserId"|"reporterUserId">>;
 
-export interface IssueFormProps {
+export type IssueFormProps = {
+  type: "create"|"update",
   onSubmit: (
     values: SubmitIssueFormData,
     formikHelpers: FormikHelpers<IssueFormData>,
     meta: Record<string, IssueMeta>,
-  ) => void | Promise<void>;
-  type: "create"|"update";
-  apiErrors?: Record<string, string>;
-  values?: IssueFormData;
-  loading?: boolean;
-  editMeta?: Record<string, IssueMeta>;
-  issueKey?: string;
+  ) => void | Promise<void>,
+  apiErrors?: Record<string, string>,
+  values?: IssueFormData,
+  loading?: boolean,
+  editMeta?: Record<string, IssueMeta>,
+  issueKey?: string,
 }
