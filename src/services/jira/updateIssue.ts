@@ -6,7 +6,7 @@ import { InvalidRequestResponseError } from "./InvalidRequestResponseError";
 import type { IDeskproClient } from "@deskpro/app-sdk";
 import type { SubmitIssueFormData } from "../../components/IssueForm/types";
 import type { IssueMeta } from "../../types";
-import type { IssueItem, AttachmentFile, JiraAPIError } from "./types";
+import type { IssueItem, JiraAPIError } from "./types";
 
 export const updateIssue = async (
   client: IDeskproClient,
@@ -54,30 +54,6 @@ export const updateIssue = async (
 
   if (has(res, ["errors"]) || has(res, ["errorMessages"])) {
     throw new InvalidRequestResponseError("Failed to update JIRA issue", res as JiraAPIError);
-  }
-
-  if ((data.attachments ?? []).length) {
-    const attachmentUploads = data.attachments.map((attachment: AttachmentFile) => {
-      if (attachment.file) {
-        const form = new FormData();
-        form.append(`file`, attachment.file);
-
-        return baseRequest(client, {
-          url: `/issue/${issueKey}/attachments`,
-          method: "POST",
-          data: form
-        });
-      }
-
-      if (attachment.id && attachment.delete) {
-        return baseRequest(client, {
-          url: `/attachment/${attachment.id}`,
-          method: "DELETE",
-        });
-      }
-    });
-
-    await Promise.all(attachmentUploads);
   }
 
   return res;

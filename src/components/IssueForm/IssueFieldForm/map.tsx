@@ -41,7 +41,7 @@ const map = (type: FieldType): MaybeField => match<FieldType, MaybeField>(type)
 
 interface CustomFieldProps {
     meta: IssueMeta;
-    apiErrors?: Record<string, string>;
+    apiErrors?: string|string[]|Record<string, string>;
     extraLabels?: string[];
 }
 

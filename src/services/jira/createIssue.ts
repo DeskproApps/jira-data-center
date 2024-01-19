@@ -6,7 +6,7 @@ import { InvalidRequestResponseError } from "./InvalidRequestResponseError";
 import type { IDeskproClient } from "@deskpro/app-sdk";
 import type { IssueMeta } from "../../types";
 import type { SubmitIssueFormData } from "../../components/IssueForm/types";
-import type { AttachmentFile, JiraIssueDetails } from "./types";
+import type { JiraIssueDetails } from "./types";
 
 export const createIssue = async (
   client: IDeskproClient,
@@ -57,23 +57,6 @@ export const createIssue = async (
   if (!issueId || !issueKey) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     throw new InvalidRequestResponseError("Failed to create JIRA issue", res as any);
-  }
-
-  if ((data.attachments ?? []).length) {
-    const attachmentUploads = data.attachments.map((attachment: AttachmentFile) => {
-      if (attachment.file) {
-        const form = new FormData();
-        form.append(`file`, attachment.file);
-
-        return baseRequest(client, {
-          url: `/issue/${issueKey}/attachments`,
-          method: "POST",
-          data: form,
-        });
-      }
-    });
-
-    await Promise.all(attachmentUploads);
   }
 
   return res;

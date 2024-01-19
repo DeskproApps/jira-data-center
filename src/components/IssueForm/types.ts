@@ -29,7 +29,7 @@ export type IssueFormProps = {
     formikHelpers: FormikHelpers<IssueFormData>,
     meta: Record<string, IssueMeta>,
   ) => void | Promise<void>,
-  apiErrors?: Record<string, string>,
+  apiErrors?: string|string[]|Record<string, string>,
   values?: IssueFormData,
   loading?: boolean,
   editMeta?: Record<string, IssueMeta>,

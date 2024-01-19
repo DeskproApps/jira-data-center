@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { size, isPlainObject, isString } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { IntlProvider } from "react-intl";
 import { Formik, FormikHelpers } from "formik";
@@ -22,11 +23,10 @@ import { CustomField } from "./IssueFieldForm/map";
 import {
   ErrorBlock,
   DropdownSelect,
-  AttachmentsField,
   DropdownMultiSelect,
   SubtaskDropdownWithSearch,
 } from "../common";
-import type { IssueFormData, AttachmentFile } from "../../services/jira/types";
+import type { IssueFormData } from "../../services/jira/types";
 import type { IssueFormProps } from "./types";
 import "./IssueForm.css";
 
@@ -98,15 +98,22 @@ export const IssueForm: FC<IssueFormProps> = ({
                         return isRequiredField({ projects, fieldName, projectId, issueTypeId })
                     })(projects, values.projectId, values.issueTypeId);
 
+                    const fullErrors = [
+                      ...Object.values(errors),
+                      ...(isPlainObject(apiErrors)
+                        ? Object.values(apiErrors as object)
+                        : Array.isArray(apiErrors)
+                        ? apiErrors
+                        : isString(apiErrors)
+                        ? [apiErrors]
+                        : []
+                      ),
+                    ];
+
                     return (
                         <Stack gap={10} vertical>
-                            {Object.values({...errors, ...apiErrors}).length > 0 && submitCount > 0 && (
-                                <ErrorBlock
-                                  text={Object.values({
-                                    ...errors,
-                                    ...(Array.isArray(apiErrors) ? apiErrors : [apiErrors]),
-                                  }) as string|string[]}
-                                />
+                            {(Boolean(size(fullErrors)) && Boolean(submitCount)) && (
+                                <ErrorBlock text={fullErrors} />
                             )}
                             <div className="create-form-field">
                                 <FormikField<string> name="projectId">
@@ -244,14 +251,6 @@ export const IssueForm: FC<IssueFormProps> = ({
                                     </FormikField>
                                 </div>
                             )}
-                            <div className="create-form-field">
-                                <Label label="Attachments" />
-                                <FormikField<AttachmentFile[]> name="attachments">
-                                    {([field, , helpers]) => (
-                                        <AttachmentsField onFiles={helpers.setValue} existing={field.value} />
-                                    )}
-                                </FormikField>
-                            </div>
                             {is("labels") && (
                                 <div className="create-form-field">
                                     <FormikField<string[]> name="labels">
@@ -281,7 +280,7 @@ export const IssueForm: FC<IssueFormProps> = ({
                                 <Stack justify="space-between">
                                     <Button text={type === "create" ? "Create" : "Update"} onClick={() => submitForm()} loading={loading} />
                                     {type === "update" && issueKey ? (
-                                        <Button text="Cancel" intent="secondary" onClick={() => navigate(`/view${issueKey}`)} />
+                                        <Button text="Cancel" intent="secondary" onClick={() => navigate(`/view/${issueKey}`)} />
                                     ) : (
                                         <Button text="Reset" intent="secondary" onClick={() => resetForm()} />
                                     )}
