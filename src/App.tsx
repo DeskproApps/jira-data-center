@@ -1,28 +1,73 @@
-import {DeskproAppProvider} from "@deskpro/app-sdk";
-import { StoreProvider } from "./context/StoreProvider/StoreProvider";
-import { Main } from "./pages/Main";
-import "./App.css";
+import { get, noop } from "lodash";
+import { match } from "ts-pattern";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import {
+  LoadingSpinner,
+  useDeskproAppClient,
+  useDeskproAppEvents,
+  useDeskproLatestAppContext,
+} from "@deskpro/app-sdk";
+import { isNavigatePayload } from "./utils";
+import { useUnlinkIssue, useRegisterElements } from "./hooks";
+import {
+  EditPage,
+  HomePage,
+  LinkPage,
+  ViewPage,
+  CreatePage,
+  LoadingAppPage,
+  VerifySettingsPage,
+  ViewPermissionsPage,
+  CreateIssueCommentPage,
+} from "./pages";
+import type { ElementEventPayload } from "./types";
 
-import "flatpickr/dist/themes/light.css";
-import "tippy.js/dist/tippy.css";
-import "simplebar/dist/simplebar.min.css";
+const App = () => {
+  const navigate = useNavigate();
+  const { client } = useDeskproAppClient();
+  const { context } = useDeskproLatestAppContext();
+  const { unlink, isLoading } = useUnlinkIssue();
 
-import "@deskpro/deskpro-ui/dist/deskpro-ui.css";
-import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
+  useRegisterElements(({ registerElement }) => {
+    registerElement("refresh", { type: "refresh_button" });
+  });
 
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
+  useDeskproAppEvents({
+    onShow: () => {
+      client && setTimeout(() => client.resize(), 200);
+    },
+    onElementEvent: (_, __, payload) => {
+      match<ElementEventPayload>(payload as ElementEventPayload)
+        .with({ type: "changePage" }, () => {
+          if (isNavigatePayload(payload as ElementEventPayload)) {
+            navigate(get(payload, ["path"]));
+          }
+        })
+        .with({ type: "unlink" }, () => unlink(get(payload, ["issueKey"])))
+        .otherwise(noop)
+      ;
+    },
+  }, [client, context]);
 
-TimeAgo.addDefaultLocale(en)
+  if (!client || isLoading) {
+    return (
+      <LoadingSpinner/>
+    );
+  }
 
-function App() {
   return (
-    <DeskproAppProvider>
-      <StoreProvider>
-        <Main />
-      </StoreProvider>
-    </DeskproAppProvider>
+    <Routes>
+      <Route path="/admin/verify_settings" element={<VerifySettingsPage />}/>
+      <Route path="/home" element={<HomePage />}/>
+      <Route path="/link" element={<LinkPage />}/>
+      <Route path="/view/:issueKey" element={<ViewPage />}/>
+      <Route path="/create" element={<CreatePage />}/>
+      <Route path="/edit/:issueKey" element={<EditPage />}/>
+      <Route path="/comment/:issueKey" element={<CreateIssueCommentPage />}/>
+      <Route path="/view_permissions" element={<ViewPermissionsPage />}/>
+      <Route index  element={<LoadingAppPage />}/>
+    </Routes>
   );
 }
 
-export default App;
+export { App };

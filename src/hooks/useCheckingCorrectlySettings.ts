@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import get from "lodash/get";
+import { useLocation } from "react-router-dom";
 import { useDeskproLatestAppContext } from "@deskpro/app-sdk";
-import { useStore } from "../context/StoreProvider/hooks";
 import { TicketContext } from "../types";
 
 type UseCheckingCorrectlySettings = () => {
@@ -9,24 +9,23 @@ type UseCheckingCorrectlySettings = () => {
 };
 
 const useCheckingCorrectlySettings: UseCheckingCorrectlySettings = () => {
-    const [isSettingsError, setIsSettingsError] = useState<boolean>(false);
+  const { pathname } = useLocation();
+  const [isSettingsError, setIsSettingsError] = useState<boolean>(false);
+  const { context } = useDeskproLatestAppContext() as { context: TicketContext };
+  const instanceUrl = useMemo(() => get(context, ["settings", "instance_url"]), [context]);
+  const isAdmin = useMemo(() => pathname.includes("/admin/"), [pathname]);
 
-    const [state] = useStore();
-    const { context } = useDeskproLatestAppContext() as { context: TicketContext };
-    const instanceUrl = get(context, ["settings", "instance_url"]);
-    const page = get(state, ["page"]);
+  useEffect(() => {
+    if (isAdmin) {
+      return;
+    }
 
-    useEffect(() => {
-        if (page === "verify_settings") {
-            return;
-        }
+    if (context?.settings && !instanceUrl) {
+      setIsSettingsError(true);
+    }
+  }, [context, instanceUrl, isAdmin]);
 
-        if (context?.settings && !instanceUrl) {
-            setIsSettingsError(true);
-        }
-    }, [context, page, instanceUrl]);
-
-    return { isSettingsError };
+  return { isSettingsError };
 };
 
 export { useCheckingCorrectlySettings };
