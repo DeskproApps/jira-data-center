@@ -32,7 +32,7 @@ type Props = {
 
 const Details: FC<Props> = ({ issue, attachments }) => {
   const { theme } = useDeskproAppTheme();
-  const { getBaseUrl } = useExternalLink();
+  const { getBaseUrl, getUserUrl } = useExternalLink();
 
   return (
     <>
@@ -102,23 +102,29 @@ const Details: FC<Props> = ({ issue, attachments }) => {
       <Property
         label="Assignee"
         text={!issue?.assigneeId ? "-" : (
-          <>
+          <Stack gap={6} align="center">
             <Member
               name={issue.assigneeName}
               avatarUrl={issue.assigneeAvatarUrl}
             />
-          </>
+            {getUserUrl(issue.assigneeId) && (
+              <LinkIcon href={getUserUrl(issue.assigneeId) as string}/>
+            )}
+          </Stack>
         )}
       />
       <Property
         label="Reporter"
         text={!issue?.reporterName ? "-" : (
-          <>
+          <Stack gap={6} align="end">
             <Member
               name={issue.reporterName}
               avatarUrl={issue.reporterAvatarUrl}
             />
-          </>
+            {getUserUrl(issue.reporterId) && (
+              <LinkIcon href={getUserUrl(issue.reporterId) as string}/>
+            )}
+          </Stack>
         )}
       />
       <Property
