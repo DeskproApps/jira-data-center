@@ -2,11 +2,12 @@ import { useMemo, useCallback } from "react";
 import { get } from "lodash";
 import { useDeskproLatestAppContext } from "@deskpro/app-sdk";
 import type { Maybe, TicketContext } from "../types";
-import type { IssueItem } from "../services/jira/types";
+import type { IssueItem, JiraUser } from "../services/jira/types";
 
 type UseExternalLink = () => {
   getBaseUrl: () => Maybe<string>,
   getIssueUrl: (issueKey: Maybe<IssueItem["key"]>) => Maybe<string>,
+  getUserUrl: (username: Maybe<JiraUser["name"]>) => Maybe<string>,
 };
 
 const useExternalLink: UseExternalLink = () => {
@@ -25,7 +26,13 @@ const useExternalLink: UseExternalLink = () => {
         : `${instanceUrl}/browse/${issueKey}`;
     }, [instanceUrl]);
 
-    return { getBaseUrl, getIssueUrl };
+    const getUserUrl = useCallback((username?: Maybe<JiraUser["name"]>) => {
+      return (!instanceUrl || !username)
+        ? "#"
+        : `${instanceUrl}/secure/ViewProfile.jspa?name=${username}`;
+    }, [instanceUrl]);
+
+    return { getBaseUrl, getIssueUrl, getUserUrl };
 };
 
 export { useExternalLink };

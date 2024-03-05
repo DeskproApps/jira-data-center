@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { get } from "lodash";
-import { P5 } from "@deskpro/deskpro-ui";
+import { P5, Stack } from "@deskpro/deskpro-ui";
 import {
   Link,
   Title,
@@ -25,7 +25,7 @@ export type Props = {
 
 export const IssueItem: FC<Props> = ({ issue, onClickTitle }) => {
   const entityCount = useAssociatedEntityCount(issue.key);
-  const { getBaseUrl, getIssueUrl } = useExternalLink();
+  const { getBaseUrl, getIssueUrl, getUserUrl } = useExternalLink();
   const issueUrl = getIssueUrl(get(issue, ["key"]));
 
   const onClick = useCallback((e: MouseEvent) => {
@@ -77,10 +77,12 @@ export const IssueItem: FC<Props> = ({ issue, onClickTitle }) => {
       <Property
         label="Reporter"
         text={!issue.reporterName ? "-" : (
-          <Member
-            name={issue.reporterName}
-            avatarUrl={issue.reporterAvatarUrl}
-          />
+          <Stack gap={6} align="center">
+            <Member name={issue.reporterName} avatarUrl={issue.reporterAvatarUrl}/>
+            {getUserUrl(issue.reporterId) && (
+              <LinkIcon href={getUserUrl(issue.reporterId) as string}/>
+            )}
+          </Stack>
         )}
       />
     </>
