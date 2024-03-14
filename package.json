@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@atlaskit/adf-utils": "14.4.0",
-    "@deskpro/app-sdk": "^3.0.14",
+    "@deskpro/app-sdk": "^3.0.18",
     "@deskpro/deskpro-ui": "^7.1.0",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
@@ -27,7 +27,6 @@
     "flatpickr": "^4.6.13",
     "formik": "^2.2.9",
     "html-truncate": "^1.2.2",
-    "iframe-resizer": "^4.3.9",
     "javascript-time-ago": "^2.5.9",
     "lodash": "^4.17.21",
     "polished": "^4.1.1",
