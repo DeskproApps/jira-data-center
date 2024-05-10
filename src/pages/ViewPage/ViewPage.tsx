@@ -42,7 +42,7 @@ const ViewPage: FC = () => {
     issueKey && registerElement("menu", {
       type: "menu",
       items: [{
-        title: "Unlink Ticket",
+        title: "Unlink Issue",
         payload: { type: "unlink", issueKey },
       }],
     });
