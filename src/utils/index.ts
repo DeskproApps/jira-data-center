@@ -1,7 +1,6 @@
 export { addBlankTargetToLinks } from "./addBlankTargetToLinks";
 export { fetchAll } from "./fetchAll";
 export { getDateFromValue } from "./getDateFromValue";
-export { isNeedField } from "./isNeedField";
 export { isRequiredField } from "./isRequiredField";
 export { normalize } from "./normalize";
 export { toBase64 } from "./toBase64";
