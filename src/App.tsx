@@ -33,9 +33,6 @@ const App = () => {
   });
 
   useDeskproAppEvents({
-    onShow: () => {
-      client && setTimeout(() => client.resize(), 200);
-    },
     onElementEvent: (_, __, payload) => {
       match<ElementEventPayload>(payload as ElementEventPayload)
         .with({ type: "changePage" }, () => {
