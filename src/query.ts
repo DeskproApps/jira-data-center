@@ -20,6 +20,11 @@ const QueryKey = {
   ATTACHMENTS: "attachments",
   ISSUE_COMMENTS: "issue_comments",
   ISSUE_DEPENDENCIES: "issue_dependencies",
-}
+  PROJECTS: "projects",
+  ISSUE_TYPES: "issue_types",
+  ISSUE_FIELDS: "issue_fields",
+  USERS: "users",
+  LABELS: "labels"
+} as const;
 
 export { queryClient, QueryKey };
