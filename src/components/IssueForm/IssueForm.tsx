@@ -26,6 +26,7 @@ import {
   DropdownMultiSelect,
   SubtaskDropdownWithSearch,
 } from "../common";
+import type { TicketData, Settings } from "../../types";
 import type { IssueFormData } from "../../services/jira/types";
 import type { IssueFormProps } from "./types";
 import "./IssueForm.css";
@@ -40,7 +41,7 @@ export const IssueForm: FC<IssueFormProps> = ({
     loading = false,
 }: IssueFormProps) => {
     const navigate = useNavigate();
-    const { context } = useDeskproLatestAppContext();
+    const { context } = useDeskproLatestAppContext<TicketData, Settings>();
     const {
       projects,
       isLoading,

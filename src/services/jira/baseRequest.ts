@@ -7,7 +7,7 @@ import {
   getRequestBody,
 } from "../../utils";
 import { JiraError } from "./JiraError";
-import type { Request, FetchOptions } from "../../types";
+import type { Request } from "../../types";
 
 const baseRequest: Request = async (client, {
   url,
@@ -24,7 +24,7 @@ const baseRequest: Request = async (client, {
   const body = getRequestBody(data);
 
   const requestUrl = `${baseUrl}${isEmpty(params) ? "": `?${params}`}`;
-  const options: FetchOptions = {
+  const options: RequestInit = {
     method,
     body,
     headers: {

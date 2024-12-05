@@ -16,11 +16,12 @@ import { setEntityService } from "../../services/deskpro";
 import { addRemoteLink, getIssueByKey } from "../../services/jira";
 import { Link } from "../../components";
 import type { FC } from "react";
+import type { Settings, TicketData } from "../../types";
 import type { IssueItem } from "../../services/jira/types";
 
 const LinkPage: FC = () => {
   const navigate = useNavigate();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<TicketData, Settings>();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selected, setSelected] = useState<Array<IssueItem["key"]>>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -66,9 +67,9 @@ const LinkPage: FC = () => {
       ...selected.map((key: string) => addRemoteLink(
         client,
         key,
-        context?.data.ticket.id as string,
-        context?.data.ticket.subject as string,
-        context?.data.ticket.permalinkUrl as string
+        context?.data?.ticket.id as string,
+        context?.data?.ticket.subject as string,
+        context?.data?.ticket.permalinkUrl as string
       )),
       ...selected.map((issueKey) => setSelectionState(issueKey, true, "email")),
       ...selected.map((issueKey) => setSelectionState(issueKey, true, "note")),

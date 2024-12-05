@@ -16,7 +16,7 @@ import { APP_PREFIX } from "../constants";
 import type { FC, PropsWithChildren } from "react";
 import type { IDeskproClient, GetStateResponse, TargetAction } from "@deskpro/app-sdk";
 import type { IssueItem } from "../services/jira/types";
-import type { TicketContext, TicketData } from "../types";
+import type { Settings, TicketData } from "../types";
 
 export type ReplyBoxType = "note" | "email";
 
@@ -115,10 +115,10 @@ const ReplyBoxContext = createContext<ReturnUseReplyBox>({
 const useReplyBox = () => useContext<ReturnUseReplyBox>(ReplyBoxContext);
 
 const ReplyBoxProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { context } = useDeskproLatestAppContext() as { context: TicketContext };
+  const { context } = useDeskproLatestAppContext<TicketData, Settings>();
   const { client } = useDeskproAppClient();
   const { issues } = useLinkedIssues();
-  const ticketId = get(context, ["data", "ticket", "id"]);
+  const ticketId = context?.data?.ticket.id;
   const isCommentOnNote = get(context, ["settings", "default_comment_on_ticket_note"]);
   const isCommentOnEmail = get(context, ["settings", "default_comment_on_ticket_reply"]);
 
@@ -167,6 +167,10 @@ const ReplyBoxProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [client, ticketId]);
 
   useInitialisedDeskproAppClient((client) => {
+    if (!ticketId) {
+      return;
+    }
+
     if (isCommentOnNote) {
       registerReplyBoxNotesAdditionsTargetAction(client, ticketId, map(issues, "key"));
       client.registerTargetAction(`${APP_PREFIX}OnReplyBoxNote`, "on_reply_box_note");
