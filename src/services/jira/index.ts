@@ -17,3 +17,4 @@ export { addIssueComment } from "./addIssueComment";
 export { removeRemoteLink } from "./removeRemoteLink";
 export { replaceIssueIdToKey } from "./replaceIssueIdToKey";
 export { getCurrentUser } from "./getCurrentUser";
+export { searchUsers } from "./searchUsers";

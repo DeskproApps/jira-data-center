@@ -3,7 +3,7 @@ export * from "./Typography";
 export { Label } from "./Label";
 export { AttachmentsField } from "./AttachmentsField";
 export { DropdownMultiSelect } from "./DropdownMultiSelect";
-export { DropdownSelect } from "./DropdownSelect";
+export * from "./DropdownSelect";
 export { ErrorBlock } from "./Error";
 export { SubtaskDropdownWithSearch } from "./SubtaskDropdownWithSearch";
 export { Card } from "./Card";

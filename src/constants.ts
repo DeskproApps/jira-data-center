@@ -20,5 +20,7 @@ export const placeholders = {
   API_KEY: "__api_key__"
 };
 
+export const NOT_FOUND = "No item(s) found";
+
 /** Jira */
 export const BASE_URL = `${placeholders.URL}/rest/api/2`;

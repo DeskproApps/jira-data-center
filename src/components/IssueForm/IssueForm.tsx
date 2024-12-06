@@ -22,6 +22,7 @@ import { schema, getInitValues } from "./utils";
 import { CustomField } from "./IssueFieldForm/map";
 import {
   ErrorBlock,
+  UserSelect,
   DropdownSelect,
   DropdownMultiSelect,
   SubtaskDropdownWithSearch,
@@ -45,7 +46,6 @@ export const IssueForm: FC<IssueFormProps> = ({
     const {
       projects,
       isLoading,
-      userOptions,
       extraLabels,
       labelOptions,
       projectOptions,
@@ -206,13 +206,7 @@ export const IssueForm: FC<IssueFormProps> = ({
                                     <FormikField<string> name="assigneeUserId">
                                         {([field, , helpers], { id, error }) => (
                                             <Label htmlFor={id} label="Assignee" error={error}>
-                                                <DropdownSelect
-                                                    helpers={helpers}
-                                                    options={userOptions}
-                                                    id={id}
-                                                    placeholder="Select value"
-                                                    value={field.value}
-                                                />
+                                                <UserSelect id={id} helpers={helpers} value={field.value} />
                                             </Label>
                                         )}
                                     </FormikField>
@@ -223,13 +217,7 @@ export const IssueForm: FC<IssueFormProps> = ({
                                     <FormikField<string> name="reporterUserId">
                                         {([field, , helpers], { id, error }) => (
                                             <Label htmlFor={id} label="Reporter" error={error}>
-                                                <DropdownSelect
-                                                    helpers={helpers}
-                                                    options={userOptions}
-                                                    id={id}
-                                                    placeholder="Select value"
-                                                    value={field.value}
-                                                />
+                                                <UserSelect id={id} helpers={helpers} value={field.value} />
                                             </Label>
                                         )}
                                     </FormikField>
