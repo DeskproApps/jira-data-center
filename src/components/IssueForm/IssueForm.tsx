@@ -22,10 +22,12 @@ import { schema, getInitValues } from "./utils";
 import { CustomField } from "./IssueFieldForm/map";
 import {
   ErrorBlock,
+  UserSelect,
   DropdownSelect,
   DropdownMultiSelect,
   SubtaskDropdownWithSearch,
 } from "../common";
+import type { TicketData, Settings } from "../../types";
 import type { IssueFormData } from "../../services/jira/types";
 import type { IssueFormProps } from "./types";
 import "./IssueForm.css";
@@ -40,11 +42,10 @@ export const IssueForm: FC<IssueFormProps> = ({
     loading = false,
 }: IssueFormProps) => {
     const navigate = useNavigate();
-    const { context } = useDeskproLatestAppContext();
+    const { context } = useDeskproLatestAppContext<TicketData, Settings>();
     const {
       projects,
       isLoading,
-      userOptions,
       extraLabels,
       labelOptions,
       projectOptions,
@@ -205,13 +206,7 @@ export const IssueForm: FC<IssueFormProps> = ({
                                     <FormikField<string> name="assigneeUserId">
                                         {([field, , helpers], { id, error }) => (
                                             <Label htmlFor={id} label="Assignee" error={error}>
-                                                <DropdownSelect
-                                                    helpers={helpers}
-                                                    options={userOptions}
-                                                    id={id}
-                                                    placeholder="Select value"
-                                                    value={field.value}
-                                                />
+                                                <UserSelect id={id} helpers={helpers} value={field.value} />
                                             </Label>
                                         )}
                                     </FormikField>
@@ -222,13 +217,7 @@ export const IssueForm: FC<IssueFormProps> = ({
                                     <FormikField<string> name="reporterUserId">
                                         {([field, , helpers], { id, error }) => (
                                             <Label htmlFor={id} label="Reporter" error={error}>
-                                                <DropdownSelect
-                                                    helpers={helpers}
-                                                    options={userOptions}
-                                                    id={id}
-                                                    placeholder="Select value"
-                                                    value={field.value}
-                                                />
+                                                <UserSelect id={id} helpers={helpers} value={field.value} />
                                             </Label>
                                         )}
                                     </FormikField>

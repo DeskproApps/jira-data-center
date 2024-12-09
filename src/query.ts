@@ -16,6 +16,7 @@ const QueryKey = {
   LINKED_ISSUES: "linked_issues",
   ISSUES: "issues",
   ISSUE: "issue",
+  USERS: "users",
   PERMISSIONS: "permissions",
   ATTACHMENTS: "attachments",
   ISSUE_COMMENTS: "issue_comments",

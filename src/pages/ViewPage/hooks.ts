@@ -11,7 +11,7 @@ import type { IssueItem, IssueAttachment, JiraComment } from "../../services/jir
 
 type UseIssue = (issueKey?: Maybe<IssueItem["key"]>) => {
   isLoading: boolean,
-  issue: IssueItem|null,
+  issue: IssueItem|undefined,
   attachments: IssueAttachment[],
   comments: JiraComment[],
 };

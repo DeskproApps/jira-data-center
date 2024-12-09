@@ -16,9 +16,10 @@ import type { IssueMeta } from "../../types";
 import {
   JiraUser,
   JiraProject,
+  JiraUserInfo,
   IssueFormData,
   JiraIssueType,
-  JiraPriorityValue, JiraUserInfo,
+  JiraPriorityValue,
 } from "../../services/jira/types";
 
 type UseFormDeps = (
