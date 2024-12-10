@@ -4,12 +4,8 @@ import {
   faHandPointer,
   faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Infinite,
-  Dropdown,
-  DivAsInputWithDisplay,
-  dropdownRenderOptions,
-} from "@deskpro/deskpro-ui";
+import { Dropdown, DivAsInputWithDisplay } from "@deskpro/deskpro-ui";
+import { optionsRenderer } from "./utils";
 import type { FC } from "react";
 import type { FieldHelperProps } from "formik";
 import type {
@@ -58,42 +54,7 @@ const DropdownSelect: FC<DropdownSelectProps> = ({ helpers, id, placeholder, val
       autoscrollText="Autoscroll"
       selectedIcon={faHandPointer as AnyIcon}
       externalLinkIcon={faExternalLinkAlt as AnyIcon}
-      optionsRenderer={(
-        opts,
-        handleSelectOption,
-        activeItem,
-        activeSubItem,
-        setActiveSubItem,
-        hideIcons
-      ) => (
-        <Infinite
-          maxHeight={"30vh"}
-          anchor={false}
-          scrollSideEffect={() => setActiveSubItem(null)}
-          fetchMoreText="Fetch more"
-          autoscrollText="Autoscroll"
-        >
-          <div style={{ maxHeight: "30vh" }}>
-            {opts.map(
-              dropdownRenderOptions({
-                handleSelectOption,
-                activeItem,
-                activeSubItem,
-                setActiveSubItem,
-                fetchMoreText: "Fetch more",
-                autoscrollText: "Autoscroll",
-                selectedIcon: faHandPointer as AnyIcon,
-                externalLinkIcon: faExternalLinkAlt as AnyIcon,
-                hasSelectedItems: false,
-                hasExpandableItems: false,
-                hideIcons,
-                setActiveValueIndex: () => {},
-                valueOptions: [],
-              })
-            )}
-          </div>
-        </Infinite>
-      )}
+      optionsRenderer={optionsRenderer}
       hideIcons
     >
       {({ targetRef, targetProps }: DropdownTargetProps<HTMLDivElement>) => (

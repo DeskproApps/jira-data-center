@@ -21,3 +21,4 @@ export { getIssueTypes } from "./getIssueTypes";
 export { getFields } from "./getFields";
 export { getUserByProjectKeys } from "./getUserByProjectKeys";
 export { getLabels } from "./getLabels";
+export { searchUsers } from "./searchUsers";

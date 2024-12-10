@@ -16,6 +16,7 @@ const QueryKey = {
   LINKED_ISSUES: "linked_issues",
   ISSUES: "issues",
   ISSUE: "issue",
+  USERS: "users",
   PERMISSIONS: "permissions",
   ATTACHMENTS: "attachments",
   ISSUE_COMMENTS: "issue_comments",
@@ -23,7 +24,6 @@ const QueryKey = {
   PROJECTS: "projects",
   ISSUE_TYPES: "issue_types",
   ISSUE_FIELDS: "issue_fields",
-  USERS: "users",
   LABELS: "labels"
 } as const;
 

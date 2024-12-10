@@ -106,7 +106,7 @@ export const formatCustomFieldValue = (meta: IssueMeta, value: any) => {
     .with(FieldType.SELECT_MULTI, () => (value ?? []).map((id: string) => ({ id })))
     .with(FieldType.SELECT_SINGLE, () => value ? ({ id: value }) : undefined)
     .with(FieldType.URL, () => value ?? undefined)
-    .with(FieldType.USER_PICKER, () => value ? ({ id: value }) : undefined)
+    .with(FieldType.USER_PICKER, () => value ? ({ name: value }) : undefined)
     .run()
 };
 

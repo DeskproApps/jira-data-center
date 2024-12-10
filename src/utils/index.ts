@@ -8,6 +8,6 @@ export { isNavigatePayload } from "./isNavigatePayload";
 export { isForm } from "./isForm";
 export { getQueryParams } from "./getQueryParams";
 export { getRequestBody } from "./getRequestBody";
-export { getOption } from "./getOption";
+export { getOption, loadingOption, getNotFoundOption } from "./getOption";
 export { getOptions } from "./getOptions";
 export { getApiError } from "./getApiError";

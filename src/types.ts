@@ -1,6 +1,6 @@
 import type { To, ParamKeyValuePair } from "react-router-dom";
 import type { DropdownValueType } from "@deskpro/deskpro-ui";
-import type { Context, IDeskproClient, V2ProxyRequestInitBody } from "@deskpro/app-sdk";
+import type { Context, IDeskproClient } from "@deskpro/app-sdk";
 import type {JiraUserInfo, JiraIssueDetails, IssueItem} from "./services/jira/types";
 import type { Response } from "./services/jira/types";
 
@@ -21,7 +21,7 @@ export type RequestParams = {
   rawUrl?: string,
   method?: ApiRequestMethod,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: Dict<any>|RequestInit["body"]|V2ProxyRequestInitBody["body"]
+  data?: Dict<any>|RequestInit["body"],
   headers?: Dict<string>,
   queryParams?: string|Dict<string>|ParamKeyValuePair[],
 };
@@ -30,9 +30,6 @@ export type Request = <T>(
   client: IDeskproClient,
   params: RequestParams,
 ) => Response<T>;
-
-// V2ProxyRequestInit
-export type FetchOptions = Pick<RequestParams, "method"|"headers"> & V2ProxyRequestInitBody;
 
 /**  An ISO-8601 encoded UTC date time string. Example value: `""2019-09-07T15:50:00Z"` */
 export type DateTime = string;
