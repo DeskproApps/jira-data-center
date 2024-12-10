@@ -39,7 +39,7 @@ const UserSelect: FC<Props> = ({ helpers, id, value }) => {
     });
 
     return (search === null) // if haven't searched anyone yet
-      ? []
+      ? [getNotFoundOption("No user(s) found")]
       : (users.isFetching) // if sent searching request in the API
       ? [loadingOption]
       : (orderedUsers.length === 0) // if nothing found
