@@ -1,8 +1,13 @@
-import { useMemo, useCallback } from "react";
-import { get, find } from "lodash";
+import { useMemo } from "react";
 import { useQueryWithClient } from "@deskpro/app-sdk";
 import { QueryKey } from "../../query";
-import { getIssueDependencies } from "../../services/jira";
+import {
+  getFields,
+  getLabels,
+  getProjects,
+  getIssueTypes,
+  getUserByProjectKeys,
+} from "../../services/jira";
 import { buildCustomFieldMeta } from "../../services/jira/utils";
 import {
   getUserOptions,
@@ -34,19 +39,40 @@ type UseFormDeps = (
   users: JiraUserInfo[],
   userOptions: Array<DropdownValueType<JiraUser["key"]>>,
   labelOptions: Array<DropdownValueType<string>>,
-  buildIssueTypeOptions: (projectId: JiraProject["id"]) => Array<DropdownValueType<JiraIssueType["id"]>>,
-  buildPriorityOptions: (
-    projectId: JiraProject["id"],
-    issueTypeId: JiraPriorityValue["id"],
-  ) => Array<DropdownValueType<JiraPriorityValue["id"]>>,
-  getCustomFields: (
-    projectId?: JiraProject["id"],
-    issueTypeId?: JiraIssueType["id"],
-  ) => Record<string, IssueMeta>
+  issueTypeOptions: Array<DropdownValueType<JiraIssueType["id"]>>,
+  priorityOptions: Array<DropdownValueType<JiraPriorityValue["id"]>>,
+  customFields: Record<string, IssueMeta>,
 };
 
 const useFormDeps: UseFormDeps = (values, editMeta) => {
-  const { data, isLoading } = useQueryWithClient([QueryKey.ISSUE_DEPENDENCIES], getIssueDependencies);
+  const projectId = values?.projectId;
+  const issueTypeId = values?.issueTypeId;
+
+  const projects = useQueryWithClient([QueryKey.PROJECTS], getProjects);
+
+  const issueTypes = useQueryWithClient(
+    [QueryKey.ISSUE_TYPES, projectId as JiraProject["id"]],
+    (client) => getIssueTypes(client, projectId as JiraProject["id"]),
+    { enabled: Boolean(projectId) },
+  );
+
+  const fields = useQueryWithClient(
+    [QueryKey.ISSUE_FIELDS, projectId as string, issueTypeId as string],
+    (client) => getFields(client, projectId as JiraProject["id"], issueTypeId as JiraIssueType["id"]),
+    { enabled: Boolean(projectId) && Boolean(issueTypeId) },
+  );
+
+  const projectKey = projects.data?.find(({ id }) => projectId && id === projectId)?.key;
+
+  const users = useQueryWithClient(
+    [QueryKey.USERS, projectKey as JiraProject["key"]],
+    (client) => getUserByProjectKeys(client, [projectKey as JiraProject["key"]]),
+    { enabled: Boolean(projectKey) },
+  );
+
+  const userOptions = useMemo(() => getUserOptions(users.data), [users.data]);
+
+  const labels = useQueryWithClient([QueryKey.LABELS], getLabels);
 
   const extraLabels: string[] = useMemo(() => [], []);
 
@@ -57,67 +83,45 @@ const useFormDeps: UseFormDeps = (values, editMeta) => {
     labels.forEach((labels) => labels.forEach((l: string) => extraLabels.push(l)));
   }
 
-  const buildIssueTypeOptions = useCallback((projectId: JiraProject["id"]) => {
-    const { projects } =  data?.createMeta || {};
-    const project = find(projects || [], { id: projectId });
+  const labelOptions = useMemo(() => {
+    return getLabelOptions([
+      ...(labels.data?.results.map(({ displayName }) => displayName).filter(Boolean) || []),
+      ...extraLabels,
+    ]);
+  }, [labels.data?.results, extraLabels]);
 
-    if (!project) {
-      return [];
-    }
+  const projectOptions = useMemo(() => getProjectOptions(projects.data), [projects.data]);
 
-    return (project.issuetypes ?? []).map((issueType: JiraIssueType) => {
+  const issueTypeOptions = useMemo(() => {
+    return (issueTypes.data?.values ?? []).map((issueType: JiraIssueType) => {
       return getOption(issueType.id, issueType.name);
     });
-  }, [data?.createMeta]);
+  }, [issueTypes.data?.values]);
 
-  const buildPriorityOptions = useCallback((projectId: string, issueTypeId: string) => {
-    const { projects } = data?.createMeta || {};
-    const project = find(projects || [], { id: projectId });
+  const customFields = useMemo(() => {
+    const map = (fields.data?.values ?? []).reduce((acc, f) => ({ ...acc, [f.fieldId]: f }), {});
+    return buildCustomFieldMeta(map);
+  }, [fields.data?.values]);
 
-    if (!project) {
-      return [];
-    }
+  const priorityOptions = useMemo(() => {
+    const priorityField = fields.data?.values?.find((f) => f.fieldId === "priority");
 
-    const issueType = find(project.issuetypes, { id: issueTypeId });
-
-    return (issueType?.fields?.priority?.allowedValues ?? [])
-      .map((priority: JiraPriorityValue) => getOption(priority.id, priority.name));
-  }, [data?.createMeta]);
-
-  const getCustomFields = (projectId?: string, issueTypeId?: string): Record<string, IssueMeta> => {
-    const { projects } = data?.createMeta || {};
-
-    const project = find(projects || [], { id: projectId });
-
-    if (!project) {
-      return {};
-    }
-
-    const issueType = find(project.issuetypes || [], { id: issueTypeId });
-
-    if (!issueType) {
-      return {};
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return buildCustomFieldMeta(issueType.fields);
-  };
+    return (priorityField?.allowedValues ?? [])
+      .map((priority) => getOption(priority.id, priority.name));
+  }, [fields.data?.values]);
 
   return {
-    isLoading: isLoading,
-    projects: get(data, ["createMeta", "projects"], []) || [],
-    projectOptions: useMemo(() => getProjectOptions(data?.projects), [data?.projects]),
-    userOptions: useMemo(() => getUserOptions(data?.users), [data?.users]),
-    labelOptions: useMemo(() => {
-      return getLabelOptions([...(data?.labels || []), ...extraLabels]);
-    }, [data?.labels, extraLabels]),
+    isLoading: [projects, labels].some(({ isLoading }) => isLoading),
+    projects: projects.data ?? [],
+    projectOptions,
+    userOptions,
+    labelOptions,
     extraLabels,
-    buildIssueTypeOptions,
-    buildPriorityOptions,
-    getCustomFields,
-    labels: data?.labels || [],
-    users: data?.users || [],
+    issueTypeOptions,
+    priorityOptions,
+    customFields,
+    labels: (labels.data?.results?? []).map((label) => label.displayName).filter(Boolean),
+    users: users.data ?? [],
   };
 };
 

@@ -19,7 +19,6 @@ import {
   dropdownRenderOptions,
 } from "@deskpro/deskpro-ui";
 import { useDeskproAppTheme } from "@deskpro/app-sdk";
-import { Label } from "../Label";
 import type { FC } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,6 +62,7 @@ const DropdownMultiSelect: FC<DropdownMultiSelectProps> = ({ helpers, id, placeh
       inputValue={input}
       onInputChange={setInput}
       options={filteredOptions}
+      closeOnSelect={false}
       onSelectOption={(option) => {
         helpers.setTouched(true);
         helpers.setValue(sortedUniq([...vals, option.value]));
@@ -117,12 +117,12 @@ const DropdownMultiSelect: FC<DropdownMultiSelectProps> = ({ helpers, id, placeh
           value={
             <Stack align="center" gap={4} wrap="wrap">
               {valLabels.map(([val, label, color], idx: number) => (
-                <Label color={color ?? colors.grey20} key={idx} onClick={() => helpers.setValue(vals.filter((v) => v !== val))}>
+                <div color={color ?? colors.grey20} key={idx} onClick={() => helpers.setValue(vals.filter((v) => v !== val))}>
                   <Stack align="center">
                     <span style={{ marginRight: "4px" }}>{label}</span>
                     <Icon icon={faTimes as AnyIcon} />
                   </Stack>
-                </Label>
+                </div>
               ))}
             </Stack>
           }

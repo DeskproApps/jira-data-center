@@ -138,6 +138,10 @@ export type JiraUserInfo = {
   emailAddress: string,
   self: string,
   timeZone: string,
+  name: string,
+  key?: string,
+  deleted?: boolean,
+  locale?: string,
 };
 
 export type PermissionKeys =
@@ -290,4 +294,9 @@ export type SearchResponse<T> = {
   startAt: number,
   total: number,
   values: T[],
+};
+
+export type JiraIssueLabel = {
+  value: string,
+  displayName: string,
 };
