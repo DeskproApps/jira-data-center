@@ -79,7 +79,7 @@ const VerifySettingsPage: FC = () => {
                 style={{ minWidth: "72px", justifyContent: "center" }}
                 onClick={onVerifySettings}
                 loading={isLoading}
-                disabled={!every([settings?.instance_url, settings?.api_key] || isLoading)}
+                disabled={!every([settings?.instance_url, settings?.api_key]) || isLoading}
             />&nbsp;
 
             {currentUser
@@ -90,7 +90,7 @@ const VerifySettingsPage: FC = () => {
                         </Secondary>
                     </P1>
                 )
-                : <Invalid type="p1">{error}</Invalid> || ""
+                : error && <Invalid type='p1'>{error}</Invalid>
             }
         </Stack>
     );
