@@ -7,6 +7,6 @@ export const NumberField: FC<MappedViewProps> = ({ value }) => {
     const numberValue = Number(value);
 
     return (isNumber(numberValue) && !isNaN(numberValue))
-        ? <>{value}</>
+        ? <>{String(value)}</>
         : <NoValue />
 };
