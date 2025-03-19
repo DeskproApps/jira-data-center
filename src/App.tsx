@@ -19,6 +19,7 @@ import {
   VerifySettingsPage,
   ViewPermissionsPage,
   CreateIssueCommentPage,
+  AdminCallbackPage
 } from "./pages";
 import type { ElementEventPayload } from "./types";
 
@@ -55,6 +56,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/admin/verify_settings" element={<VerifySettingsPage />}/>
+      <Route path='/admin/callback' element={<AdminCallbackPage />}/>
       <Route path="/home" element={<HomePage />}/>
       <Route path="/link" element={<LinkPage />}/>
       <Route path="/view/:issueKey" element={<ViewPage />}/>

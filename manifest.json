@@ -31,6 +31,14 @@
     }
   },
   "settings": {
+    "use_api_key": {
+      "title": "Use Access Token",
+      "type": "boolean",
+      "isRequired": false,
+      "isBackendOnly": false,
+      "default": false,
+      "order": 1
+    },
     "instance_url": {
       "title": "Jira Data Center Instance URL",
       "description": "Enter the URL of your Jira Data Centre instance, e.g. https://my-jira-instance.com",
@@ -38,15 +46,41 @@
       "type": "string",
       "isRequired": true,
       "isBackendOnly": false,
-      "order": 10
+      "order": 2
+    },
+    "client_id": {
+      "title": "Client ID",
+      "type": "string",
+      "isRequired": false,
+      "isBackendOnly": false,
+      "condition": "settings.use_api_key != true",
+      "order": 3
+    },
+    "client_secret": {
+      "title": "Client Secret",
+      "type": "string",
+      "isRequired": false,
+      "isBackendOnly": true,
+      "condition": "settings.use_api_key != true",
+      "order": 4
+    },
+    "callback_url": {
+      "title": "Callback URL",
+      "type": "app_embedded",
+      "options": { "entrypoint": "#/admin/callback", "height": "100px" },
+      "isRequired": false,
+      "isBackendOnly": true,
+      "condition": "settings.use_api_key != true",
+      "order": 5
     },
     "api_key": {
       "title": "Access Token",
       "description": "JIRA Data Centre user's access token, please follow the app setup guide to get this",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": true,
-      "order": 30
+      "condition": "settings.use_api_key != false",
+      "order": 6
     },
     "verify_settings": {
       "title": "",
@@ -54,7 +88,8 @@
       "options": { "entrypoint": "#/admin/verify_settings", "height": "30px" },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 40
+      "condition": "settings.use_api_key != false",
+      "order": 7
     },
     "default_comment_on_ticket_reply": {
       "title": "Ticket reply as Jira comment?",
@@ -62,7 +97,7 @@
       "type": "boolean",
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 50
+      "order": 8
     },
     "default_comment_on_ticket_note": {
       "title": "Ticket note as Jira comment?",
@@ -70,7 +105,7 @@
       "type": "boolean",
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 60
+      "order": 9
     },
     "ticket_subject_as_issue_summary": {
       "title": "Use ticket ID and subject as summary",
@@ -78,7 +113,7 @@
       "type": "boolean",
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 70
+      "order": 10
     }
   },
   "proxy": {
