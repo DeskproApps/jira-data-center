@@ -7,3 +7,4 @@ export { LoadingAppPage } from "./LoadingAppPage";
 export { VerifySettingsPage } from "./VerifySettingsPage";
 export { ViewPage } from "./ViewPage";
 export { ViewPermissionsPage } from "./ViewPermissionsPage";
+export { AdminCallbackPage } from './AdminCallbackPage';
