@@ -6,3 +6,5 @@ dist-ssr
 .idea
 build
 yarn-error.log
+/coverage
+.pnpm-store
