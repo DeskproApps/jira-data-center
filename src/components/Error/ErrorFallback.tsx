@@ -4,14 +4,9 @@ import { DEFAULT_ERROR, SETTINGS_ERROR, STATUS } from "../../constants";
 import { JiraError } from "../../services/jira";
 import { getApiError } from "../../utils";
 import { Container, ErrorBlock } from "../common";
-import type { FC } from "react";
-import type { FallbackProps } from "react-error-boundary";
+import { FallbackRender } from "@sentry/react";
 
-type Props = Omit<FallbackProps, "error"> & {
-  error: Error,
-};
-
-const ErrorFallback: FC<Props> = ({ error }) => {
+const ErrorFallback: FallbackRender = ({ error }) => {
   let message = DEFAULT_ERROR;
   let consoleMsg = null;
 
