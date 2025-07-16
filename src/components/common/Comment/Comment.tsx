@@ -7,8 +7,9 @@ import { DPNormalize } from "../Typography";
 import type { FC } from "react";
 import type { AnyIcon } from "@deskpro/deskpro-ui";
 import type { Maybe } from "../../../types";
+import { DeskproAppTheme } from "@deskpro/app-sdk";
 
-const TimeAgo = styled(ReactTimeAgo)`
+const TimeAgo = styled(ReactTimeAgo)<DeskproAppTheme>`
   color: ${({theme}) => theme.colors.grey80};
 `;
 
