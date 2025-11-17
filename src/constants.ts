@@ -18,7 +18,7 @@ export const STATUS = {
 export const placeholders = {
   URL: "__instance_url__",
   API_KEY: "__api_key__"
-};
+} as const;
 
 export const NOT_FOUND = "No item(s) found";
 
